@@ -12,7 +12,7 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Open **http://127.0.0.1:5173**. The repository root is this directory; in the supplied Groot workspace, first run `cd playground`. Four fictional NOVA DENTAL demos are already populated. No onboarding or import step.
+Open **http://127.0.0.1:5173** from this repository root (Groot). Playground opens your empty workspace. Choose **Start your project**, enter a name and optional description, and create your first exploration with your existing coding agent. No wizard or AI connection is required. **NOVA · Example Project** opens the four fictional demos separately; **Back to your workspace** returns to your own work.
 
 For the compiled application:
 
@@ -25,7 +25,7 @@ Open **http://127.0.0.1:4310**. Both modes watch the same local files and compil
 
 ## Use your own coding agent
 
-Open **this same folder** in Codex, Claude Code, Cursor, Warp or VS Code. Keep Playground running. Ask the agent to read `AGENTS.md`, relevant `context/*.md`, `packages/design-system/src`, and the applicable `skills/*/SKILL.md`.
+Open **this same folder** in Codex, Claude Code, Cursor, Warp or VS Code. Keep Playground running. Ask the agent to read `AGENTS.md`, `workspace/project.json`, relevant `workspace/context/*.md`, any components in `workspace/packages/design-system/src`, and the applicable `skills/*/SKILL.md`. Start Here and contextual empty states provide copyable prompts. A design system is optional: supply Figma, Storybook, codebase or documentation references to your agent, or continue with simple styles. There are no built-in importers.
 
 For example:
 
@@ -44,7 +44,17 @@ Use **Create alternative** before independent explorations. It copies the comple
 - On Simplified, open **Controls**, then **Show appointment slots**. Adjust gap, padding, radius, title size or duration using mouse or keyboard. **Save changes** writes controls.json; **Discard preview** cancels unsaved tweaks; **Undo last change** writes the previous saved values. No React source rewriting occurs. Controls are intentionally limited to this one area and copied alternatives.
 - Invalid or externally changed feedback/control files produce a visible error instead of silent replacement. Reload file values to reconcile. Avoid concurrent external writes during an app save; revision checks are optimistic, not filesystem locks.
 
+## Your workspace and the example
+
+Your project lives in `workspace/project.json`, with `workspace/demos/`, `workspace/context/`, `workspace/data/` and `workspace/packages/design-system/`. These are portable, agent-readable files; keep them with your repository backups. Project creation never overwrites existing metadata. A normal launch returns to your project. Dismissible orientation is remembered in browser storage and remains available in Start Here.
+
+NOVA keeps its original root-level files and is explicitly opened with `?example=nova`. Example feedback and alternatives remain in the example. Older exploration links still open their original source when absent from the user workspace. Existing additional root-level explorations are surfaced by an “Open original explorations” link; nothing is automatically moved or reclassified. Existing V2 tools work in both locations. API clients select user content with `?scope=user`; unscoped endpoints retain the original example behavior for compatibility.
+
+The user Design System page explains the component location and offers an agent prompt for a component showcase in Explorations. It does not auto-render an arbitrary imported library. NOVA retains its existing interactive component viewer.
+
 ## Files are the product model
+
+The paths below describe the original NOVA example. For your project, prefix content paths with `workspace/`; the demo contracts are unchanged.
 
 - `demos/<id>/meta.json`: ID (matching folder), title, description, platform (`web` / `mobile`), author, optional authorSlug, tags, parentId and designer-owned rationale.
 - `demos/<id>/src/App.tsx`: default-exported React component receiving optional selected screen/state values.

@@ -8,7 +8,7 @@ test('NOVA core loop: discover, interact, fork, externally edit, recover and reo
   test.setTimeout(90000);
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
-  await page.goto('/');
+  await page.goto('/?example=nova');
   await expect(
     page.getByRole('button', { name: 'Open Emergency Booking — Current', exact: true }),
   ).toBeVisible();

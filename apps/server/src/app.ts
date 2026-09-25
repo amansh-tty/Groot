@@ -4,6 +4,7 @@ import { healthSchema, settingsSchema } from '@playground/shared';
 import { openDatabase } from './database.js';
 import { Workbench } from './workbench.js';
 import { z } from 'zod';
+import { userWorkspace, readProject, createProject } from './project.js';
 
 interface AppOptions {
   dataDir: string;
@@ -28,11 +29,45 @@ export async function createApp(options: AppOptions) {
     const workbench = new Workbench(options.workspaceRoot);
     await workbench.start();
     app.addHook('onClose', async () => workbench.close());
-    app.get('/api/demos', async () => workbench.list());
-    app.get('/api/context', async () => workbench.context());
+    const directory = await userWorkspace(options.workspaceRoot);
+    const personal = new Workbench(directory);
+    await personal.start();
+    app.addHook('onClose', async () => personal.close());
+    const bench = (request: { query: unknown }) =>
+      (request.query as { scope?: string }).scope === 'user' ? personal : workbench;
+    app.get('/api/workspace', async (_request, reply) => {
+      try {
+        const legacy = (await workbench.list()).demos.filter(
+          (d) =>
+            ![
+              'emergency-booking',
+              'emergency-booking-simplified',
+              'emergency-booking-urgency-first',
+              'patient-search',
+            ].includes(d.id),
+        );
+        return { project: await readProject(directory), legacyCount: legacy.length };
+      } catch (error) {
+        return reply.code(409).send({ error: { message: (error as Error).message } });
+      }
+    });
+    app.post('/api/workspace', async (request, reply) => {
+      try {
+        return await createProject(directory, request.body);
+      } catch {
+        return reply.code(409).send({
+          error: {
+            message:
+              'Enter a project name (up to 100 characters) and description (up to 500). An existing project will not be overwritten.',
+          },
+        });
+      }
+    });
+    app.get('/api/demos', async (request) => bench(request).list());
+    app.get('/api/context', async (request) => bench(request).context());
     app.get<{ Params: { id: string } }>('/api/demos/:id/controls', async (request, reply) => {
       try {
-        return await workbench.controls(request.params.id);
+        return await bench(request).controls(request.params.id);
       } catch {
         return reply.code(400).send({
           error: {
@@ -52,7 +87,7 @@ export async function createApp(options: AppOptions) {
           .code(400)
           .send({ error: { message: 'Send a controls revision and numeric values.' } });
       try {
-        return await workbench.changeControls(
+        return await bench(request).changeControls(
           request.params.id,
           body.data.version,
           body.data.values,
@@ -67,7 +102,7 @@ export async function createApp(options: AppOptions) {
     });
     app.get<{ Params: { id: string } }>('/api/demos/:id/feedback', async (request, reply) => {
       try {
-        return await workbench.feedback(request.params.id);
+        return await bench(request).feedback(request.params.id);
       } catch {
         return reply.code(400).send({
           error: {
@@ -85,7 +120,7 @@ export async function createApp(options: AppOptions) {
           .code(400)
           .send({ error: { message: 'A feedback revision and change are required.' } });
       try {
-        return await workbench.changeFeedback(
+        return await bench(request).changeFeedback(
           request.params.id,
           body.data.version,
           body.data.change,
@@ -101,7 +136,7 @@ export async function createApp(options: AppOptions) {
     });
     app.get<{ Params: { id: string } }>('/api/demos/:id', async (request, reply) => {
       try {
-        const detail = await workbench.detail(request.params.id);
+        const detail = await bench(request).detail(request.params.id);
         return { meta: detail.meta, readme: detail.readme, feedback: detail.feedback };
       } catch {
         return reply.code(404).send({
@@ -114,7 +149,7 @@ export async function createApp(options: AppOptions) {
     });
     app.get<{ Params: { id: string } }>('/api/demos/:id/preview', async (request, reply) => {
       try {
-        return await workbench.preview(request.params.id);
+        return await bench(request).preview(request.params.id);
       } catch {
         return reply.code(400).send({
           error: {
@@ -126,7 +161,7 @@ export async function createApp(options: AppOptions) {
     });
     app.get<{ Params: { id: string } }>('/api/demos/:id/frame', async (request, reply) => {
       try {
-        const result = await workbench.preview(request.params.id);
+        const result = await bench(request).preview(request.params.id);
         if (!result.html) return reply.code(422).type('text/plain').send(result.error);
         const nonce = /<script nonce="([a-z0-9]+)">/.exec(result.html)?.[1];
         reply.removeHeader('X-Frame-Options');
@@ -160,7 +195,7 @@ export async function createApp(options: AppOptions) {
         });
       try {
         return {
-          id: await workbench.fork(
+          id: await bench(request).fork(
             request.params.id,
             parsed.data.title,
             parsed.data.description,

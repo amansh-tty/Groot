@@ -50,3 +50,7 @@ Reuse apps/web/src/components/ui/button.tsx. FeedbackPanel owns comment forms/st
 ## Do's and Don'ts
 
 Preserve keyboard focus and reduced motion. Do not turn the prototype into an inspector or add AI chat. Do not change the NOVA design system to restyle the workbench.
+
+## First-use orientation
+
+One user workspace is primary; NOVA is an explicit Example Project destination with a return link. Reuse neutral surfaces and shared Button for inline project creation and contextual agent prompts. Orientation is dismissible and available in Start Here. No tour, mandatory setup sequence or project selector. User thumbnails are neutral rather than fictional NOVA screenshots.

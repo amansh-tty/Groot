@@ -16,6 +16,14 @@ import { useAppStore } from './store';
 import { api, type Catalog, type Demo } from './workbench-api';
 import { DesignSystem } from './DesignSystem';
 import { PrototypeView } from './PrototypeView';
+import {
+  Orientation,
+  AgentPrompt,
+  CreateProject,
+  UserDesignSystem,
+  type Project,
+} from './WorkspaceWelcome';
+const example = new URLSearchParams(location.search).get('example') === 'nova';
 type Page = 'all' | 'start' | 'system' | 'mine';
 const empty: Catalog = {
   demos: [],
@@ -25,6 +33,14 @@ const empty: Catalog = {
 };
 function Thumbnail({ demo }: { demo: Demo }) {
   const search = demo.id.includes('patient');
+  if (!example)
+    return (
+      <div className="demo-thumbnail user-thumbnail" aria-hidden="true">
+        <Layers size={32} />
+        <strong>{demo.title}</strong>
+        <span>{demo.platform === 'mobile' ? 'Mobile' : 'Web'} exploration</span>
+      </div>
+    );
   const simplified = Boolean(demo.parentId);
   return (
     <div className={'demo-thumbnail ' + (search ? 'thumb-mobile' : '')} aria-hidden="true">
@@ -106,7 +122,7 @@ function StartHere({ revision }: { revision: number }) {
           >
             Using Playground
           </button>
-          <span>NOVA PRODUCT CONTEXT</span>
+          <span>{example ? 'NOVA PRODUCT CONTEXT' : 'YOUR PRODUCT CONTEXT'}</span>
           {context.map((c) => (
             <button
               key={c.name}
@@ -119,7 +135,15 @@ function StartHere({ revision }: { revision: number }) {
         </nav>
         <article>
           {error && <p role="alert">{error}</p>}
-          {selected === 'START' ? (
+          {selected === 'START' && !example ? (
+            <>
+              <Orientation />
+              <h2>Give your agent the product context</h2>
+              <AgentPrompt kind="context" />
+              <h2>Create a functional exploration</h2>
+              <AgentPrompt kind="exploration" />
+            </>
+          ) : selected === 'START' ? (
             <>
               <h2>Your agent builds. Playground gives it a place.</h2>
               <p>
@@ -181,6 +205,19 @@ function StartHere({ revision }: { revision: number }) {
   );
 }
 export function App() {
+  const [workspace, setWorkspace] = useState<{
+    project: Project | null;
+    legacyCount: number;
+  } | null>(null);
+  const [orientation, setOrientation] = useState(() => {
+    try {
+      return localStorage.getItem('playground.orientation.dismissed') !== 'yes';
+    } catch {
+      return true;
+    }
+  });
+  const [creatingExploration, setCreatingExploration] = useState(false);
+  const projectName = example ? 'NOVA DENTAL' : (workspace?.project?.name ?? 'Your workspace');
   const [draftDirty, setDraftDirty] = useState(false);
   const [navigationNotice, setNavigationNotice] = useState('');
   const [page, setPage] = useState<Page>('all');
@@ -208,9 +245,27 @@ export function App() {
       if (running) return;
       running = true;
       try {
-        const next = await api<Catalog>('/demos');
+        const [next, info] = await Promise.all([
+          api<Catalog>('/demos'),
+          example
+            ? Promise.resolve({ project: null, legacyCount: 0 })
+            : api<{ project: Project | null; legacyCount: number }>('/workspace'),
+        ]);
+        if (!stopped && !example) {
+          const linked = new URLSearchParams(location.hash.slice(1)).get('demo');
+          if (linked && !next.demos.some((d) => d.id === linked)) {
+            const original = (await fetch('/api/demos?scope=example').then((r) =>
+              r.json(),
+            )) as Catalog;
+            if (!stopped && original.demos.some((d) => d.id === linked)) {
+              location.replace('?example=nova#demo=' + encodeURIComponent(linked));
+              return;
+            }
+          }
+        }
         if (!stopped) {
           setCatalog(next);
+          setWorkspace(info);
           setError('');
           setLoaded(true);
         }
@@ -274,7 +329,7 @@ export function App() {
       <aside className="wb-sidebar">
         <a
           className="wb-brand"
-          href="#"
+          href={example ? '?example=nova' : './'}
           onClick={(e) => {
             e.preventDefault();
             navigate('all');
@@ -286,11 +341,11 @@ export function App() {
           playground<span className="brand-dot">.</span>
         </a>
         <div className="project-switch">
-          <span className="nova-glyph">N</span>
+          <span className="nova-glyph">{projectName.charAt(0)}</span>
           <div>
-            NOVA DENTAL<small>Product explorations</small>
+            {projectName}
+            <small>{example ? 'Example Project' : 'Your project'}</small>
           </div>
-          <span>⌄</span>
         </div>
         <span className="sidebar-label">WORKBENCH</span>
         <nav>
@@ -314,6 +369,20 @@ export function App() {
             </button>
           ))}
         </nav>
+        <a
+          className="example-link"
+          href={example ? './' : '?example=nova'}
+          onClick={(e) => {
+            if (draftDirty) {
+              e.preventDefault();
+              setNavigationNotice(
+                'Save or discard the controls preview before leaving this exploration.',
+              );
+            }
+          }}
+        >
+          {example ? 'Back to your workspace' : 'NOVA · Example Project'}
+        </a>
         <div className="sidebar-footer">
           <div className="watch-status">
             <i />
@@ -351,7 +420,7 @@ export function App() {
       <div className="wb-main">
         <header className="wb-topbar">
           <div>
-            NOVA DENTAL
+            {projectName}
             <ChevronRight size={13} />
             <span>
               {active
@@ -365,7 +434,7 @@ export function App() {
                       : 'Design System'}
             </span>
           </div>
-          <span className="local-badge">LOCAL WORKSPACE</span>
+          <span className="local-badge">{example ? 'EXAMPLE PROJECT' : 'LOCAL WORKSPACE'}</span>
         </header>
         <main id="workbench-main" tabIndex={-1}>
           {error && (
@@ -378,7 +447,33 @@ export function App() {
               {navigationNotice}
             </p>
           )}
-          {active ? (
+          {!example && orientation && (
+            <Orientation
+              onDismiss={() => {
+                setOrientation(false);
+                try {
+                  localStorage.setItem('playground.orientation.dismissed', 'yes');
+                } catch {
+                  /* session dismissal still works */
+                }
+              }}
+            />
+          )}
+          {!example && workspace && workspace.legacyCount > 0 && (
+            <p className="legacy-notice">
+              Existing explorations in the original repository remain available.{' '}
+              <a href="?example=nova">Open original explorations</a>
+            </p>
+          )}
+          {!example && !loaded ? (
+            <p role="status">Reading your workspace…</p>
+          ) : !example && !workspace?.project && !active && page === 'all' ? (
+            <CreateProject
+              onCreated={(project) =>
+                setWorkspace({ project, legacyCount: workspace?.legacyCount ?? 0 })
+              }
+            />
+          ) : active ? (
             <PrototypeView
               key={active}
               id={active}
@@ -388,14 +483,16 @@ export function App() {
               onBack={() => open('')}
             />
           ) : page === 'system' ? (
-            <DesignSystem />
+            <>
+              {example ? <DesignSystem /> : <UserDesignSystem onContinue={() => navigate('all')} />}
+            </>
           ) : page === 'start' ? (
             <StartHere revision={catalog.revision} />
           ) : (
             <div className="gallery-page">
               <div className="gallery-heading">
                 <div>
-                  <span className="eyebrow">NOVA DENTAL / EXPLORATIONS</span>
+                  <span className="eyebrow">{projectName} / EXPLORATIONS</span>
                   <h1>{page === 'mine' ? 'My explorations' : 'All explorations'}</h1>
                   <p>
                     {page === 'mine'
@@ -403,11 +500,18 @@ export function App() {
                       : 'Working prototypes. Different directions. One shared product context.'}
                   </p>
                 </div>
-                <Button variant="outline" size="sm" onClick={() => navigate('start')}>
-                  How to add a demo
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    example ? navigate('start') : setCreatingExploration(!creatingExploration)
+                  }
+                >
+                  {example ? 'How to add a demo' : 'Create an exploration'}
                   <ArrowUpRight />
                 </Button>
               </div>
+              {!example && creatingExploration && <AgentPrompt kind="exploration" />}
               <div className="gallery-tools">
                 <div className="gallery-filters" aria-label="Platform filters">
                   {['all', 'mobile', 'web'].map((f) => (
@@ -505,33 +609,43 @@ export function App() {
                 <div className="gallery-empty">
                   <FolderHeart size={28} />
                   <h2>
-                    {page === 'mine'
-                      ? 'Make an exploration your own.'
-                      : 'No matching explorations.'}
+                    {!example && !catalog.demos.length
+                      ? 'Your first exploration starts here.'
+                      : page === 'mine'
+                        ? 'Make an exploration your own.'
+                        : 'No matching explorations.'}
                   </h2>
                   <p>
-                    {page === 'mine'
-                      ? 'Open a demo and create an alternative. It will appear here.'
-                      : 'Try another search or platform filter.'}
+                    {!example && !catalog.demos.length
+                      ? 'Tell your coding agent what you want to explore. Save its prototype in workspace/demos and it will appear here automatically.'
+                      : page === 'mine'
+                        ? 'Open a demo and create an alternative. It will appear here.'
+                        : 'Try another search or platform filter.'}
                   </p>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setSearch('');
-                      setFilter('all');
-                      if (page === 'mine') navigate('all');
-                    }}
-                  >
-                    View all demos
-                  </Button>
+                  {!example && !catalog.demos.length ? (
+                    <AgentPrompt kind="exploration" />
+                  ) : (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setSearch('');
+                        setFilter('all');
+                        if (page === 'mine') navigate('all');
+                      }}
+                    >
+                      View all demos
+                    </Button>
+                  )}
                 </div>
               )}
               <footer className="gallery-footer">
                 <span>
                   <i />
-                  Live from <code>demos/</code>
+                  Live from <code>{example ? 'demos/' : 'workspace/demos/'}</code>
                 </span>
-                <span>NOVA DENTAL · Fictional product workspace</span>
+                <span>
+                  {example ? 'NOVA DENTAL · Example Project · Fictional data' : projectName}
+                </span>
               </footer>
             </div>
           )}

@@ -15,7 +15,7 @@ When the designer asks their external coding agent to change a prototype.
 
 ## Inputs / context required
 
-Active demos/<id> folder, relevant context, README assumptions, design-system exports, data and optional prototype.config.ts.
+Active content root: workspace/ for the user project, repository root only for NOVA / existing original explorations. Read workspace/project.json for user work. Within that root: demos/<id> folder, relevant context, README assumptions, design-system exports, data and optional prototype.config.ts.
 
 ## Procedure
 

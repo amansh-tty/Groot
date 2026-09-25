@@ -16,7 +16,7 @@ import {
   type Feedback,
   type PrototypeConfig,
 } from '@playground/shared';
-import { api, type Catalog, type Detail } from './workbench-api';
+import { api, apiUrl, type Catalog, type Detail } from './workbench-api';
 import { ControlsPanel } from './ControlsPanel';
 import { CompareView } from './CompareView';
 import { ExplorationTree, explorationFamily } from './ExplorationTree';
@@ -35,6 +35,8 @@ export function PrototypeView({
   onBack: () => void;
   onDraftChange: (dirty: boolean) => void;
 }) {
+  const demoFolder =
+    new URLSearchParams(location.search).get('example') === 'nova' ? 'demos/' : 'workspace/demos/';
   const [detail, setDetail] = useState<Detail | null>(null);
   const [config, setConfig] = useState<PrototypeConfig>({
     screens: [],
@@ -99,7 +101,7 @@ export function PrototypeView({
         if (result.error) setError(result.error);
         else
           setFrame(
-            '/api/demos/' + id + '/frame?revision=' + result.revision + '&refresh=' + refresh,
+            apiUrl('/demos/' + id + '/frame?revision=' + result.revision + '&refresh=' + refresh),
           );
       })
       .catch((e) => {
@@ -300,7 +302,7 @@ export function PrototypeView({
             />
           </label>
           <p>
-            A new folder will be created in <code>demos/</code>. Your original stays intact.
+            A new folder will be created in <code>{demoFolder}</code>. Your original stays intact.
           </p>
           <div>
             <Button disabled={saving} type="submit">
@@ -531,7 +533,10 @@ export function PrototypeView({
                 <FileCode2 size={14} />
                 Source
               </h2>
-              <code>demos/{id}/src/App.tsx</code>
+              <code>
+                {demoFolder}
+                {id}/src/App.tsx
+              </code>
               <p>Edit this file with your coding agent. Saved changes appear here automatically.</p>
             </div>
             {feedbackNotice && <p role="status">{feedbackNotice}</p>}

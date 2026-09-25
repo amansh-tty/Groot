@@ -1,5 +1,9 @@
 # Repository guidance
 
+## Active content location
+
+The user's project is `workspace/project.json`; its content roots are `workspace/demos`, `workspace/context`, `workspace/data` and `workspace/packages/design-system`. Root-level `demos`, `context`, `data` and `packages/design-system` belong to NOVA / original explorations. Determine the intended location before editing. Below, demo-relative paths apply within that content root. Never use NOVA facts or components as the user's default. A missing user design system is valid; simple prototype-local styles work. Keep user component showcases as normal explorations. Do not overwrite an existing project or move older root-level work automatically.
+
 Playground V1 is a visual workbench around the user's existing coding agent. The repository is the integration layer. Read `docs/product/v1.md`; the previous V0 provider/phase plan is superseded.
 
 - Use TypeScript, pnpm and the existing small packages. Keep UI primitives in `apps/web` until reuse justifies extracting them.

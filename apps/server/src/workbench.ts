@@ -43,7 +43,13 @@ export class Workbench {
     this.root = await realpath(this.directory);
     for (const folder of ['demos', 'context', 'data', 'packages/design-system', '.console']) {
       const path = join(this.root, folder);
-      await mkdir(path, { recursive: true });
+      let parent = this.root;
+      for (const segment of folder.split('/')) {
+        parent = join(parent, segment);
+        await mkdir(parent, { recursive: true });
+        await this.safe(parent);
+      }
+      await this.safe(path);
       const watcher = watch(path, { recursive: true }, (_event, name) => {
         if (
           name &&

@@ -19,7 +19,7 @@ Repository root, runtime versions and the user's editor/agent.
 
 ## Procedure
 
-Check Node 24.x and pnpm 11.19.0, install dependencies if needed, then run pnpm dev. Point to the pre-filled NOVA demos. Explain AGENTS.md, relevant context files and explicit skill paths. For a setup error, report the actual command and actionable cause.
+Check Node 24.x and pnpm 11.19.0, install dependencies if needed, then run pnpm dev. Open the empty user workspace and use Start your project (name required, description optional). Explain that workspace/ contains their project files. NOVA is separately accessible as Example Project, never the default user content. Start Here retains orientation after dismissal; no design system is required. Explain AGENTS.md, relevant context files and explicit skill paths. For a setup error, report the actual command and actionable cause.
 
 ## Constraints
 

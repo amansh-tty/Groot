@@ -11,8 +11,14 @@ export interface Detail {
   readme: string;
   feedback: Feedback[];
 }
+export function apiUrl(path: string) {
+  const example = new URLSearchParams(location.search).get('example') === 'nova';
+  return (
+    '/api' + path + (path.includes('?') ? '&' : '?') + 'scope=' + (example ? 'example' : 'user')
+  );
+}
 export async function api<T>(path: string, options?: RequestInit): Promise<T> {
-  const response = await fetch('/api' + path, { ...options, signal: AbortSignal.timeout(30000) });
+  const response = await fetch(apiUrl(path), { ...options, signal: AbortSignal.timeout(30000) });
   const result = await response.json();
   if (!response.ok)
     throw new Error(

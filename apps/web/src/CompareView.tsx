@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { prototypeConfigSchema, type PrototypeConfig } from '@playground/shared';
-import { api, type Catalog } from './workbench-api';
+import { api, apiUrl, type Catalog } from './workbench-api';
 import { Button } from './components/ui/button';
 
 function ComparePane({
@@ -43,7 +43,7 @@ function ComparePane({
       .then((result) => {
         if (cancelled) return;
         if (result.error) setError(result.error);
-        else setFrame('/api/demos/' + id + '/frame?revision=' + result.revision);
+        else setFrame(apiUrl('/demos/' + id + '/frame?revision=' + result.revision));
       })
       .catch((e) => {
         if (!cancelled) setError(e.message);
