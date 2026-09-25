@@ -1,0 +1,38 @@
+[
+  {
+    "id": "NV-1042",
+    "name": "Avery Morgan",
+    "age": 34,
+    "phone": "202-555-0104",
+    "lastVisit": "2026-08-12",
+    "alerts": ["Contact details verified"],
+    "initials": "AM"
+  },
+  {
+    "id": "NV-1087",
+    "name": "Jamie Ellis",
+    "age": 47,
+    "phone": "202-555-0118",
+    "lastVisit": "2026-06-03",
+    "alerts": ["Confirm accessibility preferences"],
+    "initials": "JE"
+  },
+  {
+    "id": "NV-1123",
+    "name": "Sam Rivera",
+    "age": 29,
+    "phone": "202-555-0132",
+    "lastVisit": "2026-09-08",
+    "alerts": [],
+    "initials": "SR"
+  },
+  {
+    "id": "NV-1156",
+    "name": "Taylor Chen",
+    "age": 62,
+    "phone": "202-555-0146",
+    "lastVisit": "2026-07-21",
+    "alerts": ["Prefers phone reminders"],
+    "initials": "TC"
+  }
+]

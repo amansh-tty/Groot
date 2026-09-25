@@ -1,0 +1,11 @@
+{
+  "id": "emergency-booking-urgency-first",
+  "title": "Emergency Booking — Urgency First",
+  "description": "Capture patient and urgency, then choose a time with a recommended provider and room.",
+  "rationale": "Prioritizes stated urgency and same-day availability before provider selection. Compatible provider and operatory assignments are presented as scheduling recommendations, not clinical triage.",
+  "platform": "web",
+  "author": "NOVA team",
+  "authorSlug": "nova-team",
+  "tags": ["booking", "urgency"],
+  "parentId": "emergency-booking"
+}

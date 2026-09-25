@@ -1,0 +1,18 @@
+[
+  {
+    "id": "fb-1",
+    "prototype": "emergency-booking",
+    "screen": "slots",
+    "element": "urgency-summary",
+    "comment": "Urgency is difficult to scan while choosing a slot.",
+    "status": "open"
+  },
+  {
+    "id": "fb-2",
+    "prototype": "emergency-booking",
+    "screen": "provider",
+    "element": "provider-list",
+    "comment": "Do we need to show every provider, or only providers who can handle this appointment type?",
+    "status": "open"
+  }
+]

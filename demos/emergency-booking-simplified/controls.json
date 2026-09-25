@@ -1,0 +1,56 @@
+{
+  "area": "Appointment slot cards",
+  "screen": "slots",
+  "controls": [
+    {
+      "id": "card-gap",
+      "label": "Card gap",
+      "type": "slider",
+      "min": 4,
+      "max": 48,
+      "step": 4,
+      "value": 16,
+      "unit": "px"
+    },
+    {
+      "id": "card-padding",
+      "label": "Card padding",
+      "type": "slider",
+      "min": 8,
+      "max": 32,
+      "step": 4,
+      "value": 16,
+      "unit": "px"
+    },
+    {
+      "id": "card-radius",
+      "label": "Card radius",
+      "type": "slider",
+      "min": 0,
+      "max": 24,
+      "step": 4,
+      "value": 8,
+      "unit": "px"
+    },
+    {
+      "id": "title-size",
+      "label": "Title size",
+      "type": "slider",
+      "min": 12,
+      "max": 24,
+      "step": 2,
+      "value": 16,
+      "unit": "px"
+    },
+    {
+      "id": "motion-duration",
+      "label": "Motion duration",
+      "type": "slider",
+      "min": 0,
+      "max": 500,
+      "step": 50,
+      "value": 200,
+      "unit": "ms"
+    }
+  ]
+}

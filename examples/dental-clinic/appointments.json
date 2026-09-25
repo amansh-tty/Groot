@@ -1,0 +1,40 @@
+{
+  "fictional": true,
+  "date": "2026-10-06",
+  "clinicians": [
+    { "id": "dentist-1", "name": "Dr. Avery Reed" },
+    { "id": "dentist-2", "name": "Dr. Jordan Vale" }
+  ],
+  "slots": [
+    {
+      "id": "slot-1",
+      "clinicianId": "dentist-1",
+      "time": "09:30",
+      "durationMinutes": 30,
+      "available": true
+    },
+    {
+      "id": "slot-2",
+      "clinicianId": "dentist-1",
+      "time": "10:00",
+      "durationMinutes": 30,
+      "available": false
+    },
+    {
+      "id": "slot-3",
+      "clinicianId": "dentist-2",
+      "time": "10:30",
+      "durationMinutes": 30,
+      "available": true
+    }
+  ],
+  "appointments": [
+    {
+      "id": "appointment-1",
+      "slotId": "slot-2",
+      "patientName": "Morgan Example",
+      "contact": "morgan@example.invalid",
+      "reason": "Fictional follow-up appointment"
+    }
+  ]
+}

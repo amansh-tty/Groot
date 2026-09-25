@@ -1,0 +1,11 @@
+{
+  "id": "emergency-booking-simplified",
+  "title": "Emergency Booking — Simplified",
+  "description": "Patient, urgency and compatible slots in three considered steps.",
+  "platform": "web",
+  "author": "NOVA team",
+  "authorSlug": "nova-team",
+  "tags": ["booking", "front-desk"],
+  "parentId": "emergency-booking",
+  "rationale": "Reduces booking from seven steps to three by combining patient and urgency information and offering compatible provider/room pairs."
+}

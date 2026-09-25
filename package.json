@@ -1,0 +1,39 @@
+{
+  "name": "playground",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": ">=24.19.0 <25",
+    "pnpm": "11.19.0"
+  },
+  "scripts": {
+    "dev": "concurrently --kill-others -n server,web \"pnpm --filter @playground/server dev\" \"pnpm --filter @playground/web dev\"",
+    "build": "pnpm -r --if-present build",
+    "start": "node --env-file-if-exists=.env apps/server/dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:smoke": "node scripts/production-smoke.mjs",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+  },
+  "devDependencies": {
+    "@playground/design-system": "workspace:*",
+    "@types/react": "19.3.0",
+    "react": "19.3.0",
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.63.0",
+    "@types/node": "24.13.6",
+    "concurrently": "10.0.5",
+    "eslint": "10.11.0",
+    "prettier": "3.9.9",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.70.1",
+    "vitest": "5.0.1"
+  }
+}

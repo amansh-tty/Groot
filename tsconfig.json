@@ -1,0 +1,24 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "customConditions": ["development"],
+    "jsx": "react-jsx",
+    "resolveJsonModule": true,
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "types": ["node"],
+    "noEmit": true
+  },
+  "include": [
+    "apps/**/*.ts",
+    "apps/**/*.tsx",
+    "packages/**/*.ts",
+    "packages/**/*.tsx",
+    "demos/**/*.ts",
+    "demos/**/*.tsx",
+    "tests/**/*.ts",
+    "*.ts"
+  ],
+  "exclude": ["**/dist", "**/node_modules"]
+}

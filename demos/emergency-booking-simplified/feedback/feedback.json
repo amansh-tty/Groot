@@ -1,0 +1,62 @@
+[
+  {
+    "element": "appointment-slots",
+    "elementId": "appointment-slots",
+    "component": "",
+    "label": "",
+    "selector": "",
+    "screen": "slots",
+    "state": "default",
+    "id": "nova-simplified-1",
+    "prototype": "emergency-booking-simplified",
+    "comment": "Urgency gets lost while scanning available slots.",
+    "status": "open",
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "resolvedAt": null
+  },
+  {
+    "element": "slot-guidance",
+    "elementId": "slot-guidance",
+    "component": "",
+    "label": "",
+    "selector": "",
+    "screen": "slots",
+    "state": "default",
+    "id": "nova-simplified-2",
+    "prototype": "emergency-booking-simplified",
+    "comment": "Do we need to show providers who cannot handle this appointment type?",
+    "status": "resolved",
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "resolvedAt": "2026-09-24T00:00:00.000Z"
+  },
+  {
+    "element": "confirm-appointment",
+    "elementId": "confirm-appointment",
+    "component": "Button",
+    "label": "",
+    "selector": "",
+    "screen": "confirmation",
+    "state": "default",
+    "id": "nova-simplified-3",
+    "prototype": "emergency-booking-simplified",
+    "comment": "The confirmation action feels visually detached from the appointment summary.",
+    "status": "open",
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "resolvedAt": null
+  },
+  {
+    "element": "confirm-appointment",
+    "elementId": "confirm-appointment",
+    "component": "Button",
+    "label": "Confirm appointment",
+    "selector": "#root > div:nth-child(1) > div:nth-child(2) > main:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(8) > button:nth-child(2)",
+    "screen": "confirmation",
+    "state": "default",
+    "id": "939077de-eb1c-4aea-a575-accee083638a",
+    "prototype": "emergency-booking-simplified",
+    "comment": "Make this action feel more connected to the appointment summary.",
+    "status": "open",
+    "createdAt": "2026-09-24T07:12:19.614Z",
+    "resolvedAt": null
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "id": "p1",
+    "name": "Dr. Maya Rowan",
+    "role": "Dentist",
+    "specialty": "General dentistry",
+    "procedures": ["assessment", "treatment"],
+    "availability": {
+      "start": "09:00",
+      "end": "17:00"
+    }
+  },
+  {
+    "id": "p2",
+    "name": "Dr. Leo Arden",
+    "role": "Dentist",
+    "specialty": "Emergency assessments",
+    "procedures": ["assessment"],
+    "availability": {
+      "start": "10:00",
+      "end": "16:00"
+    }
+  }
+]

@@ -1,0 +1,14 @@
+packages:
+  - apps/*
+  - packages/*
+
+allowBuilds:
+  esbuild: true
+
+minimumReleaseAgeExclude:
+  - prettier@3.9.9
+
+strictPeerDependencies: true
+saveExact: true
+engineStrict: true
+verifyDepsBeforeRun: warn

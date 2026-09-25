@@ -1,0 +1,10 @@
+{
+  "id": "patient-search",
+  "title": "Patient Search",
+  "description": "A focused exploration of finding the right patient record.",
+  "platform": "mobile",
+  "author": "NOVA team",
+  "authorSlug": "nova-team",
+  "tags": ["patients", "search"],
+  "parentId": null
+}

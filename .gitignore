@@ -1,0 +1,21 @@
+# Dependencies and package-manager cache
+node_modules/
+.pnpm-store/
+
+# Build and test output
+dist/
+*.tsbuildinfo
+coverage/
+test-results/
+playwright-report/
+*.log
+# Local configuration and application data
+.env
+.env.*
+!.env.example
+.playground-data/
+*.sqlite*
+# Operating-system files
+.DS_Store
+Thumbs.db
+Desktop.ini

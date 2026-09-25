@@ -1,0 +1,20 @@
+[
+  {
+    "id": "o1",
+    "name": "Operatory 01",
+    "procedures": ["assessment", "treatment"],
+    "availability": {
+      "start": "09:00",
+      "end": "17:00"
+    }
+  },
+  {
+    "id": "o2",
+    "name": "Operatory 02",
+    "procedures": ["assessment"],
+    "availability": {
+      "start": "09:00",
+      "end": "16:00"
+    }
+  }
+]

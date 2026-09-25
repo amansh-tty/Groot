@@ -1,0 +1,11 @@
+{
+  "id": "emergency-booking",
+  "title": "Emergency Booking — Current",
+  "description": "The hypothetical seven-stage workflow, with its friction preserved.",
+  "platform": "web",
+  "author": "NOVA team",
+  "authorSlug": "nova-team",
+  "tags": ["booking", "front-desk"],
+  "parentId": null,
+  "rationale": "Makes the existing seven-step scheduling sequence visible for comparison."
+}

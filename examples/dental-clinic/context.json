@@ -1,0 +1,32 @@
+{
+  "name": "Willow Dental — emergency booking",
+  "description": "Explore a simpler appointment booking experience for a fictional clinic.",
+  "category": "Healthcare operations",
+  "fictional": true,
+  "context": {
+    "overview": "Willow Dental is a fictional digital clinic management platform for managing appointments and front-desk coordination.",
+    "users": "Front-desk staff help patients find appropriate appointments while coordinating clinician availability.",
+    "userProblems": "Emergency appointment booking requires repeated entry and too many screens while a patient is waiting.",
+    "goals": "Explore a simpler flow that makes available slots and the final booking clear.",
+    "designPrinciples": [
+      "Keep the next action clear",
+      "Preserve entered information",
+      "Make booking status explicit"
+    ],
+    "constraints": [
+      "Use fictional data only",
+      "Do not double-book a clinician",
+      "Require patient name, contact and an available slot",
+      "Provide booking confirmation",
+      "Do not offer medical triage or diagnosis"
+    ],
+    "terminology": {
+      "slot": "A clinician's available appointment time",
+      "booking": "A confirmed patient appointment"
+    },
+    "decisions": [],
+    "assumptions": [],
+    "proposals": ["Explore a two-step booking flow"]
+  },
+  "suggestedPrompt": "Create a three-step appointment booking flow for a dental clinic."
+}
