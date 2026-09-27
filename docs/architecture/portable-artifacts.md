@@ -34,6 +34,8 @@ Copy that HTML anywhere. It contains React, React DOM, prototype code, CSS, impo
 
 ## Validation evidence
 
+The designer also confirmed the manual portability test passed: the exported Emergency Booking HTML was copied outside the repository, opened independently, and rendered and worked correctly.
+
 On 27 September 2026, exported NOVA `emergency-booking` using the public command: **754,330 bytes (about 737 KiB)**.
 
 Artifact: `dist/exports/example/emergency-booking/1790503569128/prototype.html`.
