@@ -75,6 +75,12 @@ All Demos gallery with search, platform filters and grid/list layouts; My Demos;
 
 NOVA DENTAL is fictional. Current Booking uses seven stages, Simplified uses three, Urgency First uses four stages with recommended provider/room pairs, and Patient Search supports recent/search/result/error scenarios. All booking flows check full-duration provider and operatory availability against shared fixtures before offering slots. Confirmations are simulated local prototype state, never real appointments.
 
+## Export a portable prototype
+
+Run `pnpm build`, then `pnpm groot export emergency-booking --example` to export NOVA, or `pnpm groot export <id>` for an exploration in `workspace/`. The command prints the path to a self-contained `prototype.html` under `dist/exports/`. Copy it outside the repository and open it directly in a browser; Groot does not need to be running. Source TSX/JSX is unchanged. Imported local images are embedded; remote assets and APIs are unsupported. See [artifact contract and portability evidence](docs/architecture/portable-artifacts.md).
+
+With Groot stopped, run `pnpm test:export` after building to exercise the exported booking flow outside the repository.
+
 ## Validation
 
 ```sh
