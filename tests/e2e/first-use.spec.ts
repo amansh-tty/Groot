@@ -86,7 +86,53 @@ test('empty workspace, own project, agent files, optional design system and sepa
       }),
     }),
   );
+  await page.route('**/api/demos?scope=user', (route) =>
+    route.fulfill({
+      contentType: 'application/json',
+      body: JSON.stringify({
+        demos: [],
+        warnings: [],
+        revision: 0,
+        designer: { name: 'Local designer', slug: 'local-designer' },
+      }),
+    }),
+  );
   await page.reload();
+  await expect(
+    page.getByRole('heading', { name: 'Your first exploration starts here.' }),
+  ).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Create an exploration' })).toHaveCount(0);
+  const copyFirstPrompt = page.getByRole('button', { name: 'Copy starter prompt' });
+  await expect(copyFirstPrompt).toBeVisible();
+  await expect(page.getByText('Open this project folder in your coding agent')).toBeVisible();
+  await expect(page.getByText(externalPath, { exact: true })).toBeVisible();
+  await expect(page.getByText('starting points, not requirements', { exact: false })).toBeVisible();
+  await expect(
+    page.getByText('You can begin before either is complete', { exact: false }),
+  ).toBeVisible();
+  await expect(page.getByText('Already have your own agent setup? Keep using it.')).toBeVisible();
+  await expect(page.getByText('OPTIONAL STARTER PROMPT')).toBeVisible();
+  await expect(page.getByText('Groot discovers it automatically', { exact: false })).toBeVisible();
+  const firstPrompt = page.getByLabel('Agent prompt');
+  await expect(firstPrompt).toHaveValue(
+    /available project context and relevant agent instructions/,
+  );
+  await expect(firstPrompt).toHaveValue(/context\//);
+  await expect(firstPrompt).toHaveValue(/@playground\/design-system/);
+  await expect(firstPrompt).toHaveValue(/meaningful interactions and important states/);
+  await expect(firstPrompt).toHaveValue(/\[EXPLORATION NAME\]/);
+  await expect(firstPrompt).toHaveValue(/\[SCENARIO \/ PROBLEM\]/);
+  await expect(firstPrompt).toHaveValue(/\[WHAT THE USER NEEDS TO DO\]/);
+  await expect(firstPrompt).toHaveValue(/avoid unnecessary workspace-owned dependencies/);
+  await expect(firstPrompt).toHaveValue(/package\.json, or node_modules/);
+  await expect(firstPrompt).not.toHaveValue(/workspace\/|NOVA|Dental|Spend\.In/i);
+  await copyFirstPrompt.click();
+  await expect(page.locator('.first-exploration-handoff .agent-prompt [role="status"]')).toHaveText(
+    /Copied|copy it manually/,
+  );
+  await page.getByRole('button', { name: 'Copy folder path' }).click();
+  await expect(page.locator('.handoff-path-status')).toHaveText(/copied|copy it manually/i);
+
   await page.getByRole('button', { name: 'Start Here', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Spend.In', exact: true })).toBeVisible();
   await expect(page.getByText('Current project', { exact: true })).toBeVisible();
@@ -101,15 +147,25 @@ test('empty workspace, own project, agent files, optional design system and sepa
   await expect(page.getByText('Open the designer project folder', { exact: false })).toBeVisible();
   await expect(page.getByText('Open this repository', { exact: false })).toHaveCount(0);
   const prompts = page.getByLabel('Agent prompt');
-  await expect(prompts.first()).toHaveValue(/^Read project\.json/);
-  await expect(prompts.last()).toHaveValue(/Write demos\/<id>\/meta\.json/);
-  await expect(prompts.last()).not.toHaveValue(/workspace\/|packages\/design-system|skills\//);
+  await expect(prompts).toHaveCount(1);
+  await expect(prompts).toHaveValue(/available project context/);
+  await expect(prompts).toHaveValue(/demos\/<id>/);
+  await expect(prompts).not.toHaveValue(/workspace\/|packages\/design-system|skills\//);
+  const startHereText = await page.locator('.context-layout > article').innerText();
+  expect(startHereText.indexOf('Create your first exploration')).toBeLessThan(
+    startHereText.indexOf('Create another project'),
+  );
   await page.getByRole('button', { name: 'Design System', exact: true }).click();
   await expect(page.getByText('design-system/src/index.tsx', { exact: true })).toBeVisible();
   await expect(page.getByText(/workspace\/packages\/design-system/)).toHaveCount(0);
   await page.getByRole('button', { name: 'All Demos', exact: false }).click();
   await expect(page.getByText('Live from', { exact: false })).toContainText('demos/');
   await expect(page.getByText('Live from', { exact: false })).not.toContainText('workspace/demos/');
+  await page.unroute('**/api/demos?scope=user');
+  await page.reload();
+  await expect(page.getByRole('button', { name: 'Open Reading list', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Create an exploration' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Copy starter prompt' })).toHaveCount(0);
   await page.getByRole('button', { name: 'Open Reading list', exact: true }).click();
   await expect(page.getByText('NOVA DENTAL', { exact: true })).toHaveCount(0);
   await expect(page.getByText(/\/ Spend\.In$/)).toBeVisible();

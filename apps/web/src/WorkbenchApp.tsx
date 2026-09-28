@@ -20,6 +20,7 @@ import {
   Orientation,
   AgentPrompt,
   CreateProject,
+  FirstExplorationHandoff,
   ProjectEntry,
   UserDesignSystem,
   type Project,
@@ -152,12 +153,21 @@ function StartHere({
           {error && <p role="alert">{error}</p>}
           {selected === 'START' && !example ? (
             <>
-              {workspace && <ProjectEntry project={project} workspace={workspace} />}
               <Orientation workspace={workspace} />
-              <h2>Give your agent the product context</h2>
-              <AgentPrompt kind="context" workspace={workspace} />
-              <h2>Create a functional exploration</h2>
-              <AgentPrompt kind="exploration" workspace={workspace} />
+              {workspace?.mode === 'external' ? (
+                <>
+                  <FirstExplorationHandoff workspace={workspace} />
+                  <ProjectEntry project={project} workspace={workspace} />
+                </>
+              ) : (
+                <>
+                  {workspace && <ProjectEntry project={project} workspace={workspace} />}
+                  <h2>Give your agent the product context</h2>
+                  <AgentPrompt kind="context" workspace={workspace} />
+                  <h2>Create a functional exploration</h2>
+                  <AgentPrompt kind="exploration" workspace={workspace} />
+                </>
+              )}
             </>
           ) : selected === 'START' ? (
             <>
@@ -535,16 +545,18 @@ export function App() {
                       : 'Working prototypes. Different directions. One shared product context.'}
                   </p>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() =>
-                    example ? navigate('start') : setCreatingExploration(!creatingExploration)
-                  }
-                >
-                  {example ? 'How to add a demo' : 'Create an exploration'}
-                  <ArrowUpRight />
-                </Button>
+                {(example || catalog.demos.length > 0) && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      example ? navigate('start') : setCreatingExploration(!creatingExploration)
+                    }
+                  >
+                    {example ? 'How to add a demo' : 'Create an exploration'}
+                    <ArrowUpRight />
+                  </Button>
+                )}
               </div>
               {!example && creatingExploration && (
                 <AgentPrompt kind="exploration" workspace={workspace?.workspace} />
@@ -652,26 +664,36 @@ export function App() {
                         ? 'Make an exploration your own.'
                         : 'No matching explorations.'}
                   </h2>
-                  <p>
-                    {!example && !catalog.demos.length
-                      ? `Tell your coding agent what you want to explore. Save its prototype in ${workspace?.workspace.mode === 'external' ? 'demos/' : 'workspace/demos/'} and it will appear here automatically.`
-                      : page === 'mine'
-                        ? 'Open a demo and create an alternative. It will appear here.'
-                        : 'Try another search or platform filter.'}
-                  </p>
                   {!example && !catalog.demos.length ? (
-                    <AgentPrompt kind="exploration" workspace={workspace?.workspace} />
+                    workspace?.workspace.mode === 'external' ? (
+                      <FirstExplorationHandoff workspace={workspace.workspace} />
+                    ) : (
+                      <>
+                        <p>
+                          Tell your coding agent what you want to explore. Save its prototype in
+                          workspace/demos/ and it will appear here automatically.
+                        </p>
+                        <AgentPrompt kind="exploration" workspace={workspace?.workspace} primary />
+                      </>
+                    )
                   ) : (
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setSearch('');
-                        setFilter('all');
-                        if (page === 'mine') navigate('all');
-                      }}
-                    >
-                      View all demos
-                    </Button>
+                    <>
+                      <p>
+                        {page === 'mine'
+                          ? 'Open a demo and create an alternative. It will appear here.'
+                          : 'Try another search or platform filter.'}
+                      </p>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setSearch('');
+                          setFilter('all');
+                          if (page === 'mine') navigate('all');
+                        }}
+                      >
+                        View all demos
+                      </Button>
+                    </>
                   )}
                 </div>
               )}

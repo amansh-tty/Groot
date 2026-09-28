@@ -120,15 +120,30 @@ export function Orientation({
 export function AgentPrompt({
   kind,
   workspace,
+  primary = false,
 }: {
   kind: 'exploration' | 'system' | 'context';
   workspace?: WorkspaceLocation;
+  primary?: boolean;
 }) {
   const [copied, setCopied] = useState('');
   const external = workspace?.mode === 'external';
   const prompt = external
     ? kind === 'exploration'
-      ? 'Read AGENTS.md, project.json, relevant context files, and design-system/src/index.tsx if present. Help me create a functional exploration for my product. Ask what experience I want to explore. Write demos/<id>/meta.json and demos/<id>/src/App.tsx using the existing demo contract. Use data/ and the shared design system only if available; otherwise use simple local styles.'
+      ? `Create a functional Groot product exploration.
+
+Exploration name: [EXPLORATION NAME]
+Scenario / problem: [SCENARIO / PROBLEM]
+What the user needs to do: [WHAT THE USER NEEDS TO DO]
+
+Work only inside this designer workspace.
+1. Read the available project context and relevant agent instructions in this folder.
+2. Use available product context under context/ when it helps the exploration.
+3. Inspect and reuse available components and tokens through @playground/design-system.
+4. Create the exploration under demos/<id>/ using Groot's supported exploration contract.
+5. Implement meaningful interactions and important states; do not create a static mockup.
+6. Keep prototype imports inside the supported workspace boundaries and avoid unnecessary workspace-owned dependencies, package.json, or node_modules.
+7. When finished, report the files created or changed, implemented interactions and states, design-system usage, assumptions, and limitations.`
       : kind === 'system'
         ? 'Read project.json and relevant context files. Help me establish reusable components in design-system/src/index.tsx from the Figma, Storybook, codebase or documentation references I supply. Ask me for those references; do not assume an importer exists. Add a component showcase as an exploration in demos/.'
         : 'Read project.json. Help me document my product in context/PRODUCT.md, context/USERS.md, context/PRINCIPLES.md and context/CONSTRAINTS.md. Ask only what is needed; keep established facts separate from assumptions.'
@@ -149,10 +164,10 @@ export function AgentPrompt({
         aria-label="Agent prompt"
         readOnly
         value={prompt}
-        rows={5}
+        rows={external && kind === 'exploration' ? 14 : 5}
       />
       <Button
-        variant="outline"
+        variant={primary ? 'default' : 'outline'}
         onClick={() => {
           void navigator.clipboard
             .writeText(prompt)
@@ -160,10 +175,69 @@ export function AgentPrompt({
             .catch(() => setCopied('Select the prompt above and copy it manually.'));
         }}
       >
-        Copy agent prompt
+        {primary ? 'Copy starter prompt' : 'Copy agent prompt'}
       </Button>
       <span role="status">{copied}</span>
     </div>
+  );
+}
+
+export function FirstExplorationHandoff({ workspace }: { workspace: WorkspaceLocation }) {
+  const [pathStatus, setPathStatus] = useState('');
+  return (
+    <section className="first-exploration-handoff" aria-label="Create your first exploration">
+      <ol>
+        <li>
+          <h3>Add useful product context</h3>
+          <p>
+            Better context can help your agent produce better explorations.{' '}
+            <code>context/PRODUCT.md</code> and <code>design-system/src/index.tsx</code> are
+            starting points, not requirements. Edit, replace, extend or organize your supporting
+            context and agent instructions however you prefer. You can begin before either is
+            complete.
+          </p>
+        </li>
+        <li>
+          <h3>Open this project folder in your coding agent</h3>
+          <p>
+            Use Codex, Claude Code, Cursor or another coding agent. Already have your own agent
+            setup? Keep using it.
+          </p>
+          <div className="handoff-path">
+            <code>{workspace.path}</code>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                void navigator.clipboard
+                  .writeText(workspace.path)
+                  .then(() => setPathStatus('Project folder copied.'))
+                  .catch(() => setPathStatus('Select the folder path and copy it manually.'));
+              }}
+            >
+              Copy folder path
+            </Button>
+          </div>
+          <span className="handoff-path-status" role="status">
+            {pathStatus}
+          </span>
+        </li>
+        <li>
+          <h3>Create your first exploration</h3>
+          <p>
+            Describe the exploration to your agent however you normally work. Groot cares about the
+            resulting exploration contract, not your prompting method.
+          </p>
+          <span className="starter-prompt-label">OPTIONAL STARTER PROMPT</span>
+          <p>New to this workflow? Replace the three bracketed placeholders and start here.</p>
+          <AgentPrompt kind="exploration" workspace={workspace} primary />
+        </li>
+      </ol>
+      <p className="handoff-next">
+        Keep Groot running. When the coding agent creates the exploration, Groot discovers it
+        automatically and it appears in Studio.
+      </p>
+    </section>
   );
 }
 

@@ -759,6 +759,11 @@ h1 {
   font-size: 20px;
   color: #e5e8e6;
 }
+.gallery-empty .first-exploration-handoff {
+  max-width: 820px;
+  margin: 32px auto 0;
+  text-align: left;
+}
 .catalog-error {
   margin: 16px 32px;
   background: #332821;
@@ -1827,6 +1832,73 @@ textarea:focus-visible {
   color: var(--muted-foreground);
   font-size: 12px;
 }
+.first-exploration-handoff {
+  margin: 32px 0;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--muted);
+}
+.first-exploration-handoff ol {
+  display: grid;
+  gap: 24px;
+  margin: 0;
+  padding-left: 24px;
+}
+.first-exploration-handoff li {
+  padding-left: 8px;
+}
+.first-exploration-handoff h3,
+.first-exploration-handoff p {
+  margin: 0;
+}
+.first-exploration-handoff li > p {
+  margin-top: 6px;
+  color: var(--muted-foreground);
+}
+.handoff-path {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background: var(--background);
+}
+.handoff-path code {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.handoff-path button {
+  flex-shrink: 0;
+}
+.handoff-path-status {
+  display: block;
+  min-height: 1em;
+  margin-top: 6px;
+  color: var(--muted-foreground);
+  font-size: 12px;
+}
+.starter-prompt-label {
+  display: block;
+  margin-top: 20px;
+  color: var(--muted-foreground);
+  font-size: 9px;
+  letter-spacing: 1.2px;
+}
+.starter-prompt-label + p {
+  margin-top: 6px;
+}
+.first-exploration-handoff .agent-prompt {
+  margin-bottom: 0;
+}
+.handoff-next {
+  margin: 24px 0 0 !important;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  color: var(--foreground);
+}
 .workspace-welcome {
   max-width: 760px;
   padding: 48px 32px;
@@ -1919,5 +1991,9 @@ textarea:focus-visible {
   }
   .project-entry-actions {
     grid-template-columns: 1fr;
+  }
+  .handoff-path {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
