@@ -17,7 +17,12 @@ it('starts empty, creates one file-based project, isolates examples and reopens 
     await rm(root, { recursive: true, force: true });
   });
   const headers = { host: '127.0.0.1:4310', origin: 'http://127.0.0.1:4310' };
-  expect((await app.inject({ url: '/api/workspace', headers })).json().project).toBeNull();
+  const initialWorkspace = (await app.inject({ url: '/api/workspace', headers })).json();
+  expect(initialWorkspace.project).toBeNull();
+  expect(initialWorkspace.workspace).toEqual({
+    mode: 'legacy',
+    path: join(root, 'workspace'),
+  });
   expect((await app.inject({ url: '/api/demos?scope=user', headers })).json().demos).toEqual([]);
   expect(
     (await app.inject({ method: 'POST', url: '/api/workspace', headers, payload: { name: '' } }))

@@ -39,6 +39,7 @@ test('empty workspace, own project, agent files, optional design system and sepa
   await page.getByRole('button', { name: 'Continue without a design system' }).click();
   await expect(page.getByLabel('Agent prompt')).toHaveValue(/workspace\/demos/);
   await page.getByRole('link', { name: 'NOVA · Example Project', exact: true }).click();
+  await expect(page.getByText('EXAMPLE PROJECT', { exact: true })).toBeVisible();
   await expect(
     page.getByRole('button', { name: 'Open Emergency Booking — Simplified', exact: true }),
   ).toBeVisible();
@@ -67,6 +68,37 @@ test('empty workspace, own project, agent files, optional design system and sepa
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Open Reading list', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: /Open Emergency Booking/ })).toHaveCount(0);
+  const externalPath = ['C:', 'Design Work', 'Spend.In'].join('\\');
+  await page.route('**/api/workspace?scope=user', (route) =>
+    route.fulfill({
+      contentType: 'application/json',
+      body: JSON.stringify({
+        project: { name: 'Spend.In', description: 'External workspace' },
+        legacyCount: 0,
+        workspace: { mode: 'external', path: externalPath },
+      }),
+    }),
+  );
+  await page.reload();
+  await page.getByRole('button', { name: 'Start Here', exact: true }).click();
+  await expect(page.getByText('Designer project folder:', { exact: false })).toContainText(
+    externalPath,
+  );
+  await expect(page.getByText('Open the designer project folder', { exact: false })).toBeVisible();
+  await expect(page.getByText('Open this repository', { exact: false })).toHaveCount(0);
+  const prompts = page.getByLabel('Agent prompt');
+  await expect(prompts.first()).toHaveValue(/^Read project\.json/);
+  await expect(prompts.last()).toHaveValue(/Write demos\/<id>\/meta\.json/);
+  await expect(prompts.last()).not.toHaveValue(/workspace\/|packages\/design-system|skills\//);
+  await page.getByRole('button', { name: 'Design System', exact: true }).click();
+  await expect(page.getByText('design-system/src/index.tsx', { exact: true })).toBeVisible();
+  await expect(page.getByText(/workspace\/packages\/design-system/)).toHaveCount(0);
+  await page.getByRole('button', { name: 'All Demos', exact: false }).click();
+  await expect(page.getByText('Live from', { exact: false })).toContainText('demos/');
+  await expect(page.getByText('Live from', { exact: false })).not.toContainText('workspace/demos/');
+  await page.getByRole('button', { name: 'Open Reading list', exact: true }).click();
+  await expect(page.getByText('NOVA DENTAL', { exact: true })).toHaveCount(0);
+  await expect(page.getByText(/\/ Spend\.In$/)).toBeVisible();
   await page.setViewportSize({ width: 640, height: 800 });
   await page.screenshot({
     path: test.info().outputPath('own-workspace-narrow.png'),

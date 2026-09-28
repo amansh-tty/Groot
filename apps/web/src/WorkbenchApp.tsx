@@ -22,9 +22,15 @@ import {
   CreateProject,
   UserDesignSystem,
   type Project,
+  type WorkspaceLocation,
 } from './WorkspaceWelcome';
 const example = new URLSearchParams(location.search).get('example') === 'nova';
 type Page = 'all' | 'start' | 'system' | 'mine';
+interface WorkspaceState {
+  project: Project | null;
+  legacyCount: number;
+  workspace: WorkspaceLocation;
+}
 const empty: Catalog = {
   demos: [],
   warnings: [],
@@ -98,7 +104,7 @@ function Thumbnail({ demo }: { demo: Demo }) {
     </div>
   );
 }
-function StartHere({ revision }: { revision: number }) {
+function StartHere({ revision, workspace }: { revision: number; workspace?: WorkspaceLocation }) {
   const [context, setContext] = useState<{ name: string; content: string }[]>([]);
   const [selected, setSelected] = useState('START');
   const [error, setError] = useState('');
@@ -137,11 +143,11 @@ function StartHere({ revision }: { revision: number }) {
           {error && <p role="alert">{error}</p>}
           {selected === 'START' && !example ? (
             <>
-              <Orientation />
+              <Orientation workspace={workspace} />
               <h2>Give your agent the product context</h2>
-              <AgentPrompt kind="context" />
+              <AgentPrompt kind="context" workspace={workspace} />
               <h2>Create a functional exploration</h2>
-              <AgentPrompt kind="exploration" />
+              <AgentPrompt kind="exploration" workspace={workspace} />
             </>
           ) : selected === 'START' ? (
             <>
@@ -205,10 +211,7 @@ function StartHere({ revision }: { revision: number }) {
   );
 }
 export function App() {
-  const [workspace, setWorkspace] = useState<{
-    project: Project | null;
-    legacyCount: number;
-  } | null>(null);
+  const [workspace, setWorkspace] = useState<WorkspaceState | null>(null);
   const [orientation, setOrientation] = useState(() => {
     try {
       return localStorage.getItem('playground.orientation.dismissed') !== 'yes';
@@ -248,8 +251,12 @@ export function App() {
         const [next, info] = await Promise.all([
           api<Catalog>('/demos'),
           example
-            ? Promise.resolve({ project: null, legacyCount: 0 })
-            : api<{ project: Project | null; legacyCount: number }>('/workspace'),
+            ? Promise.resolve<WorkspaceState>({
+                project: null,
+                legacyCount: 0,
+                workspace: { mode: 'legacy', path: '' },
+              })
+            : api<WorkspaceState>('/workspace'),
         ]);
         if (!stopped && !example) {
           const linked = new URLSearchParams(location.hash.slice(1)).get('demo');
@@ -447,8 +454,9 @@ export function App() {
               {navigationNotice}
             </p>
           )}
-          {!example && orientation && (
+          {!example && orientation && loaded && workspace && (
             <Orientation
+              workspace={workspace?.workspace}
               onDismiss={() => {
                 setOrientation(false);
                 try {
@@ -470,7 +478,11 @@ export function App() {
           ) : !example && !workspace?.project && !active && page === 'all' ? (
             <CreateProject
               onCreated={(project) =>
-                setWorkspace({ project, legacyCount: workspace?.legacyCount ?? 0 })
+                setWorkspace({
+                  project,
+                  legacyCount: workspace?.legacyCount ?? 0,
+                  workspace: workspace?.workspace ?? { mode: 'legacy', path: 'workspace' },
+                })
               }
             />
           ) : active ? (
@@ -481,13 +493,22 @@ export function App() {
               onDraftChange={setDraftDirty}
               onOpen={open}
               onBack={() => open('')}
+              workspace={workspace?.workspace}
+              productName={projectName}
             />
           ) : page === 'system' ? (
             <>
-              {example ? <DesignSystem /> : <UserDesignSystem onContinue={() => navigate('all')} />}
+              {example ? (
+                <DesignSystem />
+              ) : (
+                <UserDesignSystem
+                  workspace={workspace?.workspace}
+                  onContinue={() => navigate('all')}
+                />
+              )}
             </>
           ) : page === 'start' ? (
-            <StartHere revision={catalog.revision} />
+            <StartHere revision={catalog.revision} workspace={workspace?.workspace} />
           ) : (
             <div className="gallery-page">
               <div className="gallery-heading">
@@ -511,7 +532,9 @@ export function App() {
                   <ArrowUpRight />
                 </Button>
               </div>
-              {!example && creatingExploration && <AgentPrompt kind="exploration" />}
+              {!example && creatingExploration && (
+                <AgentPrompt kind="exploration" workspace={workspace?.workspace} />
+              )}
               <div className="gallery-tools">
                 <div className="gallery-filters" aria-label="Platform filters">
                   {['all', 'mobile', 'web'].map((f) => (
@@ -617,13 +640,13 @@ export function App() {
                   </h2>
                   <p>
                     {!example && !catalog.demos.length
-                      ? 'Tell your coding agent what you want to explore. Save its prototype in workspace/demos and it will appear here automatically.'
+                      ? `Tell your coding agent what you want to explore. Save its prototype in ${workspace?.workspace.mode === 'external' ? 'demos/' : 'workspace/demos/'} and it will appear here automatically.`
                       : page === 'mine'
                         ? 'Open a demo and create an alternative. It will appear here.'
                         : 'Try another search or platform filter.'}
                   </p>
                   {!example && !catalog.demos.length ? (
-                    <AgentPrompt kind="exploration" />
+                    <AgentPrompt kind="exploration" workspace={workspace?.workspace} />
                   ) : (
                     <Button
                       variant="outline"
@@ -641,7 +664,12 @@ export function App() {
               <footer className="gallery-footer">
                 <span>
                   <i />
-                  Live from <code>{example ? 'demos/' : 'workspace/demos/'}</code>
+                  Live from{' '}
+                  <code>
+                    {example || workspace?.workspace.mode === 'external'
+                      ? 'demos/'
+                      : 'workspace/demos/'}
+                  </code>
                 </span>
                 <span>
                   {example ? 'NOVA DENTAL · Example Project · Fictional data' : projectName}

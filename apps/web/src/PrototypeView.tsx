@@ -28,15 +28,23 @@ export function PrototypeView({
   onOpen,
   onBack,
   onDraftChange,
+  workspace,
+  productName,
 }: {
   id: string;
   catalog: Catalog;
   onOpen: (id: string) => void;
   onBack: () => void;
   onDraftChange: (dirty: boolean) => void;
+  workspace?: { mode: 'external' | 'legacy'; path: string };
+  productName: string;
 }) {
-  const demoFolder =
-    new URLSearchParams(location.search).get('example') === 'nova' ? 'demos/' : 'workspace/demos/';
+  const example = new URLSearchParams(location.search).get('example') === 'nova';
+  const demoFolder = example
+    ? 'demos/'
+    : workspace?.mode === 'external'
+      ? 'demos/'
+      : 'workspace/demos/';
   const [detail, setDetail] = useState<Detail | null>(null);
   const [config, setConfig] = useState<PrototypeConfig>({
     screens: [],
@@ -253,7 +261,8 @@ export function PrototypeView({
         <div>
           <h1>{detail?.meta.title ?? meta?.title ?? 'Loading exploration…'}</h1>
           <span>
-            {detail?.meta.author ?? meta?.author} <span className="separator">/</span> NOVA DENTAL
+            {detail?.meta.author ?? meta?.author} <span className="separator">/</span>{' '}
+            {example ? 'NOVA DENTAL · EXAMPLE PROJECT' : productName}
           </span>
         </div>
         <Button

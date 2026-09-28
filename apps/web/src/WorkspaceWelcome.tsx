@@ -6,7 +6,18 @@ export interface Project {
   name: string;
   description: string;
 }
-export function Orientation({ onDismiss }: { onDismiss?: () => void }) {
+export interface WorkspaceLocation {
+  mode: 'external' | 'legacy';
+  path: string;
+}
+export function Orientation({
+  onDismiss,
+  workspace,
+}: {
+  onDismiss?: () => void;
+  workspace?: WorkspaceLocation;
+}) {
+  const external = workspace?.mode === 'external';
   return (
     <section className="orientation" aria-label="Using Playground">
       <div>
@@ -16,10 +27,22 @@ export function Orientation({ onDismiss }: { onDismiss?: () => void }) {
           controls. Start Here holds your product context. Design System is where you establish
           reusable components.
         </p>
-        <p>
-          Open this repository in Codex, Claude Code or Cursor. Your agent edits local files;
-          Playground updates as you work. No AI connection or account is needed here.
-        </p>
+        {external ? (
+          <>
+            <p>
+              Open the designer project folder in Codex, Claude Code or Cursor. Your agent edits
+              those local files; Playground updates as you work.
+            </p>
+            <p>
+              Designer project folder: <code>{workspace.path}</code>
+            </p>
+          </>
+        ) : (
+          <p>
+            Open this repository in Codex, Claude Code or Cursor. Your agent edits local files;
+            Playground updates as you work. No AI connection or account is needed here.
+          </p>
+        )}
       </div>
       {onDismiss && (
         <Button variant="ghost" onClick={onDismiss}>
@@ -30,17 +53,33 @@ export function Orientation({ onDismiss }: { onDismiss?: () => void }) {
   );
 }
 
-export function AgentPrompt({ kind }: { kind: 'exploration' | 'system' | 'context' }) {
+export function AgentPrompt({
+  kind,
+  workspace,
+}: {
+  kind: 'exploration' | 'system' | 'context';
+  workspace?: WorkspaceLocation;
+}) {
   const [copied, setCopied] = useState('');
-  const prompt =
-    kind === 'exploration'
+  const external = workspace?.mode === 'external';
+  const prompt = external
+    ? kind === 'exploration'
+      ? 'Read AGENTS.md, project.json, relevant context files, and design-system/src/index.tsx if present. Help me create a functional exploration for my product. Ask what experience I want to explore. Write demos/<id>/meta.json and demos/<id>/src/App.tsx using the existing demo contract. Use data/ and the shared design system only if available; otherwise use simple local styles.'
+      : kind === 'system'
+        ? 'Read project.json and relevant context files. Help me establish reusable components in design-system/src/index.tsx from the Figma, Storybook, codebase or documentation references I supply. Ask me for those references; do not assume an importer exists. Add a component showcase as an exploration in demos/.'
+        : 'Read project.json. Help me document my product in context/PRODUCT.md, context/USERS.md, context/PRINCIPLES.md and context/CONSTRAINTS.md. Ask only what is needed; keep established facts separate from assumptions.'
+    : kind === 'exploration'
       ? 'Read AGENTS.md and workspace/project.json, then relevant workspace/context files and skills/prototype/SKILL.md. Help me create a functional exploration for my product. Ask what experience I want to explore. Write workspace/demos/<id>/meta.json and src/App.tsx using the existing demo contract. Use workspace/data and workspace/packages/design-system only if available; otherwise use simple local styles. Do not use NOVA product facts or alter the example files.'
       : kind === 'system'
         ? 'Read workspace/project.json and relevant workspace/context files. Help me establish reusable components in workspace/packages/design-system/src from the Figma, Storybook, codebase or documentation references I supply. Ask me for those references; do not assume an importer exists. Add a component showcase as an exploration in workspace/demos using the existing demo contract. Do not copy NOVA branding or product assumptions.'
         : 'Read workspace/project.json. Help me document my product in workspace/context/PRODUCT.md, USERS.md, PRINCIPLES.md and CONSTRAINTS.md. Ask only what is needed; keep established facts separate from assumptions. Do not use NOVA context as my product context.';
   return (
     <div className="agent-prompt">
-      <p>Copy this into your coding agent in the same repository.</p>
+      <p>
+        {external
+          ? 'Copy this into your coding agent with the designer project folder open.'
+          : 'Copy this into your coding agent in the same repository.'}
+      </p>
       <textarea
         className="resize-none"
         aria-label="Agent prompt"
@@ -140,7 +179,14 @@ export function CreateProject({ onCreated }: { onCreated: (project: Project) => 
   );
 }
 
-export function UserDesignSystem({ onContinue }: { onContinue: () => void }) {
+export function UserDesignSystem({
+  onContinue,
+  workspace,
+}: {
+  onContinue: () => void;
+  workspace?: WorkspaceLocation;
+}) {
+  const external = workspace?.mode === 'external';
   return (
     <div className="start-page">
       <h1>Your design system</h1>
@@ -149,10 +195,14 @@ export function UserDesignSystem({ onContinue }: { onContinue: () => void }) {
         references to your coding agent, or start exploring with simple styles.
       </p>
       <p>
-        Your components live in <code>workspace/packages/design-system/src</code>. Ask your agent to
-        add a component showcase to Explorations when you have components to review.
+        Your components live in{' '}
+        <code>
+          {external ? 'design-system/src/index.tsx' : 'workspace/packages/design-system/src'}
+        </code>
+        . Ask your agent to add a component showcase to Explorations when you have components to
+        review.
       </p>
-      <AgentPrompt kind="system" />
+      <AgentPrompt kind="system" workspace={workspace} />
       <Button variant="ghost" onClick={onContinue}>
         Continue without a design system
       </Button>

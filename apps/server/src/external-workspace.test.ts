@@ -65,10 +65,12 @@ it('uses an explicit external directory directly as the user workspace', async (
   });
   const headers = { host: '127.0.0.1:4310' };
 
-  expect((await app.inject({ url: '/api/workspace', headers })).json().project).toEqual({
+  const workspace = (await app.inject({ url: '/api/workspace', headers })).json();
+  expect(workspace.project).toEqual({
     name: 'External product',
     description: 'Direct workspace fixture',
   });
+  expect(workspace.workspace).toEqual({ mode: 'external', path: externalRoot });
   expect((await app.inject({ url: '/api/demos?scope=user', headers })).json().demos[0].id).toBe(
     'hello',
   );

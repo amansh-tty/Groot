@@ -52,7 +52,14 @@ export async function createApp(options: AppOptions) {
               'patient-search',
             ].includes(d.id),
         );
-        return { project: await readProject(directory), legacyCount: legacy.length };
+        return {
+          project: await readProject(directory),
+          legacyCount: legacy.length,
+          workspace: {
+            mode: options.externalWorkspaceRoot ? ('external' as const) : ('legacy' as const),
+            path: directory,
+          },
+        };
       } catch (error) {
         return reply.code(409).send({ error: { message: (error as Error).message } });
       }
