@@ -1,10 +1,35 @@
 import { fileURLToPath } from 'node:url';
+import { spawn } from 'node:child_process';
+import { once } from 'node:events';
 import { realpath } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 
 const [command, subject, ...flags] = process.argv.slice(2);
 const repo = fileURLToPath(new URL('../', import.meta.url));
-if (command === 'create') {
+if (command === 'open') {
+  if (!subject || flags.length) {
+    console.error('Usage: pnpm groot open <workspace-path>\nRun pnpm build first.');
+    process.exitCode = 1;
+  } else {
+    try {
+      const { prepareStudioLaunch } = await import('../apps/server/dist/workspace-launcher.js');
+      const launch = await prepareStudioLaunch(subject, {
+        repoRoot: repo,
+        environment: process.env,
+        packageManagerPath: process.env.npm_execpath,
+      });
+      console.log(`Opening Groot designer workspace\n${launch.workspace.path}`);
+      const child = spawn(launch.command, launch.args, launch.options);
+      const [code, signal] = await once(child, 'exit');
+      if (signal) process.kill(process.pid, signal);
+      else process.exitCode = code ?? 1;
+    } catch (error) {
+      console.error('Open failed:', error.message);
+      if (error.code === 'ERR_MODULE_NOT_FOUND') console.error('Run pnpm build before opening.');
+      process.exitCode = 1;
+    }
+  }
+} else if (command === 'create') {
   const options = new Map();
   let valid = Boolean(subject);
   for (let index = 0; index < flags.length; index += 2) {
