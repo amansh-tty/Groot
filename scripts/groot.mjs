@@ -1,18 +1,26 @@
 import { fileURLToPath } from 'node:url';
-import { join } from 'node:path';
+import { realpath } from 'node:fs/promises';
+import { join, resolve } from 'node:path';
 
 const [command, id, ...flags] = process.argv.slice(2);
-if (command !== 'export' || !id || flags.some((flag) => flag !== '--example') || flags.length > 1) {
+const example = flags.length === 1 && flags[0] === '--example';
+const externalWorkspace =
+  flags.length === 2 && flags[0] === '--workspace' && flags[1] ? flags[1] : undefined;
+if (command !== 'export' || !id || (flags.length > 0 && !example && !externalWorkspace)) {
   console.error(
-    'Usage: pnpm groot export <exploration-id> [--example]\nRun pnpm build first. User explorations are read from workspace/; --example selects NOVA.',
+    'Usage: pnpm groot export <exploration-id> [--example | --workspace <path>]\nRun pnpm build first. User explorations are read from workspace/; --example selects NOVA; --workspace selects a direct external workspace.',
   );
   process.exitCode = 1;
 } else {
   try {
     const repo = fileURLToPath(new URL('../', import.meta.url));
     const { exportPrototype } = await import('../apps/server/dist/prototype-export.js');
-    const scope = flags.includes('--example') ? 'example' : 'workspace';
-    const root = scope === 'example' ? repo : join(repo, 'workspace');
+    const scope = example ? 'example' : externalWorkspace ? 'external' : 'workspace';
+    const root = externalWorkspace
+      ? await realpath(resolve(externalWorkspace))
+      : scope === 'example'
+        ? repo
+        : join(repo, 'workspace');
     if (!/^[a-z0-9][a-z0-9-]{0,79}$/.test(id)) throw new Error('Invalid exploration ID.');
     const result = await exportPrototype(
       root,
