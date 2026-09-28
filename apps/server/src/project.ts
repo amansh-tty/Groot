@@ -18,6 +18,11 @@ export async function userWorkspace(root: string) {
   return directory;
 }
 
+// Explicit external mode uses the supplied designer workspace itself.
+export async function directUserWorkspace(directory: string) {
+  return realpath(directory);
+}
+
 export async function readProject(directory: string) {
   try {
     const path = join(directory, 'project.json');

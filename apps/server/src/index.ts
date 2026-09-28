@@ -16,6 +16,7 @@ const app = await createApp({
   staticRoot: built ? staticRoot : undefined,
   workspaceRoot:
     process.env.PLAYGROUND_WORKSPACE_ROOT ?? fileURLToPath(new URL('../../../', import.meta.url)),
+  externalWorkspaceRoot: process.env.PLAYGROUND_EXTERNAL_WORKSPACE_ROOT,
 });
 try {
   await app.listen({ host: '127.0.0.1', port: config.port });

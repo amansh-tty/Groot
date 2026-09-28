@@ -4,7 +4,7 @@ import { healthSchema, settingsSchema } from '@playground/shared';
 import { openDatabase } from './database.js';
 import { Workbench } from './workbench.js';
 import { z } from 'zod';
-import { userWorkspace, readProject, createProject } from './project.js';
+import { userWorkspace, directUserWorkspace, readProject, createProject } from './project.js';
 
 interface AppOptions {
   dataDir: string;
@@ -12,6 +12,7 @@ interface AppOptions {
   development?: boolean;
   staticRoot?: string;
   workspaceRoot?: string;
+  externalWorkspaceRoot?: string;
 }
 
 export async function createApp(options: AppOptions) {
@@ -29,7 +30,9 @@ export async function createApp(options: AppOptions) {
     const workbench = new Workbench(options.workspaceRoot);
     await workbench.start();
     app.addHook('onClose', async () => workbench.close());
-    const directory = await userWorkspace(options.workspaceRoot);
+    const directory = options.externalWorkspaceRoot
+      ? await directUserWorkspace(options.externalWorkspaceRoot)
+      : await userWorkspace(options.workspaceRoot);
     const personal = new Workbench(directory);
     await personal.start();
     app.addHook('onClose', async () => personal.close());
