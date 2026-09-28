@@ -32,6 +32,13 @@ test('empty workspace, own project, agent files, optional design system and sepa
   await expect(
     page.getByRole('heading', { name: 'Your first exploration starts here.' }),
   ).toBeVisible();
+  await page.getByRole('button', { name: 'Start Here', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Acorn', exact: true })).toBeVisible();
+  await expect(page.getByText('Built-in workspace', { exact: true })).toBeVisible();
+  await expect(page.getByText(/pnpm groot create/)).toBeVisible();
+  await expect(page.getByText(/pnpm groot open/)).toBeVisible();
+  await expect(page.getByText(/PLAYGROUND_EXTERNAL_WORKSPACE_ROOT/)).toHaveCount(0);
+  await expect(page.getByText('Designer project folder', { exact: true })).toHaveCount(0);
   const root = join(process.env.PLAYGROUND_E2E_ROOT!, 'workspace');
   expect(JSON.parse(await readFile(join(root, 'project.json'), 'utf8')).name).toBe('Acorn');
   await page.getByRole('button', { name: 'Design System', exact: true }).click();
@@ -81,6 +88,13 @@ test('empty workspace, own project, agent files, optional design system and sepa
   );
   await page.reload();
   await page.getByRole('button', { name: 'Start Here', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Spend.In', exact: true })).toBeVisible();
+  await expect(page.getByText('Current project', { exact: true })).toBeVisible();
+  await expect(page.getByText('Designer project folder', { exact: true })).toBeVisible();
+  await expect(page.getByText(/pnpm groot create/)).toBeVisible();
+  await expect(page.getByText(/pnpm groot open/)).toBeVisible();
+  await expect(page.getByText(/PLAYGROUND_EXTERNAL_WORKSPACE_ROOT/)).toHaveCount(0);
+  await expect(page.getByText(/Switch project/i)).toHaveCount(0);
   await expect(page.getByText('Designer project folder:', { exact: false })).toContainText(
     externalPath,
   );

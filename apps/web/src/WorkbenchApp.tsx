@@ -20,6 +20,7 @@ import {
   Orientation,
   AgentPrompt,
   CreateProject,
+  ProjectEntry,
   UserDesignSystem,
   type Project,
   type WorkspaceLocation,
@@ -104,7 +105,15 @@ function Thumbnail({ demo }: { demo: Demo }) {
     </div>
   );
 }
-function StartHere({ revision, workspace }: { revision: number; workspace?: WorkspaceLocation }) {
+function StartHere({
+  revision,
+  workspace,
+  project,
+}: {
+  revision: number;
+  workspace?: WorkspaceLocation;
+  project: Project | null;
+}) {
   const [context, setContext] = useState<{ name: string; content: string }[]>([]);
   const [selected, setSelected] = useState('START');
   const [error, setError] = useState('');
@@ -143,6 +152,7 @@ function StartHere({ revision, workspace }: { revision: number; workspace?: Work
           {error && <p role="alert">{error}</p>}
           {selected === 'START' && !example ? (
             <>
+              {workspace && <ProjectEntry project={project} workspace={workspace} />}
               <Orientation workspace={workspace} />
               <h2>Give your agent the product context</h2>
               <AgentPrompt kind="context" workspace={workspace} />
@@ -347,11 +357,11 @@ export function App() {
           </span>
           playground<span className="brand-dot">.</span>
         </a>
-        <div className="project-switch">
+        <div className="current-project">
           <span className="nova-glyph">{projectName.charAt(0)}</span>
           <div>
             {projectName}
-            <small>{example ? 'Example Project' : 'Your project'}</small>
+            <small>{example ? 'Example Project' : 'Current project'}</small>
           </div>
         </div>
         <span className="sidebar-label">WORKBENCH</span>
@@ -508,7 +518,11 @@ export function App() {
               )}
             </>
           ) : page === 'start' ? (
-            <StartHere revision={catalog.revision} workspace={workspace?.workspace} />
+            <StartHere
+              revision={catalog.revision}
+              workspace={workspace?.workspace}
+              project={workspace?.project ?? null}
+            />
           ) : (
             <div className="gallery-page">
               <div className="gallery-heading">

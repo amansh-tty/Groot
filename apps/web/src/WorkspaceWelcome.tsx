@@ -10,6 +10,70 @@ export interface WorkspaceLocation {
   mode: 'external' | 'legacy';
   path: string;
 }
+export function ProjectEntry({
+  project,
+  workspace,
+}: {
+  project: Project | null;
+  workspace: WorkspaceLocation;
+}) {
+  const [copied, setCopied] = useState('');
+  const createCommand = 'pnpm groot create "<workspace-path>" --name "<project-name>"';
+  const openCommand = 'pnpm groot open "<workspace-path>"';
+  function copy(command: string, label: string) {
+    void navigator.clipboard
+      .writeText(command)
+      .then(() => setCopied(`${label} command copied.`))
+      .catch(() => setCopied('Select the command and copy it manually.'));
+  }
+  return (
+    <section className="project-entry" aria-labelledby="current-project-heading">
+      <div className="current-project-details">
+        <span className="eyebrow">CURRENT PROJECT</span>
+        <h2 id="current-project-heading">{project?.name ?? 'No project is open'}</h2>
+        <p>
+          Groot Studio is connected to one local folder. Open this folder in your coding agent so
+          its context, design system and explorations stay together.
+        </p>
+        <dl>
+          <div>
+            <dt>Workspace</dt>
+            <dd>
+              <code>{workspace.path}</code>
+            </dd>
+          </div>
+          <div>
+            <dt>Connection</dt>
+            <dd>
+              {workspace.mode === 'external' ? 'Designer project folder' : 'Built-in workspace'}
+            </dd>
+          </div>
+        </dl>
+      </div>
+      <div className="project-entry-actions">
+        <article>
+          <h3>Create another project</h3>
+          <p>Create a thin Groot project as a normal local folder.</p>
+          <code>{createCommand}</code>
+          <Button variant="outline" size="sm" onClick={() => copy(createCommand, 'Create')}>
+            Copy create command
+          </Button>
+        </article>
+        <article>
+          <h3>Open an existing project</h3>
+          <p>Start another Groot Studio process connected to that project folder.</p>
+          <code>{openCommand}</code>
+          <Button variant="outline" size="sm" onClick={() => copy(openCommand, 'Open')}>
+            Copy open command
+          </Button>
+        </article>
+      </div>
+      <span className="project-entry-status" role="status">
+        {copied}
+      </span>
+    </section>
+  );
+}
 export function Orientation({
   onDismiss,
   workspace,
