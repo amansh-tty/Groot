@@ -36,10 +36,15 @@ export class Workbench {
   private hash(value: string) {
     return createHash('sha256').update(value).digest('hex');
   }
-  constructor(readonly directory: string) {}
+  constructor(
+    readonly directory: string,
+    readonly workspaceLayout: 'legacy' | 'external' = 'legacy',
+  ) {}
   async start() {
     this.root = await realpath(this.directory);
-    for (const folder of ['demos', 'context', 'data', 'packages/design-system', '.console']) {
+    const designSystemFolder =
+      this.workspaceLayout === 'external' ? 'design-system' : 'packages/design-system';
+    for (const folder of ['demos', 'context', 'data', designSystemFolder, '.console']) {
       const path = join(this.root, folder);
       let parent = this.root;
       for (const segment of folder.split('/')) {

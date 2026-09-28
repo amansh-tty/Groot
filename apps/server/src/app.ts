@@ -33,7 +33,10 @@ export async function createApp(options: AppOptions) {
     const directory = options.externalWorkspaceRoot
       ? await directUserWorkspace(options.externalWorkspaceRoot)
       : await userWorkspace(options.workspaceRoot);
-    const personal = new Workbench(directory);
+    const personal = new Workbench(
+      directory,
+      options.externalWorkspaceRoot ? 'external' : 'legacy',
+    );
     await personal.start();
     app.addHook('onClose', async () => personal.close());
     const bench = (request: { query: unknown }) =>

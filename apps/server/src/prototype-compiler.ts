@@ -31,6 +31,14 @@ export async function compilePrototype(directory: string, demoDirectory: string,
     if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
     /* optional contract */
   }
+  let designSystemDirectory = join(root, 'packages/design-system');
+  try {
+    await safe(join(root, 'design-system/src/index.tsx'));
+    designSystemDirectory = join(root, 'design-system');
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
+    /* Existing workspaces use packages/design-system. */
+  }
   const code = `import React, {useState, Component} from 'react';
 import {createRoot} from 'react-dom/client';
 import Prototype from ${JSON.stringify(entry.replaceAll('\\', '/'))};
@@ -84,7 +92,7 @@ createRoot(document.getElementById('root')).render(<Host/>);`;
       react: join(webModules, 'react'),
       'react-dom': join(webModules, 'react-dom'),
       'lucide-react': join(webModules, 'lucide-react'),
-      '@playground/design-system': join(root, 'packages/design-system/src/index.tsx'),
+      '@playground/design-system': join(designSystemDirectory, 'src/index.tsx'),
     },
     plugins: [
       {
@@ -95,7 +103,7 @@ createRoot(document.getElementById('root')).render(<Host/>);`;
             const allowed = [
               demoPath,
               join(root, 'data'),
-              join(root, 'packages/design-system'),
+              designSystemDirectory,
               join(compilerRoot, 'node_modules'),
             ];
             if (
