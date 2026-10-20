@@ -21,9 +21,9 @@ rounded:
 
 ## Overview
 
-Groot is a local workbench for designers exploring directions with their existing external coding agent. The user approved the three latest generated home/editor/dialog studies, guided by their attached Figma-style file architecture and Paper-style vertical toolbar. The user explicitly rejected purple/blue shell accents retained by the generated editor. All shell surfaces and interaction cues are grayscale; color belongs to imported prototypes. The actual Toolcraft reference informs compact neutral field construction, panel grouping, fine dividers and contextual canvas tools. The approved direction replaces the earlier light and dark experiments.
+Groot is a local workbench for designers exploring directions with their existing external coding agent. The user approved the three latest generated home/editor/dialog studies, guided by their attached Figma-style file architecture and Paper-style vertical toolbar. The user explicitly rejected purple/blue shell accents retained by the generated editor. All shell surfaces and interaction cues are grayscale; color belongs to imported prototypes. The interface uses compact neutral fields, grouped panels, fine dividers and contextual canvas tools. The approved direction replaces the earlier light and dark experiments.
 
-This is an existing file-based React/TypeScript/pnpm app, not a generated Toolcraft renderer product. Apply Toolcraft visual semantics through the workbench's shared shell primitives. Never patch generated Toolcraft internals or add unrelated canvas settings, exports, timeline, layers or an AI chat to imitate the source tool.
+Groot is a file-based React/TypeScript/pnpm application. Its shared shell primitives own navigation, panels and controls. Keep visual decisions grounded in the approved images and product workflow. Do not add unrelated canvas settings, timeline, layers or embedded AI chat.
 
 ## Colors
 
@@ -47,7 +47,7 @@ The library renders real lazy inert sandbox previews, twelve initially with Load
 
 ## Elevation & Depth
 
-Toolcraft-like panel boundaries and very subtle neutral insets. Only modal dialogs and the prototype frame use restrained shadow to establish depth. No lifted marketing cards, gradients, colored decoration or stock imagery. The charcoal canvas recedes behind the prototype. Reduced-motion disables transitional movement.
+Subtle panel boundaries and very subtle neutral insets. Only modal dialogs and the prototype frame use restrained shadow to establish depth. No lifted marketing cards, gradients, colored decoration or stock imagery. The charcoal canvas recedes behind the prototype. Reduced-motion disables transitional movement.
 
 ## Shapes
 

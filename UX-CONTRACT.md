@@ -1,6 +1,6 @@
 # Groot interaction contract
 
-The maintained user brief and AGENTS.md own product behavior. DESIGN.md owns the Toolcraft-language shell. Imported prototype data and design systems remain independent.
+The maintained user brief and AGENTS.md own product behavior. DESIGN.md owns the Groot interface. Imported prototype data and design systems remain independent.
 
 | Capability     | Canonical owner                                        | Source of truth                              | Allowed variants                                      | Verification                        |
 | -------------- | ------------------------------------------------------ | -------------------------------------------- | ----------------------------------------------------- | ----------------------------------- |

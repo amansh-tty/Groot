@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-/* Toolcraft visual semantics, translated for the file-based Playground shell.
+/* Groot shell design tokens.
    These tokens never enter sandboxed prototype documents. */
 @theme inline {
   --color-background: var(--background);
