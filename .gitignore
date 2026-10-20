@@ -19,3 +19,6 @@ playwright-report/
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# Local integration recovery artifact
+docs/integration/original-local-changes.patch

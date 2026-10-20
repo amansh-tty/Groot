@@ -55,6 +55,18 @@ it('creates an independent local alternative and reopens it without a database r
   }
   await expect(bench.detail('../context')).rejects.toThrow('Invalid demo ID');
 });
+it('discovers project-specific context documents without importing sibling project facts', async () => {
+  const { root, bench } = await fixture();
+  await writeFile(
+    join(root, 'context/DESIGN-SOURCE.md'),
+    '# Verified source\nLocal inspected components.',
+  );
+  await mkdir(join(root, 'context/nested'));
+  await writeFile(join(root, 'context/nested/OTHER.md'), 'Unrelated nested content');
+  const docs = await bench.context();
+  expect(docs.find((doc) => doc.name === 'DESIGN-SOURCE')?.content).toContain('Verified source');
+  expect(docs.some((doc) => doc.name === 'OTHER')).toBe(false);
+});
 it('compiles real React and reports a syntax failure without overwriting source', async () => {
   const { root, bench } = await fixture();
   const first = await bench.preview('patient-search');
@@ -130,4 +142,20 @@ it('persists only declared controls, rejects stale or out-of-range changes, and 
   const source = await readFile(join(root, 'demos', id, 'src/App.tsx'), 'utf8');
   await bench.changeControls(id, saved.version, { 'card-gap': 16 });
   expect(await readFile(join(root, 'demos', id, 'src/App.tsx'), 'utf8')).toBe(source);
+});
+
+it('reads recorded bounded prompt history and preserves malformed files', async () => {
+  const { root, bench } = await fixture();
+  const file = join(root, 'demos/patient-search/prompts.json');
+  expect((await bench.detail('patient-search')).prompts).toEqual([]);
+  const records = [
+    { prompt: 'Make search keyboard accessible.', createdAt: '2026-10-20T10:00:00.000Z' },
+  ];
+  await writeFile(file, JSON.stringify(records));
+  expect((await bench.detail('patient-search')).prompts).toEqual(records);
+  await writeFile(file, 'invalid history');
+  const invalid = await bench.detail('patient-search');
+  expect(invalid.prompts).toEqual([]);
+  expect(invalid.promptError).toContain('preserved');
+  expect(await readFile(file, 'utf8')).toBe('invalid history');
 });

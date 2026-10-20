@@ -9,6 +9,7 @@ export interface Project {
 export interface WorkspaceLocation {
   mode: 'external' | 'legacy';
   path: string;
+  agentPath?: string;
 }
 export function ProjectEntry({
   project,
@@ -83,7 +84,7 @@ export function Orientation({
 }) {
   const external = workspace?.mode === 'external';
   return (
-    <section className="orientation" aria-label="Using Playground">
+    <section className="orientation" aria-label="Using Groot">
       <div>
         <strong>Your work, alongside your coding agent.</strong>
         <p>
@@ -95,7 +96,7 @@ export function Orientation({
           <>
             <p>
               Open the designer project folder in Codex, Claude Code or Cursor. Your agent edits
-              those local files; Playground updates as you work.
+              those local files; Groot updates as you work.
             </p>
             <p>
               Designer project folder: <code>{workspace.path}</code>
@@ -104,7 +105,7 @@ export function Orientation({
         ) : (
           <p>
             Open this repository in Codex, Claude Code or Cursor. Your agent edits local files;
-            Playground updates as you work. No AI connection or account is needed here.
+            Groot updates as you work. No AI connection or account is needed here.
           </p>
         )}
       </div>
@@ -121,14 +122,16 @@ export function AgentPrompt({
   kind,
   workspace,
   primary = false,
+  onCancel,
 }: {
   kind: 'exploration' | 'system' | 'context';
   workspace?: WorkspaceLocation;
   primary?: boolean;
+  onCancel?: () => void;
 }) {
   const [copied, setCopied] = useState('');
   const external = workspace?.mode === 'external';
-  const prompt = external
+  const basePrompt = external
     ? kind === 'exploration'
       ? `Create a functional Groot product exploration.
 
@@ -152,6 +155,11 @@ Work only inside this designer workspace.
       : kind === 'system'
         ? 'Read workspace/project.json and relevant workspace/context files. Help me establish reusable components in workspace/packages/design-system/src from the Figma, Storybook, codebase or documentation references I supply. Ask me for those references; do not assume an importer exists. Add a component showcase as an exploration in workspace/demos using the existing demo contract. Do not copy NOVA branding or product assumptions.'
         : 'Read workspace/project.json. Help me document my product in workspace/context/PRODUCT.md, USERS.md, PRINCIPLES.md and CONSTRAINTS.md. Ask only what is needed; keep established facts separate from assumptions. Do not use NOVA context as my product context.';
+  const prompt =
+    basePrompt +
+    (kind === 'exploration'
+      ? '\nRecord the prompt you used in the exploration’s prompts.json as an array entry with prompt and an ISO createdAt date. Preserve existing records.'
+      : '');
   return (
     <div className="agent-prompt">
       <p>
@@ -166,17 +174,24 @@ Work only inside this designer workspace.
         value={prompt}
         rows={external && kind === 'exploration' ? 14 : 5}
       />
-      <Button
-        variant={primary ? 'default' : 'outline'}
-        onClick={() => {
-          void navigator.clipboard
-            .writeText(prompt)
-            .then(() => setCopied('Copied. Paste into your agent.'))
-            .catch(() => setCopied('Select the prompt above and copy it manually.'));
-        }}
-      >
-        {primary ? 'Copy starter prompt' : 'Copy agent prompt'}
-      </Button>
+      <div className="agent-prompt-actions">
+        {onCancel && (
+          <Button variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+        )}
+        <Button
+          variant={primary ? 'default' : 'outline'}
+          onClick={() => {
+            void navigator.clipboard
+              .writeText(prompt)
+              .then(() => setCopied('Copied. Paste into your agent.'))
+              .catch(() => setCopied('Select the prompt above and copy it manually.'));
+          }}
+        >
+          {primary ? 'Copy starter prompt' : 'Copy agent prompt'}
+        </Button>
+      </div>
       <span role="status">{copied}</span>
     </div>
   );

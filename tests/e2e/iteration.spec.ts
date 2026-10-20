@@ -57,7 +57,7 @@ test('designer iteration: element feedback is readable and actionable in local f
   await expect(
     preview.getByRole('heading', { name: 'Appointment confirmed', exact: true }),
   ).toBeVisible();
-  await page.getByRole('button', { name: 'Create alternative', exact: true }).click();
+  await page.getByRole('button', { name: 'Create variation', exact: true }).click();
   await page.getByLabel('Alternative name').fill('V2 iteration alternative');
   await page.getByLabel('Description', { exact: true }).fill('A local comparison experiment.');
   await page
@@ -121,10 +121,12 @@ test('designer iteration: element feedback is readable and actionable in local f
 
   await page.getByRole('button', { name: 'Close comparison', exact: true }).click();
   await page
-    .getByLabel('Exploration', { exact: true })
-    .selectOption('emergency-booking-simplified');
+    .locator('.variation-list')
+    .getByRole('button', { name: /Emergency Booking — Simplified/ })
+    .click();
   await page.getByRole('button', { name: 'Controls', exact: true }).click();
-  await page.getByRole('button', { name: 'Show appointment slots', exact: true }).click();
+  await page.getByRole('button', { name: 'Controls', exact: true }).click();
+  await page.getByRole('button', { name: 'Show controlled area', exact: true }).click();
   const gap = page.getByLabel('Card gap', { exact: false });
   await expect(gap).toHaveValue('16');
   await gap.focus();
@@ -139,7 +141,7 @@ test('designer iteration: element feedback is readable and actionable in local f
     'demos/emergency-booking-simplified/controls.json',
   );
   expect(JSON.parse(await readFile(controlsFile, 'utf8')).controls[0].value).toBe(16);
-  await page.getByRole('button', { name: /^All Demos/ }).click();
+  await page.getByRole('button', { name: 'Home', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('Save or discard');
   await expect(
     page.getByRole('heading', { name: 'Emergency Booking — Simplified', exact: true }),
@@ -182,6 +184,7 @@ test('designer iteration: element feedback is readable and actionable in local f
     'gap',
     '24px',
   );
+  await page.getByRole('button', { name: 'Controls', exact: true }).click();
   await page.getByRole('button', { name: 'Controls', exact: true }).click();
   await expect(page.getByLabel('Card gap', { exact: false })).toHaveValue('24');
   await page.screenshot({ path: test.info().outputPath('controls.png'), fullPage: true });

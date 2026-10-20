@@ -1,4 +1,5 @@
 import { watch, type FSWatcher } from 'node:fs';
+import { z } from 'zod';
 import {
   cp,
   lstat,
@@ -144,20 +145,35 @@ export class Workbench {
     } catch {
       /* optional */
     }
-    return { meta, readme, feedback, path };
+    let prompts: { prompt: string; createdAt: string }[] = [];
+    let promptError = '';
+    try {
+      const promptPath = join(path, 'prompts.json');
+      await lstat(promptPath);
+      prompts = z
+        .array(
+          z.object({
+            prompt: z.string().trim().min(1).max(8000),
+            createdAt: z.string().datetime(),
+          }),
+        )
+        .max(200)
+        .parse(JSON.parse(await this.text(promptPath)));
+    } catch (error) {
+      if (!(error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT'))
+        promptError =
+          'Prompt history could not be read. Check prompts.json; the file has been preserved.';
+    }
+    return { meta, readme, feedback, prompts, promptError, path };
   }
   async context() {
     const result = [];
-    for (const name of [
-      'PRODUCT',
-      'USERS',
-      'PRINCIPLES',
-      'CONSTRAINTS',
-      'TERMINOLOGY',
-      'DECISIONS',
-    ]) {
+    const entries = await readdir(join(this.root, 'context'), { withFileTypes: true });
+    for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name, 'en'))) {
+      if (!entry.isFile() || !/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}\.md$/i.test(entry.name)) continue;
+      const name = entry.name.slice(0, -3);
       try {
-        result.push({ name, content: await this.text(join(this.root, 'context', name + '.md')) });
+        result.push({ name, content: await this.text(join(this.root, 'context', entry.name)) });
       } catch {
         /* optional context */
       }

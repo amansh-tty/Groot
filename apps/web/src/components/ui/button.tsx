@@ -9,9 +9,9 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-        outline: 'border border-border bg-transparent text-foreground hover:bg-muted',
-        ghost: 'text-muted-foreground hover:bg-muted hover:text-foreground',
+        default: 'studio-button-primary',
+        outline: 'studio-button-outline',
+        ghost: 'studio-button-ghost',
       },
       size: { default: 'h-10 px-4 py-2', sm: 'h-8 px-3 text-xs', icon: 'h-9 w-9' },
     },
@@ -30,6 +30,8 @@ export function Button({
   return (
     <Comp
       data-slot="button"
+      data-size={size ?? 'default'}
+      type={asChild ? undefined : 'button'}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />

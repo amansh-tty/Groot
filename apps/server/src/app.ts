@@ -58,6 +58,7 @@ export async function createApp(options: AppOptions) {
           workspace: {
             mode: options.externalWorkspaceRoot ? ('external' as const) : ('legacy' as const),
             path: directory,
+            agentPath: options.externalWorkspaceRoot ? directory : options.workspaceRoot,
           },
         };
       } catch (error) {
@@ -150,7 +151,13 @@ export async function createApp(options: AppOptions) {
     app.get<{ Params: { id: string } }>('/api/demos/:id', async (request, reply) => {
       try {
         const detail = await bench(request).detail(request.params.id);
-        return { meta: detail.meta, readme: detail.readme, feedback: detail.feedback };
+        return {
+          meta: detail.meta,
+          readme: detail.readme,
+          feedback: detail.feedback,
+          prompts: detail.prompts,
+          promptError: detail.promptError,
+        };
       } catch {
         return reply.code(404).send({
           error: {

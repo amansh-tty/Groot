@@ -98,6 +98,7 @@ export function FeedbackPanel({
     >
       <label htmlFor="feedback-comment">Feedback</label>
       <textarea
+        className="resize-none"
         id="feedback-comment"
         ref={field}
         autoFocus
@@ -133,7 +134,7 @@ export function FeedbackPanel({
         Feedback <span>{data.items.length}</span>
       </h2>
       <p className="feedback-help">
-        Turn on Comment, then click an element or focus it and press Enter. Escape exits.
+        Select Comment, then choose an element in the preview. You decide when feedback is resolved.
       </p>
       {target && (
         <div className="feedback-composer">
@@ -254,7 +255,14 @@ export function FeedbackPanel({
       {!data.items.some((f) => filter === 'all' || f.status === filter) && (
         <p>No {filter === 'all' ? '' : filter + ' '}feedback yet.</p>
       )}
-      <p className="file-note">Saved in feedback/feedback.json</p>
+      <details className="file-note">
+        <summary>Where feedback is saved</summary>
+        <code>feedback/feedback.json</code>
+        <p>
+          Your agent can read this file. Editing the prototype never resolves feedback
+          automatically.
+        </p>
+      </details>
     </section>
   );
 }

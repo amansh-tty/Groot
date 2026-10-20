@@ -22,6 +22,7 @@ it('starts empty, creates one file-based project, isolates examples and reopens 
   expect(initialWorkspace.workspace).toEqual({
     mode: 'legacy',
     path: join(root, 'workspace'),
+    agentPath: root,
   });
   expect((await app.inject({ url: '/api/demos?scope=user', headers })).json().demos).toEqual([]);
   expect(

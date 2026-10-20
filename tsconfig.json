@@ -17,6 +17,8 @@
     "packages/**/*.tsx",
     "demos/**/*.ts",
     "demos/**/*.tsx",
+    "workspace/**/*.ts",
+    "workspace/**/*.tsx",
     "tests/**/*.ts",
     "*.ts"
   ],

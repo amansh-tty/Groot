@@ -1,0 +1,9 @@
+{
+  "id": "spend-in-dashboard",
+  "title": "Spend.In — Dashboard",
+  "description": "The existing Spend.In dashboard recreated from Figma frame 129:9331, with local chart and table interactions.",
+  "platform": "web",
+  "author": "Local designer",
+  "authorSlug": "local-designer",
+  "tags": ["dashboard", "spend-in", "figma"]
+}

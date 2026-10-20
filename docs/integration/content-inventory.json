@@ -1,0 +1,378 @@
+[
+  {
+    "path": "workspace/context/DESIGN-SOURCE.md",
+    "sha256": "bd0e49811403a68fa6baf772d87495ef90f00508991ac926198f622e16525085"
+  },
+  {
+    "path": "workspace/demos/design-system/README.md",
+    "sha256": "58c0dfcdecd5bab477a27fb16977d3fd377199c342cd4ee8a3d41d9733c4e544"
+  },
+  {
+    "path": "workspace/demos/design-system/feedback/feedback.json",
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  {
+    "path": "workspace/demos/design-system/meta.json",
+    "sha256": "53e72a9f511d203e93b207017edb2fdf421e9581982c409ff27250bdc30cdb95"
+  },
+  {
+    "path": "workspace/demos/design-system/prototype.config.ts",
+    "sha256": "faf69ae498e733d4837c2d38bc5a436e8ee95b1eec16b38fa4942fafb0c558a4"
+  },
+  {
+    "path": "workspace/demos/design-system/src/App.tsx",
+    "sha256": "a475c5b52c9aecf13396b9a631f0e5e3246a26b2ab3b3bce8009a9ab2283dcdf"
+  },
+  {
+    "path": "workspace/demos/design-system/src/showcase.css",
+    "sha256": "9690a6a24402a6a7cf9cc87f45087e31e9471fb59427b5c96876f4eaa68412a5"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/README.md",
+    "sha256": "82da99f86fb9781e159ee5bcbfff96e9ce3511844d1687dcbe54138284b62a8b"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/06888.svg",
+    "sha256": "8e2089feacc3f8da54dfa9d8fcd0f8f06f1b7b5f57bb37acc04f9a3957d253d1"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/0feb9.svg",
+    "sha256": "8de918b9eeb8436ccc9b197f5248f2f9aae8ba85d49cec959d7ad7445870fa0b"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/1fdbc.svg",
+    "sha256": "be23a0c0370d4e964394282a34dc161fec2d1320c641032ea3d08af4089b8773"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/217ae.svg",
+    "sha256": "88d1bb685822aaf3a526ed12489fd721e8fda87fa6f4d33f496f9469a873c726"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/29b1c.svg",
+    "sha256": "c55deca37b27589bd869e328ec887bca4f9bfc1860b3239ff0ad441c09db92e7"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/2df30.svg",
+    "sha256": "50b409aa63d8e2105cefdd942a7e56790eebee551b55f28419b235937ca224ec"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/33481.svg",
+    "sha256": "bf8c9db3553141d9263f17c5fa9cac26d039304c43cd07e56ea475f26ec7fe5a"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/35b34.svg",
+    "sha256": "e9879bd8c8443084e7235edb438ff259fcb88d5553361d5d132f5f1c9ffac563"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/36513.svg",
+    "sha256": "13fa5cda974488f41b5f75f57aee02a32f77c8d12f0b54c5639d8da616e63a01"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/3ba79.svg",
+    "sha256": "de55b590d3e26cb8563d4f5351306bd25cce00153e7f0581da83ddad7dd148f7"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/40695.svg",
+    "sha256": "15c574e25f0bd46225e7593221b19a5121474aa3399ab8f664895bdb3639791f"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/4b0f1.svg",
+    "sha256": "77b4481432b40dcaf0a388a641819f2ca1fdaa79d79d66bc80b77ea28440ebc6"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/51c71.png",
+    "sha256": "338a795f06e30f0216c162fb0e188db9595cb2cbc90557524e4dc28c670b6531"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/5df98.svg",
+    "sha256": "30f051fa440ad1223b2c6a2de78f160dcae0b6ab56965291afa361f648f3bcc7"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/5f5b5.svg",
+    "sha256": "3b51eca8f96b07a9e09c43ae14306abbc14e56b8f028e417eeda48782e42cc1e"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/60aeb.svg",
+    "sha256": "ba281fa935ad9b416fc30704ae63f08dbcd41e077abb0105aba891293dc6deb6"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/62ae4.svg",
+    "sha256": "c8118eb862dfa4e44e8e4ee4d51c01e12f74dfc312591367e1147451247123b8"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/65c64.svg",
+    "sha256": "70e2c311bce65ab3f16a5a20f4e28be3c2b7e6ba4b97c875e8d0dfb98ef146c4"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/6a2b4.svg",
+    "sha256": "33030b4eb1626cd66296ab4ece4afedcbe054d7801ebfc5bd95e1b668aba3f34"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/6c80e.svg",
+    "sha256": "faf41f4149ecfc966301ba19403eb2eb29fa32634a7f76a2bce320d04ab1257b"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/71459.svg",
+    "sha256": "b22e40b67372cc1aa764401655e9fdb0e64c3f0db088901f65622c278a100cbe"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/7145a.svg",
+    "sha256": "5de0fa6e91b6fac22e5df95d6cffe4df677e922048ce71dd02609747686d692d"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/75ffc.svg",
+    "sha256": "6b00bfe53d55133f4f3abdb4bfbfa12a7808f0ae8ed50b89cbc751fa49be11ba"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/7b680.svg",
+    "sha256": "5737db7b7c0b39404559b0c97c0f699631a545e631127efdf582abe2faceb1af"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/7b914.svg",
+    "sha256": "d46ca768dd4cfdf9816040308925604e2073f3b6a9738d5afdd394ebe90d5aad"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/80c40.svg",
+    "sha256": "73d5d104bef7e6913333897777f140e2eef389750112e41c445e5899661b2b01"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/8359f.svg",
+    "sha256": "a5aa527951d36ddb37d7235716910c43eef83cc51763ca3675e6845a52d0e821"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/84fe2.svg",
+    "sha256": "705f0c5e7305d6702311a60d7f785d7aebdfab4aca6522d92d0f5d132f4a17b1"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/87d48.svg",
+    "sha256": "e34de098005ec65813990f92f4aa8980e1d5ab934f330fc51a684415155e29ab"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/8ad24.svg",
+    "sha256": "f83faa655f4d82c84a81fe7a5ab9e1e014ea1a3079e646fd774c0d438453dfaf"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/94456.svg",
+    "sha256": "48143e6e2f13c15fd2e334b17d6fcbc627830899791429df2b2ea97f7741e0f3"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/a0da0.svg",
+    "sha256": "8a409470fc4c17b7028952180a4d5ed944b2318688cea7469536d3ee969be778"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/a1990.svg",
+    "sha256": "86392e32457d47c233e3c8aa82ca69b925a5fbc1518fc65d09204afdc0b2f051"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/a9c0b.svg",
+    "sha256": "94a0aba336be642479a5c645668c9541ea55ccc7732b480c70151c96cf14b9d3"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/b910e.svg",
+    "sha256": "c615ee12d3fce6a4c24a51ee887e8ce1729418b237bd2e13f55fc87cd09a3131"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/bc616.svg",
+    "sha256": "2e28703597a5989a6a260d1ff8aa495bea17f4c86ec718fb792e576ad8cb0a94"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/be4b7.svg",
+    "sha256": "b1744f97fe715db0b8cabbfb74313aec8aca1167a6ec59cd964b62ad7e3df5a2"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/ebd20.svg",
+    "sha256": "9a231faafc6a115db51b57c0128b6b4470c0220f16d49eaabe177b99756fb183"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/ee918.svg",
+    "sha256": "fe417e494cae56d6af61c0531982fb8e7f9ecad06c71608cd20cffcb5d553747"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/ff215.svg",
+    "sha256": "c953e2dae8356088a80178cda826da79dde2d8995ad3fe58dd57453c4dfe8207"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/assets/manifest.json",
+    "sha256": "c23ca1afe3709daba5fcc9aecf3e727b5a42f607350d89a2820227cc709300d6"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/feedback/feedback.json",
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/meta.json",
+    "sha256": "59ada31d99f6599e583afdc64010ef07e5a00127c4332b5d82d5d8353cd995e1"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/prototype.config.ts",
+    "sha256": "b0db63f3059d356c22ea6c62d76cb5aadfdf88e738f5facf956a35dec4caa2b4"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/src/App.tsx",
+    "sha256": "ae53964fb2b30892ad1aa91d1bcbce4aba4985c6bd38f1f4e1bc4c97efa72a4e"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/src/assets.ts",
+    "sha256": "269c5f77aaa3fed163bbe3ce729d18cc3e7630312eccb4af1aaeba6498816c4c"
+  },
+  {
+    "path": "workspace/demos/spend-in-dashboard/src/dashboard.css",
+    "sha256": "1f3dd75380cf2f899fa4631edfdcb87109327f317f3e6b38c90f6a4082dac1a8"
+  },
+  {
+    "path": "workspace/packages/design-system/src/index.tsx",
+    "sha256": "3db1a8c16f2d76cc27817e692bcaee5928f87e443d9584b2d86960dba63c82cb"
+  },
+  {
+    "path": "workspace/packages/design-system/src/styles.css",
+    "sha256": "4abcdd26d19e99b5b3f992f594a2d1e5e0a4f754d9bd0c2b0461f042bb5cbb38"
+  },
+  {
+    "path": "workspace/packages/design-system/src/tokens.ts",
+    "sha256": "c8d436b68cd4d98a553213dedd5d22da7d083b81ca16c4b379c3ed6c44d05111"
+  },
+  {
+    "path": "context/CONSTRAINTS.md",
+    "sha256": "e893c11a982fdb85b44f9c9be0e49f10d7205f653ad5bf3ba18a97684bb17075"
+  },
+  {
+    "path": "context/DECISIONS.md",
+    "sha256": "637847b8c957718f7cc76c7575aa9312473fc2ddccfdca427739491fdf9b17b5"
+  },
+  {
+    "path": "context/PRINCIPLES.md",
+    "sha256": "59310709cf0da6ddb68b0a2d033cfdb913d68c8dea8db589cd41b8a36138038b"
+  },
+  {
+    "path": "context/PRODUCT.md",
+    "sha256": "6edad6d44109806a57aeabcae7050280d65de8d7e84aa537d0010a1019836631"
+  },
+  {
+    "path": "context/TERMINOLOGY.md",
+    "sha256": "7b9c9e3f58f4a170edadfa37e16086c723b16d070c0a6c9ac8e08cefbefa23ee"
+  },
+  {
+    "path": "context/USERS.md",
+    "sha256": "27c35dd0228d4834430f333ab72027aacf2b08ef6947d48d223eb9f7969d6a6c"
+  },
+  {
+    "path": "data/appointments.json",
+    "sha256": "8e6d00a5a3bb074aaff14bd713b2b1151278c2dac3cc9958e0de244d0776082c"
+  },
+  {
+    "path": "data/operatories.json",
+    "sha256": "9f1c6c49fe9d0ac2407493ed47217579e31b60f11ccec9ecff7c5a8ff4e2eb55"
+  },
+  {
+    "path": "data/patients.json",
+    "sha256": "145e08ac47fa82858d0bf3be0e3303e75d3d9a24841d4eb335d03ea8d4562a5f"
+  },
+  {
+    "path": "data/providers.json",
+    "sha256": "b621645306cfc5db079a04dcc9c1d3f251303a362d223d5be0c60a54c1fb3285"
+  },
+  {
+    "path": "data/scheduling.ts",
+    "sha256": "3b2dda47be4a910903c0220510fc493e1d68390e132de2b4e234e4a742fea75f"
+  },
+  {
+    "path": "demos/emergency-booking-simplified/README.md",
+    "sha256": "e1617a53b8838c2a393c7699bcf457973185341377889fbb029a5f19afbacaa5"
+  },
+  {
+    "path": "demos/emergency-booking-simplified/controls.json",
+    "sha256": "6473771df4a826682baaa623e474ecec78d0e53203e7e38c338366aa031f0175"
+  },
+  {
+    "path": "demos/emergency-booking-simplified/feedback/feedback.json",
+    "sha256": "750c002e296b4a14f85b07abbe8d7d28c5664633437209fc42acda77f870df6c"
+  },
+  {
+    "path": "demos/emergency-booking-simplified/meta.json",
+    "sha256": "d161beedd9c4617518f0fa1faa4d8f6a60a9e1e2ac89c393d76a3aa756083542"
+  },
+  {
+    "path": "demos/emergency-booking-simplified/prototype.config.ts",
+    "sha256": "cf6c42c9899129791152ff8b19cf31ecbace0f1a71bb30d1b0f83702d65558e9"
+  },
+  {
+    "path": "demos/emergency-booking-simplified/src/App.tsx",
+    "sha256": "b4896fa1d330d016e26491439af464433bbcac9c89c9a909f040420a15fd16bc"
+  },
+  {
+    "path": "demos/emergency-booking-urgency-first/README.md",
+    "sha256": "747f0342ac18d1a037429445e886afaf024e957aa01b3e52436d3246abcc7917"
+  },
+  {
+    "path": "demos/emergency-booking-urgency-first/feedback/feedback.json",
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  {
+    "path": "demos/emergency-booking-urgency-first/meta.json",
+    "sha256": "65e02304962581ea27cb7c2e4b6611a6fd078e4c1fba1feb47565af91a1e1fef"
+  },
+  {
+    "path": "demos/emergency-booking-urgency-first/prototype.config.ts",
+    "sha256": "3c034871faf405b6258b8a46465f7c652d740d8d84d342ac3d112c7341adf974"
+  },
+  {
+    "path": "demos/emergency-booking-urgency-first/src/App.tsx",
+    "sha256": "c73eab72de84ed58a87e954bc58049e5f73ac4f326b6a34145a9751bcba064f2"
+  },
+  {
+    "path": "demos/emergency-booking/README.md",
+    "sha256": "f4141399090f0ccb5162d563dcf3a13b6db11cf6ffe9008829c0b6986f732f3b"
+  },
+  {
+    "path": "demos/emergency-booking/feedback/feedback.json",
+    "sha256": "01684cff9066c86985f984a786197e23736fb74164e8d3373e5011d563fbf251"
+  },
+  {
+    "path": "demos/emergency-booking/meta.json",
+    "sha256": "82df07dd037ba46d3ff2a9b49584d6e4fe4b04c79324946a0a7f7cb8fee1418a"
+  },
+  {
+    "path": "demos/emergency-booking/prototype.config.ts",
+    "sha256": "2c7aff6fa7d2831e59d355e19e5736bb61a917bf3abb9fa44bfae492738bad5c"
+  },
+  {
+    "path": "demos/emergency-booking/src/App.tsx",
+    "sha256": "4f2716dc9263d10057af2e2402339d2a0712f30c16b311c6544123fc177e7663"
+  },
+  {
+    "path": "demos/patient-search/README.md",
+    "sha256": "7bf70e5de3bc2efdb4f61fb4c17b76d160532293b04f7b0d6e310bb40e8a97d1"
+  },
+  {
+    "path": "demos/patient-search/feedback/feedback.json",
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  {
+    "path": "demos/patient-search/meta.json",
+    "sha256": "e7bcd8d8cff7975e679994a510b81d8140e20664acb8401d9e907ceb73bf7ee9"
+  },
+  {
+    "path": "demos/patient-search/prototype.config.ts",
+    "sha256": "87ea303e903e11eff4033db116ee5442a9811250680075269a993fb19d2e2204"
+  },
+  {
+    "path": "demos/patient-search/src/App.tsx",
+    "sha256": "27ebd5f77068d3d13a1f902ca9d5feda8b2707a4df8b19705dca04f73b4413cb"
+  },
+  {
+    "path": "packages/design-system/package.json",
+    "sha256": "283b2a8b47da534ae65f0e28f3e77885eb7bbc49c7061143b85cc89578ab0431"
+  },
+  {
+    "path": "packages/design-system/src/index.tsx",
+    "sha256": "66993848b8c44016be947ad5431324bbfaab24af1c595d282badef7987c2cc7d"
+  },
+  {
+    "path": "packages/design-system/src/tokens.css",
+    "sha256": "b4bf88aed7ca29096ae7e4f80938ba07870dd161fc797f09fcbb10b304289c22"
+  },
+  {
+    "path": "workspace/project.json",
+    "sha256": "1e3941dbb52d10aa05d3e23a56aab5f512e8b02ceed61ce1b1096d885df4b419"
+  }
+]
