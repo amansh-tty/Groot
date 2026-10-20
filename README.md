@@ -1,3 +1,5 @@
+> Groot UI integration: see [docs/integration/port.md](docs/integration/port.md) for the preserved source inventory and validation.
+
 # Playground
 
 A local-first visual workbench for product designers. **Your existing coding agent edits the repository. Playground discovers, renders and organizes that work.** No provider connection, API key, chat or account.
@@ -50,7 +52,7 @@ Your project lives in `workspace/project.json`, with `workspace/demos/`, `worksp
 
 NOVA keeps its original root-level files and is explicitly opened with `?example=nova`. Example feedback and alternatives remain in the example. Older exploration links still open their original source when absent from the user workspace. Existing additional root-level explorations are surfaced by an “Open original explorations” link; nothing is automatically moved or reclassified. Existing V2 tools work in both locations. API clients select user content with `?scope=user`; unscoped endpoints retain the original example behavior for compatibility.
 
-The user Design System page explains the component location and offers an agent prompt for a component showcase in Explorations. It does not auto-render an arbitrary imported library. NOVA retains its existing interactive component viewer.
+The user Design System page renders a user exploration tagged `design-system` in the sandboxed preview. With none, it offers component guidance. NOVA retains its existing interactive component viewer. Source evidence and limitations live in workspace/context/DESIGN-SOURCE.md.
 
 ## Files are the product model
 

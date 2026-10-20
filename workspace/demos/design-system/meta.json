@@ -1,0 +1,9 @@
+{
+  "id": "design-system",
+  "title": "Pickolab — Design System",
+  "description": "Reusable foundations and inspected component states from the connected Figma selection. No product flow.",
+  "platform": "web",
+  "author": "Local designer",
+  "authorSlug": "local-designer",
+  "tags": ["design-system", "figma"]
+}

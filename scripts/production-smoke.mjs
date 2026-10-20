@@ -52,7 +52,7 @@ try {
   await start();
   const page = await fetch(origin);
   assert.equal(page.status, 200);
-  assert.match(await page.text(), /Playground/);
+  assert.match(await page.text(), /Groot/);
   const saved = await fetch(`${origin}/api/settings`, {
     method: 'PUT',
     headers: { origin, 'content-type': 'application/json' },

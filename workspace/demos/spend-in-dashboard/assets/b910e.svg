@@ -1,0 +1,17 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 33696">
+<circle id="Ellipse 8" cx="18" cy="18" r="18" fill="#EAECF1"/>
+<g id="logos:figma" clip-path="url(#clip0_0_348)">
+<path id="Vector" d="M14.6667 30C16.6907 30 18.3333 28.3573 18.3333 26.3333V22.6667H14.6667C12.6427 22.6667 11 24.3093 11 26.3333C11 28.3573 12.6427 30 14.6667 30Z" fill="#0ACF83"/>
+<path id="Vector_2" d="M11 19C11 16.976 12.6427 15.3333 14.6667 15.3333H18.3333V22.6667H14.6667C12.6427 22.6667 11 21.024 11 19Z" fill="#A259FF"/>
+<path id="Vector_3" d="M11 11.6667C11 9.64267 12.6427 8 14.6667 8H18.3333V15.3333H14.6667C12.6427 15.3333 11 13.6907 11 11.6667Z" fill="#F24E1E"/>
+<path id="Vector_4" d="M18.3335 8H22.0001C24.0241 8 25.6668 9.64267 25.6668 11.6667C25.6668 13.6907 24.0241 15.3333 22.0001 15.3333H18.3335V8Z" fill="#FF7262"/>
+<path id="Vector_5" d="M25.6668 19C25.6668 21.024 24.0241 22.6667 22.0001 22.6667C19.9761 22.6667 18.3335 21.024 18.3335 19C18.3335 16.976 19.9761 15.3333 22.0001 15.3333C24.0241 15.3333 25.6668 16.976 25.6668 19Z" fill="#1ABCFE"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_0_348">
+<rect width="14.6667" height="22" fill="white" transform="translate(11 8)"/>
+</clipPath>
+</defs>
+</svg>

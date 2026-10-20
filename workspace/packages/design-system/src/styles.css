@@ -1,0 +1,70 @@
+.figma-system {
+  color: var(--figma-Secondary-500);
+  background: var(--figma-Primary-0);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+.figma-system * {
+  box-sizing: border-box;
+}
+.figma-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: var(--figma-Primary-500);
+  color: var(--figma-Primary-0);
+  padding: 13px 24px;
+  min-height: 52px;
+  border-radius: 30px;
+  font:
+    600 16px/1.5 'Plus Jakarta Sans',
+    sans-serif;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+}
+/* Keep the 52px main geometry during real interaction to avoid layout movement.
+   Explicit catalog states retain the 50px / 60px-radius Figma discrepancy. */
+.figma-button[data-preview-state]:not([data-preview-state='main']) {
+  min-height: 50px;
+  padding-block: 12px;
+  border-radius: 60px;
+}
+.figma-button:hover:not(:disabled),
+.figma-button[data-preview-state='hover'] {
+  background: var(--figma-Primary-600);
+}
+.figma-button:active:not(:disabled),
+.figma-button[data-preview-state='pressed'] {
+  background: var(--figma-Primary-700);
+}
+.figma-button:focus-visible,
+.figma-button[data-preview-state='focused'] {
+  background: var(--figma-Primary-500);
+  box-shadow: inset 0 0 0 1px var(--figma-Primary-200);
+}
+/* Extra keyboard outline is an accessibility implementation decision. */
+.figma-button:focus-visible {
+  outline: 2px solid var(--figma-Primary-700);
+  outline-offset: 3px;
+}
+.figma-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.figma-dashboard-action {
+  border-radius: 10px;
+  min-height: 55px;
+  padding: 14px 16px;
+  font-size: 14px;
+  gap: 10px;
+}
+.figma-dashboard-action.outlined {
+  background: var(--figma-Primary-0);
+  color: var(--figma-Secondary-500);
+  border: 2px solid var(--figma-Primary-500);
+}
+.figma-dashboard-action.outlined:hover {
+  background: var(--figma-Primary-100);
+}

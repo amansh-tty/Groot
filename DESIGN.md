@@ -1,56 +1,66 @@
 ---
 version: alpha
 colors:
-  background: '#131416'
-  foreground: '#e9e9eb'
-  primary: '#dedfe2'
-  muted: '#292b2e'
-  border: '#303236'
+  background: '#1f1f1f'
+  foreground: '#f2f2f2'
+  primary: '#eeeeee'
+  muted: '#2b2b2b'
+  border: '#393939'
 typography:
   sans:
-    fontFamily: 'Inter, ui-sans-serif, Segoe UI, sans-serif'
+    fontFamily: 'Inter, Segoe UI, system-ui, sans-serif'
   code:
-    fontFamily: 'ui-monospace, monospace'
+    fontFamily: 'ui-monospace, Consolas, monospace'
 spacing:
   unit: '4px'
 rounded:
   control: '6px'
 ---
 
-# Playground design context
+# Groot design context
 
 ## Overview
 
-A focused product exploration workbench for desktop designers. Preserve V1's dark, compact frame around the light NOVA prototype. The experience is the main surface; tools stay quiet until invoked. English local workspace; no new locale scope.
+Groot is a local workbench for designers exploring directions with their existing external coding agent. The user approved the three latest generated home/editor/dialog studies, guided by their attached Figma-style file architecture and Paper-style vertical toolbar. The user explicitly rejected purple/blue shell accents retained by the generated editor. All shell surfaces and interaction cues are grayscale; color belongs to imported prototypes. The interface uses compact neutral fields, grouped panels, fine dividers and contextual canvas tools. The approved direction replaces the earlier light and dark experiments.
+
+Groot is a file-based React/TypeScript/pnpm application. Its shared shell primitives own navigation, panels and controls. Keep visual decisions grounded in the approved images and product workflow. Do not add unrelated canvas settings, timeline, layers or embedded AI chat.
 
 ## Colors
 
-Canonical runtime tokens remain in apps/web/src/workbench.css, mapped by Tailwind @theme to the shared Button. Sage and blue accent settings preserve semantics. NOVA owns its independent tokens in packages/design-system/src/tokens.css; its component viewer uses the same source.
+Model B: apps/web/src/studio.css is the single canonical shell stylesheet. main.tsx imports it directly; the former shell.css and workbench.css are no longer loaded. Its semantic variables feed the Tailwind @theme aliases and shared Button primitive. DESIGN.md mirrors accepted values.
+
+Canvas #1f1f1f; panels #242424; fields #303030; hover #3b3b3b; border #393939 and stronger boundary #555555. Text #f2f2f2, supporting #bebebe. Primary #eeeeee with #202020 text. Focus, selection, status and warning cues are neutral with explicit labels. No colored branding, gradients, dotted black void or glass treatments. Global scrollbar and forced-colors fallbacks remain canonical in studio.css.
+
+Imported Pickolab/Spend.In colors belong to workspace/packages/design-system/src; NOVA owns packages/design-system/src. Both remain unchanged. Their CSS is isolated from the workbench when run as prototypes. In particular the dashboard's purple never becomes the shell's accent.
 
 ## Typography
 
-System sans for controls and headings; monospace only for repository paths. Preserve V1 sizes and restrained hierarchy; no new fonts.
+Inter with Segoe UI/system fallback, no external font requests. Body 14px/1.6 with normal-to-slightly-open tracking; controls 13–14px, card titles 17px, screen names 18px, library heading 30px. Supporting metadata is 11–13px only where compact labels are necessary. Use 8px spacing rhythm, 16–24px panel padding and 24–40px content gutters. No condensed small text or negative tracking on control labels. Prototype font limitations remain documented in its own notes.
 
 ## Layout
 
-4/8px rhythm, compact toolbar, optional right inspector. Feedback uses that inspector. Comparison gives each functional frame independent scrolling. Native selects deliberately use OS popup geometry.
+A 56px file tab strip owns Home and open exploration tabs, including close actions. Home uses a 216px destination sidebar and preview-led two-column library; search and platform filters share one row. The editor uses a 216px variation/history sidebar, a 52px vertical interaction/zoom toolbar, central canvas and a 300px inspector open by default. Canvas header owns viewport/fit; each declared screen has a name and bounded previous/next arrows. The inspector tabs are Controls, Preview and Comments. Controls owns screen/state handoff and opt-in design controls; Preview owns flow navigation and details; Comments owns feedback. No duplicate comments list in Controls. Responsive layout stacks panels and retains source viewport behavior.
+
+Fit respects both available width and height. Desktop shows a declared 1440x1024 viewport; mobile shows 390x844. Actual size returns to unscaled responsive desktop viewing. Resizing and fit toggles preserve the same iframe and its current interaction state. Do not invent a mobile layout for a fixed desktop import. The inspector defaults open. Preview contains source paths, rationale and assumptions. On narrow displays tools reflow below the stage rather than overlaying it. Guides and the library keep document scrolling.
+
+The library renders real lazy inert sandbox previews, twelve initially with Load more, never fabricated preview art. Comparison panes remain independent and prefer real parent/child alternatives; no unrelated showcase is silently selected as a comparison partner.
 
 ## Elevation & Depth
 
-Flat neutral surfaces with minimal borders. Numbered comment markers express real comments, not decoration.
+Subtle panel boundaries and very subtle neutral insets. Only modal dialogs and the prototype frame use restrained shadow to establish depth. No lifted marketing cards, gradients, colored decoration or stock imagery. The charcoal canvas recedes behind the prototype. Reduced-motion disables transitional movement.
 
 ## Shapes
 
-Small control radii and circular numbered markers. Selected items have a visible outline and text/state labels.
+6px controls, 8px panels/dock, 4px prototype artboard, 10px app-owned dialog. A mobile preview uses a restrained device boundary without invented phone art. Real feedback numbers, actual lineage and explicit selected states carry meaning.
 
 ## Components
 
-Reuse apps/web/src/components/ui/button.tsx. FeedbackPanel owns comment forms/status/actions. Native labeled fields own input and select behavior. Global scrollbar styles live in workbench.css. Non-modal inspector keeps normal tab order. Inline delete confirmation names the comment; cancel receives focus. Save errors retain drafts; backend checks file revisions.
+Shared shell Button: apps/web/src/components/ui/button.tsx, using semantic primary/outline/ghost classes in studio.css and consistent 34/36px sizes. Shared Dialog: components/ui/dialog.tsx, using an app-owned HTML dialog with accessible title, modal background isolation, focus cycle, Escape and return focus; pending alternative creation prevents accidental dismissal. Native labeled selects are canonical, with OS-owned popup geometry deliberately accepted. FeedbackPanel/ControlsPanel retain revision-checked JSON persistence. Forms keep drafts on failed saves. LiveThumbnail owns read-only gallery previews. PrototypeView owns the session/dock/inspector; CompareView owns explicit independent comparison choices.
 
 ## Do's and Don'ts
 
-Preserve keyboard focus and reduced motion. Do not turn the prototype into an inspector or add AI chat. Do not change the NOVA design system to restyle the workbench.
+Prioritize the activity: select a direction, interact, review, fork, compare. Keep technical detail in contextual help and diagnostics. Show the Controls tab always, but offer design adjustments only if a real contract exists. Never auto-resolve feedback or alter designer rationale. Never invent missing prototype behavior or change imported source designs to match the shell. Preserve keyboard focus, labels, reduced motion, project isolation and the opaque iframe/network boundary. Do not describe visual preferences or pixel measurements as proven usability research.
 
-## First-use orientation
+## Decision evidence
 
-One user workspace is primary; NOVA is an explicit Example Project destination with a return link. Reuse neutral surfaces and shared Button for inline project creation and contextual agent prompts. Orientation is dismissible and available in Start Here. No tour, mandatory setup sequence or project selector. User thumbnails are neutral rather than fictional NOVA screenshots.
+The approved implementation plan and current captures live in docs/groot/. Visual verification lives in design-qa.md. Prior reports in docs/redesign/ and docs/refinement/ are historical. The earlier light/violet refresh report is historical; this direction supersedes its shell decisions while retaining its verified file-based behavior and preserved imports.

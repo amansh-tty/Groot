@@ -9,6 +9,8 @@ export interface Catalog {
 export interface Detail {
   meta: DemoMeta;
   readme: string;
+  prompts?: { prompt: string; createdAt: string }[];
+  promptError?: string;
   feedback: Feedback[];
 }
 export function apiUrl(path: string) {

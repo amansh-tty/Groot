@@ -1,0 +1,80 @@
+/* Catalog layout only: not claimed as imported Figma tokens. */
+.figma-showcase {
+  padding: 32px;
+  max-width: 1120px;
+  margin: auto;
+  overflow-wrap: anywhere;
+}
+.figma-showcase h1 {
+  font-size: 32px;
+  margin: 0 0 16px;
+}
+.figma-showcase h2 {
+  font-size: 24px;
+}
+.figma-showcase p,
+.figma-showcase li {
+  line-height: 1.5;
+}
+.figma-showcase header,
+.figma-showcase section {
+  margin-bottom: 40px;
+}
+.figma-showcase .catalog-label {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+.figma-showcase .catalog-note {
+  padding: 16px;
+  border-left: 3px solid var(--figma-Primary-500);
+  background: #f3f5f7;
+}
+.swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 24px;
+}
+.swatch {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+}
+.swatch > div {
+  height: 72px;
+  border: 1px solid #c3d4e9;
+  border-radius: 4px;
+}
+.type-sample {
+  padding-block: 16px;
+  border-bottom: 1px solid #c3d4e9;
+}
+.type-sample p {
+  margin-block: 8px;
+}
+.button-states {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.button-states > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+.figma-showcase a {
+  color: var(--figma-Primary-700);
+}
+.figma-showcase a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+@media (max-width: 480px) {
+  .figma-showcase {
+    padding: 16px;
+  }
+  .figma-showcase h1 {
+    font-size: 24px;
+  }
+}

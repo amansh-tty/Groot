@@ -94,7 +94,7 @@ export function ControlsPanel({
       <p>Changes preview immediately. Save changes to share them with your coding agent.</p>
       {base && (
         <Button size="sm" variant="outline" onClick={() => onScreen(base.document.screen)}>
-          Show appointment slots
+          Show controlled area
         </Button>
       )}
       {error && <p role="alert">{error}</p>}
@@ -111,7 +111,13 @@ export function ControlsPanel({
         }}
       >
         {base?.document.controls.map((c) => (
-          <div className="control-field" key={c.id}>
+          <div
+            className={'control-field compact-control ' + c.type}
+            key={c.id}
+            style={{
+              background: `linear-gradient(to right, #414141 ${(((values[c.id] ?? c.value) - c.min) / Math.max(1, c.max - c.min)) * 100}%, #303030 0%)`,
+            }}
+          >
             <label htmlFor={'control-' + c.id}>
               {c.label}
               <output>

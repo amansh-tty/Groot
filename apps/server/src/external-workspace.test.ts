@@ -70,7 +70,11 @@ it('uses an explicit external directory directly as the user workspace', async (
     name: 'External product',
     description: 'Direct workspace fixture',
   });
-  expect(workspace.workspace).toEqual({ mode: 'external', path: externalRoot });
+  expect(workspace.workspace).toEqual({
+    mode: 'external',
+    path: externalRoot,
+    agentPath: externalRoot,
+  });
   expect((await app.inject({ url: '/api/demos?scope=user', headers })).json().demos[0].id).toBe(
     'hello',
   );
