@@ -1,8 +1,10 @@
-> Groot UI integration: see [docs/integration/port.md](docs/integration/port.md) for the preserved source inventory and validation.
+Groot UI integration: see [docs/integration/port.md](docs/integration/port.md) for the preserved source inventory and validation.
 
 # Playground
 
 A local-first visual workbench for product designers. **Your existing coding agent edits the repository. Playground discovers, renders and organizes that work.** No provider connection, API key, chat or account.
+
+<img width="1440" height="1024" alt="image" src="https://github.com/user-attachments/assets/73494b43-983a-4d92-ba3b-8996b53ce8ba" />>
 
 ## Run locally
 
