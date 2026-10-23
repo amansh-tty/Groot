@@ -1,5 +1,6 @@
 # Dependencies and package-manager cache
 node_modules/
+.vercel/
 .pnpm-store/
 
 # Build and test output
