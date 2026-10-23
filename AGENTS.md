@@ -1,5 +1,11 @@
 # Repository guidance
 
+## Public demo and project context
+
+`pnpm build:public` creates a static, read-only public demo in `dist/public`. It includes only the explicitly selected bundled prototypes; never export local project answers, feedback, identity, credentials or runtime data. Public edit actions must guide local installation. The public site has no project backend or MCP endpoint.
+
+`pnpm groot setup <project-folder>` prepares a project-local skill and MCP configuration. Follow that project's `.agents/skills/groot-project/SKILL.md`; call `get_project_context` and `get_prototype_brief` before creating or substantively changing a prototype. Confirm answers with the designer, preserve their source and fact/decision/assumption status, and record brief revisions. The stdio MCP is bound to one canonical project and writes only its validated context files. See `docs/project-mcp.md`.
+
 ## Active content location
 
 The user's project is `workspace/project.json`; its content roots are `workspace/demos`, `workspace/context`, `workspace/data` and `workspace/packages/design-system`. Root-level `demos`, `context`, `data` and `packages/design-system` belong to NOVA / original explorations. Determine the intended location before editing. Below, demo-relative paths apply within that content root. Never use NOVA facts or components as the user's default. A missing user design system is valid; simple prototype-local styles work. Keep user component showcases as normal explorations. Do not overwrite an existing project or move older root-level work automatically.

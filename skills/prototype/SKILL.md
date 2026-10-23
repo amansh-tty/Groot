@@ -19,6 +19,8 @@ Active content root: workspace/ for the user project, repository root only for N
 
 ## Procedure
 
+For a project configured with `pnpm groot setup`, follow its `.agents/skills/groot-project/SKILL.md`. Call `get_project_context` and `get_prototype_brief` for the actual scenario before every new exploration or substantive update. Ask about relevant missing constraints, retain provenance, and record the brief revision and source paths in the README. If the project MCP is unavailable, explain the missing connection and guide setup before proceeding; do not silently skip the context step.
+
 Inspect actual reusable components first. Identify the intended interaction and preserve unaffected behavior. Edit the active demo's normal source files; use a new alternative if requested. Implement realistic navigation, input validation and fictional data. Keep declared states/config aligned with the source. Let the watcher update Playground and validate the actual interactions.
 
 ## Constraints

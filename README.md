@@ -1,8 +1,12 @@
 Groot UI integration: see [docs/integration/port.md](docs/integration/port.md) for the preserved source inventory and validation.
 
-# Playground
+# Groot
 
-A local-first visual workbench for product designers. **Your existing coding agent edits the repository. Playground discovers, renders and organizes that work.** No provider connection, API key, chat or account.
+A local-first visual workbench for product designers. **Your existing coding agent edits the repository. Groot discovers, renders and organizes that work.** No provider connection, API key, chat or account.
+
+The public demo is a static, read-only build of the bundled projects. It opens Spend.In directly and guides visitors into local installation for their own work. Build it with `pnpm build:public`; validate it with `pnpm test:public`. It never reads visitors' local files or runs a project backend.
+
+Follow [the setup skill](skills/groot-setup/SKILL.md) to install locally. After creating or choosing a Groot workspace, run `pnpm groot setup <project-folder>`. Enable the generated MCP command in your coding agent, then let it ask and save project-specific context questions. Future prototypes start from a fresh context brief. See [project MCP and setup](docs/project-mcp.md) for configuration and limits.
 
 <img width="1440" height="1024" alt="image" src="https://github.com/user-attachments/assets/73494b43-983a-4d92-ba3b-8996b53ce8ba" />
 

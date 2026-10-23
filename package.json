@@ -22,7 +22,10 @@
     "test:smoke": "node scripts/production-smoke.mjs",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "groot": "node scripts/groot.mjs",
-    "test:export": "node scripts/export-smoke.mjs"
+    "test:export": "node scripts/export-smoke.mjs",
+    "build:public": "pnpm build && pnpm --filter @playground/web exec vite build --mode public-demo && node scripts/build-public-demo.mjs",
+    "test:public": "node scripts/public-demo-smoke.mjs",
+    "test:mcp": "node scripts/project-mcp-smoke.mjs"
   },
   "devDependencies": {
     "@playground/design-system": "workspace:*",

@@ -157,6 +157,7 @@ Work only inside this designer workspace.
         : 'Read workspace/project.json. Help me document my product in workspace/context/PRODUCT.md, USERS.md, PRINCIPLES.md and CONSTRAINTS.md. Ask only what is needed; keep established facts separate from assumptions. Do not use NOVA context as my product context.';
   const prompt =
     basePrompt +
+    '\nFor a configured Groot project, follow .agents/skills/groot-project/SKILL.md. Call get_project_context and get_prototype_brief with the actual scenario before creating or substantially changing a prototype. Resolve relevant missing answers with me and record the brief revision and sources in its README. If the MCP is not configured, guide me through pnpm groot setup and connecting the generated command first; do not claim it is connected without a tool call.' +
     (kind === 'exploration'
       ? '\nRecord the prompt you used in the exploration’s prompts.json as an array entry with prompt and an ISO createdAt date. Preserve existing records.'
       : '');

@@ -26,7 +26,14 @@ import {
   type Feedback,
   type PrototypeConfig,
 } from '@playground/shared';
-import { api, apiUrl, type Catalog, type Detail } from './workbench-api';
+import {
+  api,
+  apiUrl,
+  publicDemo,
+  requestLocalSetup,
+  type Catalog,
+  type Detail,
+} from './workbench-api';
 import { ControlsPanel } from './ControlsPanel';
 import { CompareView } from './CompareView';
 import { explorationFamily } from './ExplorationTree';
@@ -293,6 +300,10 @@ export function PrototypeView({
     setPanel(true);
   }
   const startVariation = () => {
+    if (publicDemo) {
+      requestLocalSetup();
+      return;
+    }
     if (!allowNavigation()) return;
     setTitle((detail?.meta.title ?? 'Exploration') + ' — Alternative');
     setDescription('');
@@ -411,6 +422,10 @@ export function PrototypeView({
               aria-pressed={commentMode}
               onClick={() => {
                 if (!allowNavigation()) return;
+                if (publicDemo) {
+                  requestLocalSetup();
+                  return;
+                }
                 setCommentMode(!commentMode);
                 setPanel(true);
                 setInspectorTab('review');
@@ -763,6 +778,10 @@ export function PrototypeView({
                     variant="outline"
                     size="sm"
                     onClick={() => {
+                      if (publicDemo) {
+                        requestLocalSetup();
+                        return;
+                      }
                       if (allowNavigation()) {
                         setHandoff(kind);
                         setHandoffName('');

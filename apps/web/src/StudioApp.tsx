@@ -18,7 +18,7 @@ import {
   UserRound,
   X,
 } from 'lucide-react';
-import { api, type Catalog } from './workbench-api';
+import { api, publicDemo, requestLocalSetup, type Catalog } from './workbench-api';
 import { Button } from './components/ui/button';
 import { Dialog } from './components/ui/dialog';
 import { PrototypeView } from './PrototypeView';
@@ -32,6 +32,7 @@ import {
   type WorkspaceLocation,
 } from './WorkspaceWelcome';
 import { ProjectGuide } from './ProjectGuide';
+import { LocalSetup } from './LocalSetup';
 
 const example = new URLSearchParams(location.search).get('example') === 'nova';
 type Page = 'all' | 'mine' | 'system' | 'start';
@@ -51,7 +52,20 @@ const initialCatalog: Catalog = {
   designer: { name: 'Local designer', slug: 'local-designer' },
 };
 export function App() {
-  const [route, setRoute] = useState<Route>(readRoute);
+  const [route, setRoute] = useState<Route>(() => {
+    const initial = readRoute();
+    if (publicDemo && !example && !location.hash) {
+      history.replaceState(null, '', '#demo=spend-in-dashboard');
+      return { page: 'all', demo: 'spend-in-dashboard' };
+    }
+    return initial;
+  });
+  const [localSetup, setLocalSetup] = useState(false);
+  useEffect(() => {
+    const open = () => setLocalSetup(true);
+    window.addEventListener('groot:local-setup', open);
+    return () => window.removeEventListener('groot:local-setup', open);
+  }, []);
   const [recentIds, setRecentIds] = useState<string[]>([]);
   const [openIds, setOpenIds] = useState<string[]>(() =>
     readRoute().demo ? [readRoute().demo] : [],
@@ -95,7 +109,7 @@ export function App() {
         ]);
         if (cancelled) return;
         const linked = readRoute().demo;
-        if (!example && linked && !next.demos.some((demo) => demo.id === linked)) {
+        if (!publicDemo && !example && linked && !next.demos.some((demo) => demo.id === linked)) {
           const response = await fetch('/api/demos?scope=example');
           const original = (await response.json()) as Catalog;
           if (!cancelled && original.demos.some((demo) => demo.id === linked)) {
@@ -117,7 +131,7 @@ export function App() {
       }
     }
     void refresh();
-    const timer = setInterval(() => void refresh(), 1200);
+    const timer = publicDemo ? undefined : setInterval(() => void refresh(), 1200);
     return () => {
       cancelled = true;
       clearInterval(timer);
@@ -192,10 +206,25 @@ export function App() {
     );
   const navigate = (page: Page) => go({ page, demo: '' });
   return (
-    <div className={'studio ' + (active ? 'has-exploration' : 'is-home')}>
+    <div
+      className={
+        'studio ' + (active ? 'has-exploration' : 'is-home') + (publicDemo ? ' public-demo' : '')
+      }
+    >
       <a className="skip-link" href="#workbench-main">
         Skip to content
       </a>
+      {publicDemo && (
+        <div className="demo-notice">
+          <span>
+            Demo project{' '}
+            <span className="demo-note-detail">· Explore the app. Your own work stays local.</span>
+          </span>
+          <Button size="sm" onClick={() => setLocalSetup(true)}>
+            Use my own project
+          </Button>
+        </div>
+      )}
       <div className="file-tabs" aria-label="Open files">
         <button
           className="home-tab"
@@ -231,7 +260,10 @@ export function App() {
               </button>
             </div>
           ))}
-        <button aria-label="Start a new exploration" onClick={() => setNewExploration(true)}>
+        <button
+          aria-label="Start a new exploration"
+          onClick={() => (publicDemo ? requestLocalSetup() : setNewExploration(true))}
+        >
           <Plus size={18} />
         </button>
         <details className="recent-tabs">
@@ -295,7 +327,7 @@ export function App() {
             className="sidebar-new"
             size="sm"
             variant="outline"
-            onClick={() => setNewExploration(true)}
+            onClick={() => (publicDemo ? requestLocalSetup() : setNewExploration(true))}
           >
             <Plus />
             New exploration
@@ -369,7 +401,10 @@ export function App() {
                   </p>
                 </div>
                 <div className="library-display">
-                  <Button className="library-create" onClick={() => setNewExploration(true)}>
+                  <Button
+                    className="library-create"
+                    onClick={() => (publicDemo ? requestLocalSetup() : setNewExploration(true))}
+                  >
                     <Plus />
                     New exploration
                   </Button>
@@ -559,6 +594,7 @@ export function App() {
           </div>
         )}
       </main>
+      {localSetup && <LocalSetup onClose={() => setLocalSetup(false)} />}
       {newExploration && (
         <Dialog title="Start a new exploration" onClose={() => setNewExploration(false)}>
           <p className="dialog-intro">

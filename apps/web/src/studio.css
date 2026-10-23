@@ -3625,3 +3625,120 @@ textarea {
 .studio-identity:empty {
   display: none;
 }
+
+/* Public demo and local onboarding reuse the existing monochrome shell. */
+.demo-notice {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 16px;
+  border-bottom: 1px solid #484848;
+  background: #303030;
+  font-size: 13px;
+  position: sticky;
+  top: 0;
+  z-index: 35;
+}
+.demo-notice button {
+  flex-shrink: 0;
+}
+.public-demo .file-tabs {
+  top: 44px;
+}
+.public-demo .studio-bar {
+  top: 100px;
+}
+.public-demo .prototype-page {
+  height: calc(100dvh - 100px);
+}
+.public-demo .recent-tab-menu {
+  top: 98px;
+}
+.setup-steps {
+  padding-left: 22px;
+  margin: 0 0 24px;
+}
+.setup-steps li {
+  margin-bottom: 20px;
+  padding-left: 6px;
+}
+.setup-steps strong {
+  font-size: 15px;
+  font-weight: 550;
+}
+.setup-steps p {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--muted-foreground);
+  margin: 6px 0;
+}
+.setup-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.setup-actions a,
+.setup-details a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.setup-notice {
+  min-height: 22px;
+  font-size: 13px;
+}
+.setup-details {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  font-size: 14px;
+}
+.setup-details pre,
+.project-context-setup pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font:
+    13px/1.7 ui-monospace,
+    Consolas,
+    monospace;
+  padding: 16px;
+  background: var(--control);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  max-height: 280px;
+  overflow: auto;
+}
+.project-context-setup {
+  padding: 24px 0;
+  border-block: 1px solid var(--border);
+  margin: 24px 0;
+}
+.project-context-setup h2 {
+  font-size: 19px;
+}
+.project-context-setup p,
+.project-context-setup li {
+  font-size: 14px;
+  line-height: 1.7;
+}
+.project-context-setup details {
+  margin-top: 16px;
+}
+.context-progress {
+  color: var(--foreground);
+}
+@media (max-width: 640px) {
+  .demo-note-detail {
+    display: none;
+  }
+  .demo-notice {
+    padding: 0 12px;
+    gap: 8px;
+  }
+  .public-demo .studio-bar {
+    top: auto;
+  }
+}

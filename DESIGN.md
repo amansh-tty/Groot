@@ -63,4 +63,6 @@ Prioritize the activity: select a direction, interact, review, fork, compare. Ke
 
 ## Decision evidence
 
+Public-demo mode retains the same shell and prototype design. A 44px notice explains the bundled project and offers **Use my own project**. LocalSetup owns the centered install/skill handoff; editing actions reuse it. Start Here owns ProjectContextSetup for local context progress and agent configuration. Technical configuration stays in details, and the public demo never presents a successful local MCP connection. The monochrome shell, shared Button/Dialog, responsive behavior and sandbox are unchanged.
+
 The approved implementation plan and current captures live in docs/groot/. Visual verification lives in design-qa.md. Prior reports in docs/redesign/ and docs/refinement/ are historical. The earlier light/violet refresh report is historical; this direction supersedes its shell decisions while retaining its verified file-based behavior and preserved imports.

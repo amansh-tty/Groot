@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Controls } from '@playground/shared';
-import { api } from './workbench-api';
+import { publicDemo, api } from './workbench-api';
 import { Button } from './components/ui/button';
 type Snapshot = { document: Controls; version: string };
 const valuesOf = (snapshot: Snapshot) =>
@@ -144,7 +144,7 @@ export function ControlsPanel({
           </div>
         ))}
         <div className="feedback-actions">
-          <Button size="sm" type="submit" disabled={!dirty || busy || conflict}>
+          <Button size="sm" type="submit" disabled={publicDemo || !dirty || busy || conflict}>
             {busy ? 'Saving…' : 'Save changes'}
           </Button>
           <Button
@@ -165,7 +165,7 @@ export function ControlsPanel({
             size="sm"
             variant="ghost"
             type="button"
-            disabled={!undo || dirty || busy}
+            disabled={publicDemo || !undo || dirty || busy}
             onClick={() => {
               if (undo) void persist(undo, true);
             }}

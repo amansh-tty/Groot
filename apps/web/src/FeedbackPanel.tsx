@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ElementContext, Feedback, FeedbackAction } from '@playground/shared';
-import { api } from './workbench-api';
+import { publicDemo, api } from './workbench-api';
 import { Button } from './components/ui/button';
 export function FeedbackPanel({
   id,
@@ -116,7 +116,7 @@ export function FeedbackPanel({
           size="sm"
           variant="ghost"
           type="button"
-          disabled={busy}
+          disabled={publicDemo || busy}
           onClick={() => {
             setEditing('');
             setComment('');
@@ -200,7 +200,7 @@ export function FeedbackPanel({
                   <Button
                     size="sm"
                     variant="ghost"
-                    disabled={busy}
+                    disabled={publicDemo || busy}
                     onClick={() => {
                       onCancel();
                       setEditing(f.id);
@@ -213,7 +213,7 @@ export function FeedbackPanel({
                   <Button
                     size="sm"
                     variant="ghost"
-                    disabled={busy}
+                    disabled={publicDemo || busy}
                     onClick={() =>
                       void save({
                         action: 'status',
@@ -227,7 +227,7 @@ export function FeedbackPanel({
                   <Button
                     size="sm"
                     variant="ghost"
-                    disabled={busy}
+                    disabled={publicDemo || busy}
                     onClick={() => setDeleting(f.id)}
                   >
                     Delete
@@ -243,7 +243,7 @@ export function FeedbackPanel({
                 </Button>
                 <Button
                   size="sm"
-                  disabled={busy}
+                  disabled={publicDemo || busy}
                   onClick={() => void save({ action: 'delete', id: f.id })}
                 >
                   Delete comment
