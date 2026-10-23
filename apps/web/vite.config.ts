@@ -10,6 +10,14 @@ export default defineConfig(({ mode }) => {
     plugins: [react(), tailwindcss()],
     resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
     server: { proxy: { '/api': { target: `http://127.0.0.1:${port}`, changeOrigin: true } } },
-    build: { sourcemap: false },
+    build: {
+      sourcemap: false,
+      ...(mode === 'public-demo'
+        ? {
+            outDir: fileURLToPath(new URL('../../dist/client/', import.meta.url)),
+            emptyOutDir: true,
+          }
+        : {}),
+    },
   };
 });

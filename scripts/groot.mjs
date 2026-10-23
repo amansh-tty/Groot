@@ -6,7 +6,25 @@ import { join, resolve } from 'node:path';
 
 const [command, subject, ...flags] = process.argv.slice(2);
 const repo = fileURLToPath(new URL('../', import.meta.url));
-if (command === 'open') {
+if (command === 'mcp' || command === 'setup') {
+  if (!subject || flags.length) {
+    console.error('Usage: pnpm groot ' + command + ' <workspace-path>');
+    process.exitCode = 1;
+  } else {
+    try {
+      if (command === 'mcp') {
+        const { startProjectMcp } = await import('../apps/server/dist/project-mcp.js');
+        await startProjectMcp(subject);
+      } else {
+        const { prepareProjectSetup } = await import('../apps/server/dist/project-setup.js');
+        console.log(JSON.stringify(await prepareProjectSetup(subject, repo), null, 2));
+      }
+    } catch (error) {
+      console.error('Project ' + command + ' failed:', error.message);
+      process.exitCode = 1;
+    }
+  }
+} else if (command === 'open') {
   if (!subject || flags.length) {
     console.error('Usage: pnpm groot open <workspace-path>\nRun pnpm build first.');
     process.exitCode = 1;

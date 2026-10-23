@@ -8,9 +8,10 @@
     "build": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
+    "@fastify/static": "10.1.4",
+    "@modelcontextprotocol/sdk": "1.32.1",
     "@playground/shared": "workspace:*",
     "esbuild": "0.28.2",
-    "@fastify/static": "10.1.4",
     "fastify": "5.12.5",
     "zod": "4.6.5"
   },

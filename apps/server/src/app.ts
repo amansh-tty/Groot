@@ -1,4 +1,5 @@
 import Fastify from 'fastify';
+import { ProjectContext } from './project-context.js';
 import fastifyStatic from '@fastify/static';
 import { healthSchema, settingsSchema } from '@playground/shared';
 import { openDatabase } from './database.js';
@@ -63,6 +64,17 @@ export async function createApp(options: AppOptions) {
         };
       } catch (error) {
         return reply.code(409).send({ error: { message: (error as Error).message } });
+      }
+    });
+    app.get('/api/project-context', async (_request, reply) => {
+      try {
+        return await new ProjectContext(directory).snapshot();
+      } catch (error) {
+        return reply.code(409).send({
+          error: {
+            message: error instanceof Error ? error.message : 'Project context could not be read.',
+          },
+        });
       }
     });
     app.post('/api/workspace', async (request, reply) => {
