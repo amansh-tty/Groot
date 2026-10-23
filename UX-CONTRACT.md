@@ -2,6 +2,8 @@
 
 The maintained user brief and AGENTS.md own product behavior. DESIGN.md owns the Groot interface. Imported prototype data and design systems remain independent.
 
+Variation titles wrap rather than truncate. PromptExcerpt uses a two-line excerpt and an explicitly invoked native popover for long text; the full text is scrollable, viewport-bounded and dismissible with Escape, outside click or its labeled close button. Placement follows the invoking variation or history entry. The excerpt labels recorded prompts separately from fallback direction descriptions. Compare shows the current flow first and requires an explicit different target, grouping related variations before other explorations. Both panes still run independently.
+
 | Capability     | Canonical owner                                        | Source of truth                              | Allowed variants                                      | Verification                        |
 | -------------- | ------------------------------------------------------ | -------------------------------------------- | ----------------------------------------------------- | ----------------------------------- |
 | Select/Listbox | Native labeled select                                  | DESIGN.md / existing prototype configuration | OS popup                                              | browser workflow tests              |

@@ -213,16 +213,19 @@ function ComparePane({
 }
 export function CompareView({
   id,
+  initialRight,
   catalog,
   onClose,
 }: {
   id: string;
+  initialRight?: string;
   catalog: Catalog;
   onClose: () => void;
 }) {
   const [left, setLeft] = useState(id);
   const [right, setRight] = useState(
-    catalog.demos.find((item) => item.id === id)?.parentId ??
+    initialRight ??
+      catalog.demos.find((item) => item.id === id)?.parentId ??
       catalog.demos.find((item) => item.parentId === id)?.id ??
       '',
   );

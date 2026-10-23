@@ -84,6 +84,9 @@ test('designer iteration: element feedback is readable and actionable in local f
       ),
     ),
   ).toEqual([]);
+  await page
+    .getByLabel('Compare with', { exact: true })
+    .selectOption('emergency-booking-simplified');
   await page.getByRole('button', { name: 'Compare', exact: true }).click();
   await page
     .getByLabel('Left exploration', { exact: true })

@@ -83,12 +83,14 @@ test('user project loop: alternative, successful edit, failed-build recovery, fe
   await page.getByRole('button', { name: 'Actual size', exact: true }).click();
   await expect(preview.locator('tbody tr')).toHaveCount(1);
   await preview.getByRole('button', { name: 'Clear search', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Compare', exact: true })).toBeDisabled();
+  await expect(page.locator('.compare-current')).toContainText('Spend.In');
+  await page.getByLabel('Compare with', { exact: true }).selectOption('design-system');
   await page.getByRole('button', { name: 'Compare', exact: true }).click();
-  await expect(page.getByLabel('Right exploration', { exact: true })).toHaveValue('');
-  await expect(page.locator('iframe[title="Right interactive prototype"]')).toHaveCount(0);
-  await expect(
-    page.getByRole('heading', { name: 'Another direction belongs here.' }),
-  ).toBeVisible();
+  await expect(page.getByLabel('Left exploration', { exact: true })).toHaveValue(
+    'spend-in-dashboard',
+  );
+  await expect(page.getByLabel('Right exploration', { exact: true })).toHaveValue('design-system');
   await page.getByRole('button', { name: 'Close comparison', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Hide inspector', exact: true })).toBeVisible();
   await page.screenshot({

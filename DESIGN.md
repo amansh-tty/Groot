@@ -55,6 +55,8 @@ Subtle panel boundaries and very subtle neutral insets. Only modal dialogs and t
 
 ## Components
 
+VariationSummary owns readable, wrapping variation headings and a two-line excerpt. PromptExcerpt owns long-text disclosure through a native auto popover: light dismiss, Escape, a labeled close button, viewport-clamped placement beside the invoking item, bounded height and internal scrolling. Recorded prompts and fallback direction descriptions are labeled separately. Compare starts with the current flow, then a native labeled target select grouped into related variations and other explorations; launching requires an explicit different target.
+
 Shared shell Button: apps/web/src/components/ui/button.tsx, using semantic primary/outline/ghost classes in studio.css and consistent 34/36px sizes. Shared Dialog: components/ui/dialog.tsx, using an app-owned HTML dialog with accessible title, modal background isolation, focus cycle, Escape and return focus; pending alternative creation prevents accidental dismissal. Native labeled selects are canonical, with OS-owned popup geometry deliberately accepted. FeedbackPanel/ControlsPanel retain revision-checked JSON persistence. Forms keep drafts on failed saves. LiveThumbnail owns read-only gallery previews. PrototypeView owns the session/dock/inspector; CompareView owns explicit independent comparison choices.
 
 ## Do's and Don'ts

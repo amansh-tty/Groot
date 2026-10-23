@@ -61,6 +61,44 @@ test('Groot: file tabs, monochrome tools, centered handoff and recorded prompts'
   await expect(page.locator('.prompt-history')).toContainText(
     'Keep chart categories aligned with the source.',
   );
+  const longPrompt = Array.from(
+    { length: 20 },
+    (_, index) => `Requirement ${index + 1}: preserve clear navigation and source spacing.`,
+  ).join('\n');
+  await writeFile(
+    join(root, 'demos/spend-in-dashboard/prompts.json'),
+    JSON.stringify([{ prompt: longPrompt, createdAt: '2026-10-23T10:00:00.000Z' }]),
+  );
+  const more = page
+    .locator('.prompt-history')
+    .getByRole('button', { name: 'See more: Prompt 1', exact: true });
+  await more.click();
+  const fullPrompt = page.getByRole('region', { name: 'Prompt 1 — Prompt', exact: true });
+  await expect(fullPrompt).toBeVisible();
+  await expect(fullPrompt).toContainText('Requirement 20');
+  const disclosure = await fullPrompt.boundingBox();
+  expect(disclosure!.x).toBeGreaterThanOrEqual(16);
+  expect(disclosure!.x + disclosure!.width).toBeLessThanOrEqual(1424);
+  expect(disclosure!.y + disclosure!.height).toBeLessThanOrEqual(1008);
+  await page.screenshot({ path: test.info().outputPath('prompt-disclosure.png') });
+  await page.keyboard.press('Escape');
+  await expect(fullPrompt).toBeHidden();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page
+    .locator('.variation-summary[data-current]')
+    .getByRole('button', { name: 'See more: Spend.In — Dashboard', exact: true })
+    .click();
+  const mobilePrompt = page.locator('.variation-summary[data-current] .prompt-popover');
+  await expect(mobilePrompt).toBeVisible();
+  await expect
+    .poll(async () => (await mobilePrompt.boundingBox())?.x ?? 0)
+    .toBeGreaterThanOrEqual(16);
+  const narrow = await mobilePrompt.boundingBox();
+  expect(narrow!.x).toBeGreaterThanOrEqual(16);
+  expect(narrow!.x + narrow!.width).toBeLessThanOrEqual(374);
+  await page.keyboard.press('Escape');
+  await expect(mobilePrompt).toBeHidden();
+  await page.setViewportSize({ width: 1440, height: 1024 });
   await expect(page.locator('.preview-canvas')).toHaveCSS('background-color', 'rgb(31, 31, 31)');
   const toolbar = await page.getByRole('toolbar', { name: 'Preview tools' }).boundingBox();
   expect(toolbar!.height).toBeGreaterThan(toolbar!.width * 3);

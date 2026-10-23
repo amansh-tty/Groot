@@ -36,6 +36,8 @@ import {
 } from './workbench-api';
 import { ControlsPanel } from './ControlsPanel';
 import { CompareView } from './CompareView';
+import { VariationSummary } from './VariationSummary';
+import { PromptExcerpt } from './PromptExcerpt';
 import { explorationFamily } from './ExplorationTree';
 import { FeedbackPanel } from './FeedbackPanel';
 import { Button } from './components/ui/button';
@@ -84,6 +86,7 @@ export function PrototypeView({
   const [controlsDirty, setControlsDirty] = useState(false);
   const controlDraft = useRef<Record<string, number> | null>(null);
   const [comparing, setComparing] = useState(false);
+  const [compareTarget, setCompareTarget] = useState('');
   const [description, setDescription] = useState('');
   const [rationale, setRationale] = useState('');
   const [handoff, setHandoff] = useState<'screen' | 'state' | null>(null);
@@ -324,7 +327,14 @@ export function PrototypeView({
   };
   const handoffPrompt = `Read the project context and ${demoFolder}${id}/src/App.tsx and prototype.config.ts. Add a ${handoff ?? 'screen'} named "${handoffName.trim() || '[name]'}" within this variation. ${handoff === 'screen' ? 'This is another destination in the same flow; define its navigation explicitly.' : 'This is a condition of the current screen, not a separate variation.'} Preserve existing screens, states, feedback and interactions. Use the project design system. Ask for missing behavior; document assumptions. Record this prompt in ${demoFolder}${id}/prompts.json as an array entry with prompt and ISO createdAt. Do not install dependencies or add backend access.`;
   if (comparing)
-    return <CompareView id={id} catalog={catalog} onClose={() => setComparing(false)} />;
+    return (
+      <CompareView
+        id={id}
+        initialRight={compareTarget}
+        catalog={catalog}
+        onClose={() => setComparing(false)}
+      />
+    );
   return (
     <div className="prototype-page">
       <aside className="variation-panel" aria-label="Variations">
@@ -338,17 +348,17 @@ export function PrototypeView({
         </Button>
         <div className="variation-list">
           {related.map((item) => (
-            <button
+            <VariationSummary
               key={item.id}
-              title={item.title}
-              aria-current={item.id === id ? 'page' : undefined}
-              onClick={() => {
+              item={catalog.demos.find((demo) => demo.id === item.id)!}
+              original={item.depth === 0}
+              current={item.id === id}
+              detail={detail}
+              revision={catalog.revision}
+              onOpen={() => {
                 if (allowNavigation()) onOpen(item.id);
               }}
-            >
-              <strong>{item.depth === 0 ? 'Original' : item.title}</strong>
-              {item.id === id && <span className="variation-current">Current</span>}
-            </button>
+            />
           ))}
         </div>
         <section className="prompt-history">
@@ -364,7 +374,7 @@ export function PrototypeView({
                     timeStyle: 'short',
                   })}
                 </time>
-                <p>{entry.prompt}</p>
+                <PromptExcerpt title={`Prompt ${index + 1}`} text={entry.prompt} />
               </article>
             ))
           ) : (
@@ -818,10 +828,54 @@ export function PrototypeView({
               className="inspector-section compare-launch"
             >
               <h2>Compare directions</h2>
-              <p>Inspect this variation alongside another direction.</p>{' '}
+              <div className="compare-current">
+                <span className="section-label">Current flow</span>
+                <strong>{detail?.meta.title ?? meta?.title}</strong>
+                <span>This variation · A</span>
+              </div>
+              <label className="compare-choice">
+                Compare with
+                <select
+                  aria-label="Compare with"
+                  value={
+                    catalog.demos.some((item) => item.id === compareTarget && item.id !== id)
+                      ? compareTarget
+                      : ''
+                  }
+                  onChange={(event) => setCompareTarget(event.target.value)}
+                >
+                  <option value="">Choose another flow…</option>
+                  <optgroup label="Related variations">
+                    {related
+                      .filter((item) => item.id !== id)
+                      .map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.title}
+                        </option>
+                      ))}
+                  </optgroup>
+                  <optgroup label="Other explorations">
+                    {catalog.demos
+                      .filter(
+                        (item) =>
+                          item.id !== id && !related.some((relative) => relative.id === item.id),
+                      )
+                      .map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.title}
+                        </option>
+                      ))}
+                  </optgroup>
+                </select>
+              </label>
               <Button
-                variant="ghost"
+                variant="outline"
                 size="sm"
+                disabled={
+                  !compareTarget ||
+                  compareTarget === id ||
+                  !catalog.demos.some((item) => item.id === compareTarget)
+                }
                 onClick={() => {
                   if (allowNavigation()) {
                     setComparing(true);
