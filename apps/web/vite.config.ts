@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => {
       sourcemap: false,
       ...(mode === 'public-demo'
         ? {
-            outDir: fileURLToPath(new URL('../../dist/public/', import.meta.url)),
+            outDir: fileURLToPath(new URL('../../dist/client/', import.meta.url)),
             emptyOutDir: true,
           }
         : {}),

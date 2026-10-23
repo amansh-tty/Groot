@@ -5,7 +5,7 @@ import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium, expect } from '@playwright/test';
 
-const root = fileURLToPath(new URL('../dist/public/', import.meta.url));
+const root = fileURLToPath(new URL('../dist/client/', import.meta.url));
 const requests = [];
 const server = createServer(async (req, res) => {
   const pathname = new URL(req.url, 'http://localhost').pathname;

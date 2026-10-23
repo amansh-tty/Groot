@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { compilePrototype } from '../apps/server/dist/prototype-compiler.js';
 
 const repo = fileURLToPath(new URL('../', import.meta.url));
-const destination = join(repo, 'dist/public/demo-data');
+const destination = join(repo, 'dist/client/demo-data');
 const selections = [
   { scope: 'user', root: join(repo, 'workspace'), ids: ['spend-in-dashboard', 'design-system'] },
   {
@@ -85,9 +85,9 @@ for (const { scope, root, ids } of selections) {
     complete: false,
   });
 }
-await mkdir(join(repo, 'dist/public/setup'), { recursive: true });
+await mkdir(join(repo, 'dist/client/setup'), { recursive: true });
 await writeFile(
-  join(repo, 'dist/public/setup/SKILL.md'),
+  join(repo, 'dist/client/setup/SKILL.md'),
   await readFile(join(repo, 'skills/groot-setup/SKILL.md')),
 );
 console.log(
