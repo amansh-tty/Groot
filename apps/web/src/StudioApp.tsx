@@ -34,6 +34,9 @@ import {
 import { ProjectGuide } from './ProjectGuide';
 import { LocalSetup } from './LocalSetup';
 
+if (publicDemo && !location.search && !location.hash) {
+  history.replaceState(null, '', '?example=nova#demo=emergency-booking');
+}
 const example = new URLSearchParams(location.search).get('example') === 'nova';
 type Page = 'all' | 'mine' | 'system' | 'start';
 type Route = { page: Page; demo: string };
@@ -538,8 +541,22 @@ export function App() {
               </div>
               <div className="library-project-note">
                 <span>Local workspace · {catalog.designer.name}</span>
-                <a href={example ? './' : '?example=nova'}>
-                  {example ? 'Back to your workspace' : 'NOVA · Example Project'}{' '}
+                <a
+                  href={
+                    publicDemo
+                      ? example
+                        ? '?project=spend-in#page=all'
+                        : '?example=nova#demo=emergency-booking'
+                      : example
+                        ? './'
+                        : '?example=nova'
+                  }
+                >
+                  {example
+                    ? publicDemo
+                      ? 'Spend.In · Demo Project'
+                      : 'Back to your workspace'
+                    : 'NOVA · Example Project'}{' '}
                   <ArrowUpRight size={12} />
                 </a>
               </div>

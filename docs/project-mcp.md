@@ -1,6 +1,6 @@
 # Public demo and your own project
 
-The public site is a static snapshot of the bundled Spend.In and separate NOVA examples. It opens Spend.In directly. Prototype interactions and declared controls can be inspected, but saving comments, controls or alternatives requires the local app. No filesystem API, project MCP, SQLite database, designer identity or saved project answers are deployed.
+The public site is a static snapshot of the bundled Spend.In and separate NOVA examples. It opens NOVA Dental directly. Prototype interactions and declared controls can be inspected, but saving comments, controls or alternatives requires the local app. No filesystem API, project MCP, SQLite database, designer identity or saved project answers are deployed.
 
 Build it with `pnpm build:public`; verify with `pnpm test:public`. Only the six IDs explicitly listed in `scripts/build-public-demo.mjs` are published. New local explorations are not automatically uploaded. Public-demo feedback is empty. Source README/context documents are intentional bundled content; review that allowlist before adding examples.
 

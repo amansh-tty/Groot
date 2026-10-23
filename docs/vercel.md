@@ -8,7 +8,7 @@ Connect the project to GitHub rather than only uploading a local build. Pushes t
 
 Use the production project domain as the shared link; individual deployment URLs identify a specific build. For anonymous viewing, review Vercel Deployment Protection and ensure the shared production domain is public. Configure a custom domain later if desired.
 
-The public build opens Spend.In and includes only the explicitly selected bundled demos. Own-project setup still guides visitors to install the repository and enable the project-local skill and MCP in their coding agent. Vercel never reads their local workspace. Demo changes are published only after committing and pushing their source to the connected branch; local unsaved edits are not deployed.
+The public build opens NOVA Dental and includes only the explicitly selected bundled demos. Own-project setup still guides visitors to install the repository and enable the project-local skill and MCP in their coding agent. Vercel never reads their local workspace. Demo changes are published only after committing and pushing their source to the connected branch; local unsaved edits are not deployed.
 
 The previous Sites URL is a separately published snapshot. A GitHub push updates Vercel only after the Git connection is configured; it does not update that earlier URL.
 

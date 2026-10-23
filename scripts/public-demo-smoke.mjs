@@ -42,7 +42,8 @@ try {
   await page.goto(url);
   await expect(page.locator('iframe[title="Interactive prototype"]')).toBeVisible();
   const frame = page.frameLocator('iframe[title="Interactive prototype"]');
-  await expect(frame.getByText('Your balance', { exact: false }).first()).toBeVisible();
+  await expect(frame.getByText('NOVA', { exact: false }).first()).toBeVisible();
+  assert.equal(new URL(page.url()).searchParams.get('example'), 'nova');
   assert.equal(
     await page.locator('iframe[title="Interactive prototype"]').getAttribute('sandbox'),
     'allow-scripts',
@@ -59,7 +60,17 @@ try {
   await expect(page.getByRole('dialog')).toBeVisible();
   await page.keyboard.press('Escape');
   await page.getByRole('button', { name: 'Home', exact: true }).click();
-  await expect(page.getByText('Spend.In — Dashboard', { exact: true }).first()).toBeVisible();
+  await page.goto(url + '/?project=spend-in#page=all');
+  await expect(
+    page.getByRole('heading', { name: 'Spend.In — Dashboard', exact: true }),
+  ).toBeVisible();
+  await page.goto(url + '/#demo=spend-in-dashboard');
+  await expect(
+    page
+      .frameLocator('iframe[title="Interactive prototype"]')
+      .getByText('Your balance', { exact: false })
+      .first(),
+  ).toBeVisible();
   await page.goto(url + '/?example=nova#demo=emergency-booking');
   await expect(page.locator('iframe[title="Interactive prototype"]')).toBeVisible();
   await expect(
@@ -78,7 +89,7 @@ try {
   );
   assert.deepEqual(errors, []);
   console.log(
-    'Public static demo passed: default Spend.In, sandbox, setup handoff, Home, isolated NOVA, setup skill, no backend requests.',
+    'Public static demo passed: default NOVA, Spend.In deep link, sandbox, setup handoff, Home, isolated NOVA, setup skill, no backend requests.',
   );
 } finally {
   await browser.close();

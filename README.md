@@ -4,7 +4,7 @@ Groot UI integration: see [docs/integration/port.md](docs/integration/port.md) f
 
 A local-first visual workbench for product designers. **Your existing coding agent edits the repository. Groot discovers, renders and organizes that work.** No provider connection, API key, chat or account.
 
-The public demo is a static, read-only build of the bundled projects. It opens Spend.In directly and guides visitors into local installation for their own work. Build it with `pnpm build:public`; validate it with `pnpm test:public`. It never reads visitors' local files or runs a project backend.
+The public demo is a static, read-only build of the bundled projects. It opens NOVA Dental directly and guides visitors into local installation for their own work. Build it with `pnpm build:public`; validate it with `pnpm test:public`. It never reads visitors' local files or runs a project backend.
 
 Follow [the setup skill](skills/groot-setup/SKILL.md) to install locally. After creating or choosing a Groot workspace, run `pnpm groot setup <project-folder>`. Enable the generated MCP command in your coding agent, then let it ask and save project-specific context questions. Future prototypes start from a fresh context brief. See [project MCP and setup](docs/project-mcp.md) for configuration and limits.
 
