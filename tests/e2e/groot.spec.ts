@@ -9,8 +9,8 @@ test('Groot: file tabs, monochrome tools, centered handoff and recorded prompts'
   await mkdir(root, { recursive: true });
   await cp(join(process.cwd(), 'workspace'), root, { recursive: true });
   await page.setViewportSize({ width: 1440, height: 1024 });
-  await page.goto('/');
-  await expect(page.getByRole('button', { name: 'Home', exact: true })).toBeVisible();
+  await page.goto('/?project=local#page=all');
+  await expect(page.getByRole('button', { name: 'Project overview', exact: true })).toBeVisible();
   await expect(
     page
       .frameLocator('iframe[title="Spend.In — Dashboard thumbnail"]')
@@ -110,7 +110,7 @@ test('Groot: file tabs, monochrome tools, centered handoff and recorded prompts'
   await expect(handoff.locator('.handoff-prompt')).toContainText('Transaction details');
   await expect(handoff.locator('.handoff-prompt')).toContainText('another destination');
   await page.keyboard.press('Escape');
-  await page.getByRole('button', { name: 'Home', exact: true }).click();
+  await page.getByRole('button', { name: 'Project overview', exact: true }).click();
   await page.getByRole('button', { name: 'Open Pickolab — Design System', exact: true }).click();
   await expect(page.getByLabel('Preview screen', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Next screen', exact: true }).click();
@@ -131,7 +131,7 @@ test('Groot: file tabs, monochrome tools, centered handoff and recorded prompts'
     .getByRole('button', { name: 'Spend.In — Dashboard', exact: true })
     .click();
   await expect(page.locator('.file-tab')).toHaveCount(2);
-  await page.getByRole('button', { name: 'Home', exact: true }).click();
+  await page.getByRole('button', { name: 'Project overview', exact: true }).click();
   await expect(page.locator('#library-title')).toContainText('Explorations');
   await expect(
     page.getByRole('button', { name: 'Open Spend.In — Dashboard', exact: true }),

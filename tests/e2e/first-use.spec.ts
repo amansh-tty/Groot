@@ -3,7 +3,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 test('empty project, creation recovery, agent handoff and isolated example', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?project=local#page=all');
   await expect(page.getByRole('button', { name: 'Start your project', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: /Open Emergency Booking/ })).toHaveCount(0);
   await page.getByRole('button', { name: 'Start your project', exact: true }).click();
@@ -11,7 +11,7 @@ test('empty project, creation recovery, agent handoff and isolated example', asy
   await expect(page.getByLabel('Project name', { exact: true })).toBeFocused();
   await page.getByLabel('Project name', { exact: true }).fill('Acorn');
   await page.getByLabel('Description (optional)').fill('A reading list for small teams');
-  await page.route('**/api/workspace?scope=user', async (route) => {
+  await page.route('**/api/workspace?scope=user*', async (route) => {
     if (route.request().method() === 'POST')
       await route.fulfill({
         status: 503,
@@ -23,7 +23,7 @@ test('empty project, creation recovery, agent handoff and isolated example', asy
   await page.getByRole('button', { name: 'Create project', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('Local storage unavailable');
   await expect(page.getByLabel('Project name', { exact: true })).toHaveValue('Acorn');
-  await page.unroute('**/api/workspace?scope=user');
+  await page.unroute('**/api/workspace?scope=user*');
   await page.getByRole('button', { name: 'Create project', exact: true }).click();
   await expect(
     page.getByRole('heading', { name: 'Your first exploration starts here.' }),

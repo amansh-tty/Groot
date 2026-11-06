@@ -33,11 +33,10 @@ import {
 } from './WorkspaceWelcome';
 import { ProjectGuide } from './ProjectGuide';
 import { LocalSetup } from './LocalSetup';
-import { HomeActivity } from './HomeActivity';
+import { ProjectBoards } from './PlanningBoard';
+import { PrototypeViewer } from './PrototypeViewer';
+import { ProjectContributions } from './HomeActivity';
 
-if (publicDemo && !location.search && !location.hash) {
-  history.replaceState(null, '', '?example=nova#demo=emergency-booking');
-}
 const example = new URLSearchParams(location.search).get('example') === 'nova';
 type Page = 'all' | 'mine' | 'system' | 'start';
 type Route = { page: Page; demo: string };
@@ -85,6 +84,9 @@ export function App() {
   const [dirty, setDirty] = useState(false);
   const [notice, setNotice] = useState('');
   const [newExploration, setNewExploration] = useState(false);
+  const [viewing, setViewing] = useState(
+    () => new URLSearchParams(location.hash.slice(1)).get('view') ?? '',
+  );
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
   const [sort, setSort] = useState('recent');
@@ -113,7 +115,13 @@ export function App() {
         ]);
         if (cancelled) return;
         const linked = readRoute().demo;
-        if (!publicDemo && !example && linked && !next.demos.some((demo) => demo.id === linked)) {
+        if (
+          !publicDemo &&
+          !example &&
+          !new URLSearchParams(location.search).get('project') &&
+          linked &&
+          !next.demos.some((demo) => demo.id === linked)
+        ) {
           const response = await fetch('/api/demos?scope=example');
           const original = (await response.json()) as Catalog;
           if (!cancelled && original.demos.some((demo) => demo.id === linked)) {
@@ -151,7 +159,7 @@ export function App() {
     location.hash = next.demo
       ? 'demo=' + encodeURIComponent(next.demo)
       : next.page === 'all'
-        ? ''
+        ? 'page=all'
         : 'page=' + next.page;
     return true;
   }
@@ -235,9 +243,21 @@ export function App() {
           aria-label="Home"
           title="Home"
           aria-current={!active ? 'page' : undefined}
-          onClick={() => navigate('all')}
+          onClick={() => {
+            if (dirty)
+              setNotice('Save or discard the controls preview before leaving this exploration.');
+            else location.assign('/?home=1');
+          }}
         >
           <Home size={18} />
+        </button>
+        <button
+          className="project-tab"
+          aria-label="Project overview"
+          onClick={() => navigate('all')}
+        >
+          <Folder size={15} />
+          <span>{projectName}</span>
         </button>
         {openIds
           .filter((id) => catalog.demos.some((demo) => demo.id === id))
@@ -337,6 +357,22 @@ export function App() {
           </Button>
         </div>
       </header>
+      {viewing && (
+        <PrototypeViewer
+          key={viewing}
+          id={viewing}
+          title={catalog.demos.find((demo) => demo.id === viewing)?.title ?? 'Prototype'}
+          revision={catalog.revision}
+          onClose={() => {
+            setViewing('');
+            history.replaceState(null, '', location.pathname + location.search + '#page=all');
+          }}
+          onEdit={() => {
+            setViewing('');
+            go({ page: 'all', demo: viewing });
+          }}
+        />
+      )}
       <main id="workbench-main" tabIndex={-1}>
         {error && (
           <div role="alert" className="catalog-error">
@@ -392,7 +428,12 @@ export function App() {
         ) : (
           <div className="library-layout">
             <section className="exploration-library" aria-labelledby="library-title">
-              {route.page === 'all' && <HomeActivity projectName={projectName} />}
+              {route.page === 'all' && (
+                <>
+                  <ProjectContributions repository={workspace?.project?.repository ?? ''} />
+                  <ProjectBoards />
+                </>
+              )}
               <header className="library-title">
                 <div>
                   <span className="section-label">{projectName} / Workspace</span>
@@ -500,6 +541,18 @@ export function App() {
                 {visible.slice(0, limit).map((demo) => (
                   <article className="exploration-card" key={demo.id}>
                     <div className="card-preview">
+                      <button
+                        className="card-preview-open"
+                        aria-label={'View prototype ' + demo.title}
+                        onClick={() => {
+                          setViewing(demo.id);
+                          history.replaceState(
+                            null,
+                            '',
+                            location.pathname + location.search + '#view=' + demo.id,
+                          );
+                        }}
+                      />
                       <LiveThumbnail demo={demo} revision={catalog.revision} />
                       <span className="preview-type">
                         {demo.tags.includes('design-system') ? (
@@ -541,7 +594,9 @@ export function App() {
                         className="card-open"
                         aria-label={'Open ' + demo.title}
                         onClick={() => go({ page: 'all', demo: demo.id })}
-                      />
+                      >
+                        Open workspace <ArrowUpRight size={14} />
+                      </button>
                     </div>
                   </article>
                 ))}
@@ -555,8 +610,16 @@ export function App() {
                         ? '?project=spend-in#page=all'
                         : '?example=nova#demo=emergency-booking'
                       : example
-                        ? './'
-                        : '?example=nova'
+                        ? '?project=' +
+                          encodeURIComponent(
+                            new URLSearchParams(location.search).get('from') ?? 'local',
+                          ) +
+                          '#page=all'
+                        : '?example=nova&from=' +
+                          encodeURIComponent(
+                            new URLSearchParams(location.search).get('project') ?? 'local',
+                          ) +
+                          '#page=all'
                   }
                 >
                   {example

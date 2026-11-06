@@ -9,7 +9,7 @@ test('designer shell: source-backed gallery, search, context, keyboard, responsi
   await mkdir(root, { recursive: true });
   await cp(join(process.cwd(), 'workspace'), root, { recursive: true });
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto('/');
+  await page.goto('/?project=local#page=all');
   const card = page.getByRole('button', { name: 'Open Spend.In — Dashboard', exact: true });
   await expect(card).toBeVisible();
   const cardSurface = page.locator('.exploration-card').filter({ has: card });
@@ -40,14 +40,14 @@ test('designer shell: source-backed gallery, search, context, keyboard, responsi
   await frame.locator('button[data-preview-state="main"]').focus();
   await page.keyboard.press('Enter');
   await expect(frame.getByRole('status')).toHaveText('Button activations: 1');
-  await page.getByRole('button', { name: 'Home', exact: true }).click();
+  await page.getByRole('button', { name: 'Project overview', exact: true }).click();
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(card).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   await expect(page.getByRole('button', { name: 'My Explorations', exact: true })).toBeVisible();
   await page.screenshot({ path: test.info().outputPath('playground-mobile.png'), fullPage: true });
-  await page.route('**/api/demos?scope=user', (route) =>
+  await page.route('**/api/demos?scope=user*', (route) =>
     route.fulfill({
       status: 503,
       contentType: 'application/json',
@@ -56,7 +56,7 @@ test('designer shell: source-backed gallery, search, context, keyboard, responsi
   );
   await expect(page.getByRole('alert')).toContainText('Retrying automatically');
   await expect(card).toBeVisible();
-  await page.unroute('**/api/demos?scope=user');
+  await page.unroute('**/api/demos?scope=user*');
   await expect(page.getByRole('alert')).toHaveCount(0);
 });
 

@@ -3,6 +3,7 @@ import { Button } from './components/ui/button';
 import { api } from './workbench-api';
 
 export interface Project {
+  repository?: string;
   name: string;
   description: string;
 }

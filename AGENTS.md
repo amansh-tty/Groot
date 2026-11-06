@@ -32,3 +32,7 @@ The unused `packages/ai` contract and historical V0 documents are deferred, not 
 V2 feedback stays in the existing JSON array at `demos/<id>/feedback/feedback.json`. Prefer stable `data-playground-id` attributes and `data-playground-screen` on the current screen container. Read `skills/feedback/SKILL.md`; never auto-resolve feedback without designer instruction.
 
 V2 controls are opt-in `controls.json` definitions/values imported by `prototype.config.ts` and bound explicitly through the prototype controls prop. Read the saved values before editing; do not hardcode over designer adjustments. `meta.json` rationale belongs to the designer. Preserve it when implementing feedback and use supplied rationale when creating alternatives. See README for Comment / Compare / Controls workflows.
+
+## Multiple projects and planning boards
+
+Global Home discovers the original workspace, isolated root NOVA example, and additional workspace/projects/<id>/ projects. Determine the selected project directory before editing; all content paths are relative to that project. Never mix project context, boards, prototypes or repository links. Boards are strict, non-executable boards/<id>.json files documented in docs/planning-boards.md. Read a selected board explicitly when using it as prototype input; it is not automatically part of every MCP brief. Preserve board/card IDs and distinguish assumptions from sourced facts.

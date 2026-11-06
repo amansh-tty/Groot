@@ -1,27 +1,15 @@
 import { test, expect } from '@playwright/test';
-import { mkdir } from 'node:fs/promises';
-
-test('Home shows scoped PRs and local allowance with recovery; preview fits without hiding tools', async ({
-  page,
-}) => {
-  await page.route('**/api/contributions?scope=example', (route) =>
-    route.fulfill({
-      json: [
-        {
-          number: 42,
-          title: 'Review dashboard exploration',
-          html_url: 'https://github.com/amansh-tty/Groot/pull/42',
-          state: 'closed',
-          merged_at: '2026-11-01T10:00:00Z',
-        },
-      ],
-    }),
-  );
+test('Home lists projects and opens a spacious independent prototype viewer', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/?home=1');
+  await expect(page.getByRole('heading', { name: 'Projects', exact: true })).toBeVisible();
+  await expect(page.locator('.studio-bar')).toHaveCount(0);
+  await expect(
+    page.getByRole('button', { name: 'Open project NOVA Dental', exact: true }),
+  ).toBeVisible();
   let fail = false;
-  let reads = 0;
-  await page.route('**/api/agent-allowance?scope=example', (route) => {
-    reads++;
-    return fail
+  await page.route('**/api/agent-allowance?**', (route) =>
+    fail
       ? route.fulfill({ status: 503, json: { error: { message: 'Local connection unavailable' } } })
       : route.fulfill({
           json: {
@@ -31,42 +19,49 @@ test('Home shows scoped PRs and local allowance with recovery; preview fits with
               { remainingPercent: 34, windowMinutes: 10080, resetsAt: 1800003600 },
             ],
           },
-        });
-  });
-  await page.goto('/?example=nova#page=all');
-  await expect(page.getByRole('heading', { name: 'PR contributions' })).toBeVisible();
-  await expect(page.getByRole('link', { name: /Review dashboard exploration/ })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Project files', exact: true })).toHaveCount(0);
-  await expect(
-    page.locator('.studio-bar').getByText('Example project', { exact: true }),
-  ).toHaveCount(0);
-  expect(reads).toBe(0);
+        }),
+  );
+  await page.getByRole('button', { name: 'Allowance', exact: true }).click();
   await page.getByRole('button', { name: 'Read local allowance' }).click();
   await expect(page.getByLabel('5-hour allowance remaining')).toHaveAttribute('value', '76');
   await expect(page.getByLabel('Weekly allowance remaining')).toHaveAttribute('value', '34');
   fail = true;
   await page.getByRole('button', { name: 'Refresh allowance' }).click();
   await expect(page.getByRole('alert')).toContainText('Showing the last successful check');
-  await expect(page.getByLabel('5-hour allowance remaining')).toHaveAttribute('value', '76');
-  // No allowance screenshot: personal account information never becomes a published artifact.
+  await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: 'Open project NOVA Dental', exact: true }).click();
+  await expect(page).toHaveURL(/example=nova/);
+  await page
+    .getByRole('button', { name: 'View prototype Emergency Booking — Current', exact: true })
+    .click();
+  const viewer = page.getByRole('dialog', { name: 'Emergency Booking — Current', exact: true });
+  await expect(viewer).toBeVisible();
+  await expect(viewer.locator('.variation-panel')).toHaveCount(0);
+  await expect(viewer.getByRole('toolbar')).toHaveCount(0);
+  const frame = viewer.locator('iframe[title="Prototype viewer"]');
+  await expect(frame).toBeVisible();
+  await expect(frame).toHaveAttribute('sandbox', 'allow-scripts');
+  await expect(viewer.getByRole('button', { name: 'Next prototype screen' })).toBeEnabled();
+  expect((await viewer.locator('.viewer-artboard').boundingBox())!.width).toBeGreaterThan(900);
+  await viewer.getByRole('button', { name: 'Next prototype screen' }).click();
+  await expect(viewer.locator('.viewer-footer')).toContainText('2 of 7 screens');
+  await viewer.getByRole('button', { name: 'Previous prototype screen' }).click();
+  await viewer.getByRole('button', { name: 'Show prototype comments' }).click();
+  await expect(viewer.locator('.viewer-comments')).toBeVisible();
+  await viewer.getByRole('button', { name: 'Show prototype comments' }).click();
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
-  await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto('/?example=nova#demo=emergency-booking');
-  const frame = page.locator('iframe[title="Interactive prototype"]');
   await expect(frame).toBeVisible();
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await viewer.getByRole('button', { name: 'Open workspace', exact: true }).click();
+  await expect(page.locator('iframe[title="Interactive prototype"]')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Hide inspector', exact: true })).toBeVisible();
-  const previous = page.getByRole('button', { name: 'Previous screen on canvas' });
-  await expect(previous).toBeDisabled();
-  await page.getByRole('button', { name: 'Next screen on canvas' }).click();
-  await expect(page.locator('.screen-heading')).toContainText('2 of 7');
-  await expect(previous).toBeEnabled();
-  await previous.click();
-  await expect(page.locator('.screen-heading')).toContainText('1 of 7');
-  const canvas = await page.locator('.preview-canvas').boundingBox();
-  const artboard = await page.locator('.preview-frame-wrap').boundingBox();
-  expect(artboard!.y).toBeGreaterThanOrEqual(canvas!.y + 120);
-  expect(artboard!.y + artboard!.height).toBeLessThanOrEqual(canvas!.y + canvas!.height - 40);
-  await mkdir('docs/home-activity', { recursive: true });
-  await page.screenshot({ path: 'docs/home-activity/preview.png' });
+  await page.getByRole('button', { name: 'Home', exact: true }).click();
+  await expect(
+    page.getByRole('button', { name: 'Open project NOVA Dental', exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Recents', exact: true }).click();
+  await expect(
+    page.getByRole('button', { name: 'Open project NOVA Dental', exact: true }),
+  ).toBeVisible();
 });

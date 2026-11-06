@@ -4,15 +4,17 @@ Groot UI integration: see [docs/integration/port.md](docs/integration/port.md) f
 
 A local-first visual workbench for product designers. **Your existing coding agent edits the repository. Groot discovers, renders and organizes that work.** No provider connection, API key, chat or account.
 
-The public demo is a static, read-only build of the bundled projects. It opens NOVA Dental directly and guides visitors into local installation for their own work. Build it with `pnpm build:public`; validate it with `pnpm test:public`. It never reads visitors' local files or runs a project backend.
+The public demo is a static, read-only build of the bundled projects. It opens a global Home containing the bundled NOVA Dental and Spend.In projects and guides visitors into local installation for their own work. Build it with `pnpm build:public`; validate it with `pnpm test:public`. It never reads visitors' local files or runs a project backend.
 
 Follow [the setup skill](skills/groot-setup/SKILL.md) to install locally. After creating or choosing a Groot workspace, run `pnpm groot setup <project-folder>`. Enable the generated MCP command in your coding agent, then let it ask and save project-specific context questions. Future prototypes start from a fresh context brief. See [project MCP and setup](docs/project-mcp.md) for configuration and limits.
 
 **Start Here → Project files** lets you: create multiple design-source links, plans, presentation documents and notes, and connect each to related explorations. Existing context documents open read-only. These are local file-backed documents, not imported editable Figma frames or a slide/canvas editor. See [project files](docs/project-files.md).
 
-Home shows public **amansh-tty/Groot PR activity** (the latest twenty updated pull requests, labeled Groot development) and a **local Codex allowance** check. Choose Read local allowance to read the signed-in CLI’s reported windows and reset times, without running an agent task. This account data stays local and is never bundled into the public demo. See [Home activity](docs/home-activity.md).
+Home lists all projects, recents and latest saved prompts. Contributions are grouped by each project’s linked public GitHub repository (the latest twenty updated pull requests). The top bar provides a **local Codex allowance** check. Choose Read local allowance to read the signed-in CLI’s reported windows and reset times, without running an agent task. This account data stays local and is never bundled into the public demo. See [Home activity](docs/home-activity.md).
 
 <img width="1440" height="1024" alt="image" src="https://github.com/user-attachments/assets/73494b43-983a-4d92-ba3b-8996b53ce8ba" />
+
+Projects can contain multiple working [planning boards](docs/planning-boards.md), with text cards, connectors, pan/zoom, explicit save and external-edit conflict recovery. Existing prototypes open in a large viewer; **Open workspace** exposes the editing tools. Additional projects live in `workspace/projects/<id>/`, while existing content stays in place.
 
 ## Run locally
 
@@ -24,7 +26,7 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Open **http://127.0.0.1:5173** from this repository root (Groot). Playground opens your empty workspace. Choose **Start your project**, enter a name and optional description, and create your first exploration with your existing coding agent. No wizard or AI connection is required. **NOVA · Example Project** opens the four fictional demos separately; **Back to your workspace** returns to your own work.
+Open **http://127.0.0.1:5173** from this repository root (Groot). Home lists your existing projects. Choose **New project** to create an isolated project. The original local workspace remains available; an empty legacy workspace still supports its original setup flow. Inside the project, create explorations with your existing coding agent. No wizard or AI connection is required. **NOVA · Example Project** opens the four fictional demos separately; **Back to your workspace** returns to your own work.
 
 For the compiled application:
 

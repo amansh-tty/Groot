@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowUpRight, BookOpen, Check, Copy, FileText, FolderOpen } from 'lucide-react';
 import { api, publicDemo, requestLocalSetup } from './workbench-api';
+import { ProjectRepository } from './ProjectRepository';
 import { ProjectFiles } from './ProjectFiles';
 import type { Catalog } from './workbench-api';
 import { ProjectContextSetup } from './ProjectContextSetup';
@@ -111,6 +112,8 @@ export function ProjectGuide({
           <>
             <span className="section-label">A local workbench. Your own agent.</span>
             <h1>One project. A place to explore it.</h1>
+            {!example && <ProjectRepository />}
+
             <p className="guide-lead">
               Describe a direction to your coding agent. Save the files. Try the result here.
             </p>

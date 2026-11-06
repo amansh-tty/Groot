@@ -1,13 +1,22 @@
 import Fastify from 'fastify';
 import { ProjectContext } from './project-context.js';
 import { ProjectFiles, projectFileInput } from './project-files.js';
+import { PlanningBoards } from './planning-boards.js';
+import { Projects, projectSummary, repositoryName } from './projects.js';
 import { createAllowanceReader } from './agent-allowance.js';
 import fastifyStatic from '@fastify/static';
 import { healthSchema, settingsSchema } from '@playground/shared';
 import { openDatabase } from './database.js';
 import { Workbench } from './workbench.js';
 import { z } from 'zod';
-import { userWorkspace, directUserWorkspace, readProject, createProject } from './project.js';
+import {
+  userWorkspace,
+  directUserWorkspace,
+  readProject,
+  createProject,
+  projectRepository,
+  setProjectRepository,
+} from './project.js';
 
 interface AppOptions {
   dataDir: string;
@@ -42,8 +51,93 @@ export async function createApp(options: AppOptions) {
     );
     await personal.start();
     app.addHook('onClose', async () => personal.close());
+    const projects = new Projects(directory);
+    const opened = new Map<string, Promise<Workbench>>();
+    const selectedId = (request: { query: unknown }) =>
+      (request.query as { project?: string }).project ?? '';
+    const isExtra = (id: string) => !!id && !['local', 'spend-in'].includes(id);
+    const selected = new Map<string, Workbench>();
+    app.addHook('onClose', async () => {
+      for (const value of selected.values()) value.close();
+    });
+    app.addHook('preHandler', async (request, reply) => {
+      const id = selectedId(request);
+      if (
+        !request.url.startsWith('/api/') ||
+        !isExtra(id) ||
+        (request.query as { scope?: string }).scope === 'example'
+      )
+        return;
+      try {
+        if (!opened.has(id))
+          opened.set(
+            id,
+            (async () => {
+              const path = await projects.resolve(id);
+              const value = new Workbench(path);
+              try {
+                await value.start();
+              } catch (error) {
+                value.close();
+                throw error;
+              }
+              selected.set(id, value);
+              return value;
+            })().catch((error) => {
+              opened.delete(id);
+              throw error;
+            }),
+          );
+        await opened.get(id);
+      } catch {
+        return reply.code(404).send({
+          error: {
+            message: 'This project is unavailable. Return Home to choose another project.',
+          },
+        });
+      }
+    });
     const bench = (request: { query: unknown }) =>
-      (request.query as { scope?: string }).scope === 'user' ? personal : workbench;
+      (request.query as { scope?: string }).scope === 'example'
+        ? workbench
+        : (selected.get(selectedId(request)) ??
+          ((request.query as { scope?: string }).scope === 'user' ? personal : workbench));
+    const userBench = (request: { query: unknown }) =>
+      selected.get(selectedId(request)) ?? personal;
+    app.get('/api/projects', async (_request, reply) => {
+      try {
+        const list = await projects.list();
+        const sources = [
+          { id: 'local', directory },
+          { id: 'nova', directory: options.workspaceRoot!, fallback: 'NOVA Dental' },
+          ...list.projects,
+        ];
+        const summaries = [];
+        for (const source of sources) {
+          try {
+            const summary = await projectSummary(
+              source.id,
+              source.directory,
+              'fallback' in source ? source.fallback : undefined,
+            );
+            if (summary) summaries.push(summary);
+          } catch {
+            list.warnings.push('Cannot read project ' + source.id + '. Its files were preserved.');
+          }
+        }
+        return { projects: summaries, warnings: list.warnings };
+      } catch (error) {
+        return reply.code(409).send({ error: { message: (error as Error).message } });
+      }
+    });
+    app.post('/api/projects', async (request, reply) => {
+      try {
+        const created = await projects.create(request.body);
+        return { id: created.id };
+      } catch (error) {
+        return reply.code(400).send({ error: { message: (error as Error).message } });
+      }
+    });
     const readAllowance = createAllowanceReader();
     app.get('/api/agent-allowance', async (_request, reply) => {
       reply.header('Cache-Control', 'no-store');
@@ -53,12 +147,18 @@ export async function createApp(options: AppOptions) {
         return reply.code(503).send({ error: { message: (error as Error).message } });
       }
     });
-    let contributions: { value: unknown; expires: number } | undefined;
-    app.get('/api/contributions', async (_request, reply) => {
-      if (contributions && contributions.expires > Date.now()) return contributions.value;
+    const contributions = new Map<string, { value: unknown; expires: number }>();
+    app.get('/api/contributions', async (request, reply) => {
       try {
+        const repo = (await readProject(bench(request).directory))?.repository;
+        if (!repo) return { repository: '', pulls: [] };
+        repositoryName.parse(repo);
+        const cached = contributions.get(repo);
+        if (cached && cached.expires > Date.now()) return cached.value;
         const response = await fetch(
-          'https://api.github.com/repos/amansh-tty/Groot/pulls?state=all&sort=updated&direction=desc&per_page=20',
+          'https://api.github.com/repos/' +
+            repo +
+            '/pulls?state=all&sort=updated&direction=desc&per_page=20',
           {
             headers: { Accept: 'application/vnd.github+json', 'User-Agent': 'Groot-workbench' },
             signal: AbortSignal.timeout(8000),
@@ -69,8 +169,8 @@ export async function createApp(options: AppOptions) {
           throw new Error(
             'GitHub activity is temporarily unavailable. Open the repository to see pull requests.',
           );
-        const value: unknown = await response.json();
-        contributions = { value, expires: Date.now() + 300000 };
+        const value = { repository: repo, pulls: (await response.json()) as unknown };
+        contributions.set(repo, { value, expires: Date.now() + 300000 });
         return value;
       } catch {
         return reply.code(503).send({
@@ -81,8 +181,26 @@ export async function createApp(options: AppOptions) {
         });
       }
     });
-    app.get('/api/workspace', async (_request, reply) => {
+    app.get('/api/workspace', async (request, reply) => {
       try {
+        if ((request.query as { scope?: string }).scope === 'example')
+          return {
+            project: await readProject(workbench.directory),
+            legacyCount: 0,
+            workspace: {
+              mode: 'legacy',
+              path: workbench.directory,
+              agentPath: workbench.directory,
+            },
+          };
+        if (isExtra(selectedId(request))) {
+          const path = userBench(request).directory;
+          return {
+            project: await readProject(path),
+            legacyCount: 0,
+            workspace: { mode: 'legacy', path, agentPath: path },
+          };
+        }
         const legacy = (await workbench.list()).demos.filter(
           (d) =>
             ![
@@ -105,9 +223,13 @@ export async function createApp(options: AppOptions) {
         return reply.code(409).send({ error: { message: (error as Error).message } });
       }
     });
-    app.get('/api/project-context', async (_request, reply) => {
+    app.get('/api/project-context', async (request, reply) => {
       try {
-        return await new ProjectContext(directory).snapshot();
+        return await new ProjectContext(
+          (request.query as { scope?: string }).scope === 'example'
+            ? workbench.directory
+            : userBench(request).directory,
+        ).snapshot();
       } catch (error) {
         return reply.code(409).send({
           error: {
@@ -117,8 +239,10 @@ export async function createApp(options: AppOptions) {
       }
     });
     app.post('/api/workspace', async (request, reply) => {
+      if ((request.query as { scope?: string }).scope === 'example')
+        return reply.code(403).send({ error: { message: 'The example project is read-only.' } });
       try {
-        return await createProject(directory, request.body);
+        return await createProject(userBench(request).directory, request.body);
       } catch {
         return reply.code(409).send({
           error: {
@@ -126,6 +250,61 @@ export async function createApp(options: AppOptions) {
               'Enter a project name (up to 100 characters) and description (up to 500). An existing project will not be overwritten.',
           },
         });
+      }
+    });
+    app.get('/api/boards', async (request, reply) => {
+      try {
+        return await new PlanningBoards(bench(request).directory).list();
+      } catch (error) {
+        return reply.code(409).send({ error: { message: (error as Error).message } });
+      }
+    });
+    app.post('/api/boards', async (request, reply) => {
+      if (bench(request) === workbench)
+        return reply.code(403).send({ error: { message: 'The example project is read-only.' } });
+      try {
+        return await new PlanningBoards(bench(request).directory).create(request.body);
+      } catch (error) {
+        return reply.code(400).send({ error: { message: (error as Error).message } });
+      }
+    });
+    app.get<{ Params: { id: string } }>('/api/boards/:id', async (request, reply) => {
+      try {
+        return await new PlanningBoards(bench(request).directory).read(request.params.id);
+      } catch (error) {
+        return reply.code(404).send({ error: { message: (error as Error).message } });
+      }
+    });
+    app.put<{ Params: { id: string } }>(
+      '/api/boards/:id',
+      { bodyLimit: 128000 },
+      async (request, reply) => {
+        if (bench(request) === workbench)
+          return reply.code(403).send({ error: { message: 'The example project is read-only.' } });
+        try {
+          return await new PlanningBoards(bench(request).directory).save(
+            request.params.id,
+            request.body,
+          );
+        } catch (error) {
+          return reply.code(409).send({ error: { message: (error as Error).message } });
+        }
+      },
+    );
+    app.get('/api/project-repository', async (request, reply) => {
+      try {
+        return await projectRepository(bench(request).directory);
+      } catch (error) {
+        return reply.code(409).send({ error: { message: (error as Error).message } });
+      }
+    });
+    app.post('/api/project-repository', async (request, reply) => {
+      if (bench(request) === workbench)
+        return reply.code(403).send({ error: { message: 'The example project is read-only.' } });
+      try {
+        return await setProjectRepository(bench(request).directory, request.body);
+      } catch (error) {
+        return reply.code(409).send({ error: { message: (error as Error).message } });
       }
     });
     app.get('/api/demos', async (request) => bench(request).list());
@@ -138,7 +317,7 @@ export async function createApp(options: AppOptions) {
       }
     });
     app.post('/api/files', async (request, reply) => {
-      if (bench(request) !== personal)
+      if (bench(request) === workbench)
         return reply.code(403).send({
           error: {
             message: 'The example project is read-only. Add files in your own workspace.',
@@ -146,10 +325,10 @@ export async function createApp(options: AppOptions) {
         });
       try {
         const value = projectFileInput.parse(request.body);
-        const available = (await personal.list()).demos;
+        const available = (await userBench(request).list()).demos;
         if (value.relatedDemoIds.some((id) => !available.some((demo) => demo.id === id)))
           throw new Error('Choose related explorations from this project.');
-        return await new ProjectFiles(directory).create(value);
+        return await new ProjectFiles(userBench(request).directory).create(value);
       } catch (error) {
         return reply.code(400).send({ error: { message: (error as Error).message } });
       }

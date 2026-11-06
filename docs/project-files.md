@@ -1,6 +1,6 @@
 # Project files
 
-Start Here → Project files organizes sources, plans, presentation documents, notes and read-only context. Home keeps its activity summary and runnable explorations. The project remains the filesystem root; adding a file does not create or switch projects.
+Start Here → Project files organizes sources, plans, presentation documents, notes and read-only context. Global Home lists projects; each project keeps its own runnable explorations in Overview. The project remains the filesystem root; adding a file does not create or switch projects.
 
 New file supports design sources (original http/https URL required), plans, presentation links/notes and general notes. Each document is stored independently as `project-files/<id>.json` inside the active workspace, with title, kind, description, URL, body, relatedDemoIds, ID and creation time. UI creation generates a unique ID, uses exclusive file creation, and never replaces an existing file. References must point to explorations in the active project. Source URLs containing credentials or non-http(s) protocols are rejected; the backend never fetches a source URL.
 

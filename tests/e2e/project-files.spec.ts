@@ -40,7 +40,7 @@ test('project file hub creates independent documents, links prototypes, and hand
   await expect(detail).toContainText('preserve the source layout');
   await detail.getByRole('button', { name: 'Spend.In — Dashboard', exact: true }).click();
   await expect(page.locator('iframe[title="Interactive prototype"]')).toBeVisible();
-  await page.getByRole('button', { name: 'Home', exact: true }).click();
+  await page.getByRole('button', { name: 'Project overview', exact: true }).click();
   await page.getByRole('button', { name: 'Start Here', exact: true }).click();
   await page.getByRole('button', { name: 'Project files', exact: true }).click();
   await page.getByRole('button', { name: 'New file', exact: true }).click();

@@ -22,6 +22,7 @@ async function json(path, value) {
   await mkdir(join(path, '..'), { recursive: true });
   await writeFile(path, JSON.stringify(value));
 }
+const publicProjects = [];
 for (const { scope, root, ids } of selections) {
   const output = join(destination, scope);
   const demos = [];
@@ -54,6 +55,21 @@ for (const { scope, root, ids } of selections) {
     }
     demos.push({ ...meta, modified: '2026-10-23T00:00:00.000Z' });
   }
+  publicProjects.push({
+    id: scope === 'user' ? 'local' : 'nova',
+    name: scope === 'user' ? 'Spend.In' : 'NOVA Dental',
+    description:
+      scope === 'user'
+        ? 'Spending dashboard and design system.'
+        : 'Emergency booking flows for a fictional dental product.',
+    repository: '',
+    modified: '',
+    latestPrompt: null,
+    prototypeCount: demos.length,
+    boardCount: 0,
+    cover: demos.find((demo) => !demo.tags.includes('design-system')) ?? demos[0] ?? null,
+  });
+  await json(join(output, 'boards.json'), { boards: [], warnings: [] });
   await json(join(output, 'demos.json'), {
     demos,
     warnings: [],
@@ -87,6 +103,7 @@ for (const { scope, root, ids } of selections) {
     complete: false,
   });
 }
+await json(join(destination, 'projects.json'), { projects: publicProjects, warnings: [] });
 await mkdir(join(repo, 'dist/client/setup'), { recursive: true });
 await writeFile(
   join(repo, 'dist/client/setup/SKILL.md'),

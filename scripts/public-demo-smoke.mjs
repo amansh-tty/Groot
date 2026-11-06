@@ -1,3 +1,4 @@
+/* global document -- Runs in the isolated browser verification context. */
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFile, mkdir } from 'node:fs/promises';
@@ -39,64 +40,93 @@ try {
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
   const url = `http://127.0.0.1:${server.address().port}`;
+  const captures = fileURLToPath(new URL('../docs/project-home/', import.meta.url));
+  await mkdir(captures, { recursive: true });
   await page.goto(url);
-  await expect(page.locator('iframe[title="Interactive prototype"]')).toBeVisible();
-  const frame = page.frameLocator('iframe[title="Interactive prototype"]');
-  await expect(frame.getByText('NOVA', { exact: false }).first()).toBeVisible();
-  assert.equal(new URL(page.url()).searchParams.get('example'), 'nova');
-  assert.equal(
-    await page.locator('iframe[title="Interactive prototype"]').getAttribute('sandbox'),
-    'allow-scripts',
-  );
-  await mkdir(fileURLToPath(new URL('../docs/public-demo/', import.meta.url)), { recursive: true });
-  await page.screenshot({
-    path: fileURLToPath(new URL('../docs/public-demo/demo.png', import.meta.url)),
-  });
-  await page.getByRole('button', { name: 'Use my own project', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Projects', exact: true })).toBeVisible();
+  await expect(
+    page.getByRole('button', { name: 'Open project NOVA Dental', exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('button', { name: 'Open project Spend.In', exact: true }),
+  ).toBeVisible();
+  await expect(page.locator('.studio-bar')).toHaveCount(0);
+  await expect(
+    page.frameLocator('iframe[title="Spend.In — Dashboard thumbnail"]').locator('body'),
+  ).toContainText('Spend.In');
+  await expect(
+    page.frameLocator('iframe[title="Emergency Booking — Current thumbnail"]').locator('body'),
+  ).toContainText('NOVA');
+  await expect(page.locator('.thumbnail-loading')).toHaveCount(0);
+  await page.screenshot({ path: resolve(captures, 'home.png') });
+  await page.getByRole('button', { name: 'New project', exact: true }).click();
   await expect(page.getByRole('dialog')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Copy setup prompt', exact: true })).toBeVisible();
   await page.keyboard.press('Escape');
-  await page.getByRole('button', { name: 'Start a new exploration', exact: true }).click();
+  await page.getByRole('button', { name: 'Planning board', exact: true }).click();
   await expect(page.getByRole('dialog')).toBeVisible();
   await page.keyboard.press('Escape');
-  await page.getByRole('button', { name: 'Home', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'PR contributions' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Project files', exact: true })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Allowance', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Read local allowance', exact: true })).toHaveCount(
     0,
   );
   await page.getByRole('button', { name: 'Use my local allowance', exact: true }).click();
-  await expect(page.getByRole('dialog')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Copy setup prompt', exact: true })).toBeVisible();
   await page.keyboard.press('Escape');
-  await expect(page.getByText('Loading pull requests…', { exact: true })).toBeHidden({
-    timeout: 12000,
-  });
-  await page.locator('.home-project-heading').click();
-  await page.screenshot({
-    path: fileURLToPath(new URL('../docs/home-activity/home-public.png', import.meta.url)),
-  });
-  await page.getByRole('button', { name: 'Start Here', exact: true }).click();
-  await page.getByRole('button', { name: 'Project files', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Project files', exact: true })).toBeVisible();
-  await page.goto(url + '/?project=spend-in#page=all');
-  await expect(
-    page.getByRole('heading', { name: 'Spend.In — Dashboard', exact: true }),
-  ).toBeVisible();
-  await page.goto(url + '/#demo=spend-in-dashboard');
-  await expect(
-    page
-      .frameLocator('iframe[title="Interactive prototype"]')
-      .getByText('Your balance', { exact: false })
-      .first(),
-  ).toBeVisible();
-  await page.goto(url + '/?example=nova#demo=emergency-booking');
-  await expect(page.locator('iframe[title="Interactive prototype"]')).toBeVisible();
+  await page.getByRole('button', { name: 'Open project NOVA Dental', exact: true }).click();
+  await page
+    .getByRole('button', { name: 'View prototype Emergency Booking — Current', exact: true })
+    .click();
+  const viewer = page.getByRole('dialog', { name: 'Emergency Booking — Current', exact: true });
+  await expect(viewer.locator('iframe[title="Prototype viewer"]')).toBeVisible();
+  await expect(viewer.getByRole('button', { name: 'Next prototype screen' })).toBeEnabled();
+  await viewer.getByRole('button', { name: 'Next prototype screen' }).click();
+  await expect(viewer.locator('.viewer-footer')).toContainText('2 of 7 screens');
+  await viewer.getByRole('button', { name: 'Previous prototype screen' }).click();
+  await page.screenshot({ path: resolve(captures, 'viewer.png') });
+  await viewer.getByRole('button', { name: 'Open workspace', exact: true }).click();
+  await expect(page.locator('iframe[title="Interactive prototype"]')).toHaveAttribute(
+    'sandbox',
+    'allow-scripts',
+  );
   await expect(
     page
       .frameLocator('iframe[title="Interactive prototype"]')
       .getByText('NOVA', { exact: false })
       .first(),
   ).toBeVisible();
+  await page.getByRole('button', { name: 'Home', exact: true }).click();
+  await expect(
+    page.getByRole('button', { name: 'Open project Spend.In', exact: true }),
+  ).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= 390));
+  await page
+    .getByRole('button', { name: 'Open project NOVA Dental', exact: true })
+    .scrollIntoViewIfNeeded();
+  await expect(
+    page.frameLocator('iframe[title="Emergency Booking — Current thumbnail"]').locator('body'),
+  ).toContainText('NOVA');
+  await page
+    .getByRole('button', { name: 'Open project Spend.In', exact: true })
+    .scrollIntoViewIfNeeded();
+  await expect(
+    page.frameLocator('iframe[title="Spend.In — Dashboard thumbnail"]').locator('body'),
+  ).toContainText('Spend.In');
+  await expect(page.locator('.thumbnail-loading')).toHaveCount(0);
+  await page.locator('.projects-home-bar').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: resolve(captures, 'home-mobile.png'), fullPage: true });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(url + '/?project=local#demo=spend-in-dashboard');
+  await expect(
+    page
+      .frameLocator('iframe[title="Interactive prototype"]')
+      .getByText('Your balance', { exact: false })
+      .first(),
+  ).toBeVisible();
+  await page.goto(url + '/?example=nova#page=start');
+  await page.getByRole('button', { name: 'Project files', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Project files', exact: true })).toBeVisible();
   const skill = await fetch(url + '/setup/SKILL.md');
   assert.equal(skill.status, 200);
   assert.match(await skill.text(), /groot setup/);
@@ -107,7 +137,7 @@ try {
   );
   assert.deepEqual(errors, []);
   console.log(
-    'Public static demo passed: default NOVA, Spend.In deep link, sandbox, setup handoff, Home, isolated NOVA, setup skill, no backend requests.',
+    'Public static demo passed: global project Home, mobile layout, spacious viewer, declared screens, sandbox, local-only setup/allowance, isolated project links and no backend requests.',
   );
 } finally {
   await browser.close();

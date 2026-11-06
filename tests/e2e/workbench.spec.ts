@@ -27,7 +27,7 @@ test('NOVA core loop: discover, interact, fork, externally edit, recover and reo
   await page.getByRole('button', { name: 'Start Here', exact: true }).click();
   await page.getByRole('button', { name: 'Product', exact: true }).click();
   await expect(page.locator('.context-document')).toContainText('NOVA DENTAL');
-  await page.getByRole('button', { name: 'Home', exact: true }).click();
+  await page.getByRole('button', { name: 'Project overview', exact: true }).click();
   await page.getByRole('button', { name: 'Open Emergency Booking — Current', exact: true }).click();
   const preview = page.frameLocator('iframe[title="Interactive prototype"]');
   await expect(
@@ -46,7 +46,7 @@ test('NOVA core loop: discover, interact, fork, externally edit, recover and reo
   await preview.getByRole('button', { name: /Continue/ }).click();
   await preview.getByRole('button', { name: 'Confirm appointment', exact: true }).click();
   await expect(preview.getByRole('heading', { name: 'Appointment confirmed' })).toBeVisible();
-  await page.getByRole('button', { name: 'Home', exact: true }).click();
+  await page.getByRole('button', { name: 'Project overview', exact: true }).click();
   await page
     .getByRole('button', { name: 'Open Emergency Booking — Simplified', exact: true })
     .click();
@@ -103,12 +103,12 @@ test('NOVA core loop: discover, interact, fork, externally edit, recover and reo
   await expect(
     preview.getByRole('heading', { name: 'Book an emergency appointment' }),
   ).toBeVisible();
-  await page.getByRole('button', { name: 'Home', exact: true }).click();
+  await page.getByRole('button', { name: 'Project overview', exact: true }).click();
   await page.getByRole('button', { name: 'My Explorations', exact: true }).click();
   await expect(
     page.getByRole('button', { name: 'Open Same-day booking experiment', exact: true }),
   ).toBeVisible();
-  await page.getByRole('button', { name: 'Home', exact: true }).click();
+  await page.getByRole('button', { name: 'Project overview', exact: true }).click();
   await page.getByRole('button', { name: 'Open Patient Search', exact: true }).click();
   await expect(preview.getByRole('heading', { name: 'Find your patient' })).toBeVisible();
   await preview.getByLabel('Search patients').fill('Zelda');

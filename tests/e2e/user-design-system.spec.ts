@@ -8,7 +8,7 @@ test('user design system uses reusable components inside the Design System view'
   const target = join(process.env.PLAYGROUND_E2E_ROOT!, 'workspace');
   await mkdir(target, { recursive: true });
   await cp(join(process.cwd(), 'workspace'), target, { recursive: true });
-  await page.goto('/');
+  await page.goto('/?project=local#page=all');
   await page.getByRole('button', { name: 'Design System', exact: true }).click();
   const frame = page.frameLocator('iframe[title="Interactive prototype"]');
   await expect(frame.getByRole('heading', { name: 'Pickolab design system' })).toBeVisible();

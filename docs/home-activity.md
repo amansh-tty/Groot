@@ -1,12 +1,12 @@
 # Home activity
 
-Home prioritizes PR activity, coding-agent allowance and the exploration gallery. Project documents remain available under **Start Here → Project files**.
+Home lists projects with search, Projects/Recents, latest recorded prompts and project-wise repository contributions. It has no project-specific sidebar. Opening a project reveals its Overview, Start Here, design system and explorations. Project documents remain under Start Here → Project files; planning boards are another independent file type.
 
 ## Pull requests
 
-This first version reads the latest twenty updated pull requests from the public `amansh-tty/Groot` repository. Open and merged counts apply to that returned set, not all-time contributions or a signed-in visitor. The repository and **Groot development** label stay visible when viewing the bundled NOVA or Spend.In project. Other repositories and private GitHub account connections are not configured in this version.
+The repository is an optional field on each project's project.json, set at creation or through Start Here → Project repository. No app repository is assumed for NOVA, Spend.In or a newly created product. Missing repository links are shown explicitly. The local server validates owner/repository, proxies only GitHub's public pull-request endpoint and caches successful responses per repository for five minutes. Private repositories and account authentication are not supported.
 
-The local server proxies this fixed public endpoint and caches successful responses for five minutes. The public static demo calls GitHub directly without credentials. GitHub rate limits, connection failures and malformed responses display a retry message and repository link. Existing loaded results remain visible after a refresh failure.
+Counts apply to the latest twenty updated PRs, not all-time or personal contributions. Home groups the summary by project; each project's overview can show its recent PR titles. GitHub failures show a retry action and repository link. Bundled public projects intentionally have no linked personal repositories. New project and board actions in the public demo guide local installation.
 
 Reference: [GitHub's public pull-request listing API](https://docs.github.com/en/rest/pulls/pulls#list-pull-requests).
 

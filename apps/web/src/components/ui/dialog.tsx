@@ -7,11 +7,15 @@ export function Dialog({
   onClose,
   children,
   busy = false,
+  className = '',
+  headerActions,
 }: {
   title: string;
   onClose: () => void;
   children: ReactNode;
   busy?: boolean;
+  className?: string;
+  headerActions?: ReactNode;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const returnFocus = useRef(document.activeElement as HTMLElement | null);
@@ -28,7 +32,7 @@ export function Dialog({
   return (
     <dialog
       ref={dialog}
-      className="studio-dialog"
+      className={'studio-dialog ' + className}
       aria-labelledby="studio-dialog-title"
       onCancel={(event) => {
         event.preventDefault();
@@ -61,6 +65,7 @@ export function Dialog({
     >
       <header>
         <h2 id="studio-dialog-title">{title}</h2>
+        {headerActions}
         <Button
           variant="ghost"
           size="icon"
