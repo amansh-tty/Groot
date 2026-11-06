@@ -1,14 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-  Clock3,
-  FolderOpen,
-  Plus,
-  Search,
-  Gauge,
-  ArrowUpRight,
-  LayoutDashboard,
-  StickyNote,
-} from 'lucide-react';
+import { Clock3, FolderOpen, Plus, Search, Gauge, LayoutDashboard, StickyNote } from 'lucide-react';
 import { api, publicDemo, requestLocalSetup } from './workbench-api';
 import { App } from './StudioApp';
 import { PlanningBoard } from './PlanningBoard';
@@ -188,15 +179,6 @@ function ProjectHome() {
             </Button>
           </div>
         </header>
-        {publicDemo && (
-          <div className="public-projects-note">
-            <span>Explore the bundled projects. Your own work stays local.</span>
-            <button onClick={requestLocalSetup}>
-              Use my own project
-              <ArrowUpRight size={14} />
-            </button>
-          </div>
-        )}
         <div className="projects-home-filter">
           <nav aria-label="Project views">
             <button
@@ -214,9 +196,6 @@ function ProjectHome() {
               Recents
             </button>
           </nav>
-          <span>
-            {visible.length} {visible.length === 1 ? 'project' : 'projects'}
-          </span>
         </div>
         {error && (
           <p role="alert">

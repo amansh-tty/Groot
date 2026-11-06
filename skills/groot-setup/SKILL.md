@@ -9,9 +9,19 @@ Use this when a visitor wants to move from the public demo to their own local pr
 
 ## Establish the local environment
 
-1. Ask for the desired local project folder, product name, and coding agent/client. Check whether a Groot checkout or project already exists. Never overwrite or repurpose an existing folder. Keep the app checkout separate from the user's project.
+1. Confirm the operating system (Windows, macOS or Linux), shell, desired local project folder, product name, and exact coding agent/client. Check whether a Groot checkout or project already exists. Never overwrite or repurpose an existing folder. Keep the app checkout separate from the user's project.
 2. Check Node 24.19+ within 24.x and pnpm 11.19.0. If missing, guide the designer through their OS's official installation process and required approvals. Do not run opaque remote scripts or claim prerequisites are installed without checking versions.
-3. Clone https://github.com/amansh-tty/Groot.git using branch groot-public-demo-context-mcp into a new folder. If the feature is merged, main may be used only after verifying it contains this skill and project-mcp.ts. Inspect AGENTS.md, install with pnpm install --frozen-lockfile, and run pnpm build. Explain actual failures and help resolve them.
+3. Clone https://github.com/amansh-tty/Groot.git using the current main branch into a new folder. Verify the checkout contains this skill and apps/server/src/project-mcp.ts. Inspect AGENTS.md, install with pnpm install --frozen-lockfile, and run pnpm build. Explain actual failures and help resolve them.
+
+## Match the OS and client
+
+- Windows: use native PowerShell and Windows paths. Prefer npm.cmd / pnpm.cmd when PowerShell script wrappers are blocked; do not change the user's execution policy just to run setup. Confirm the PATH in a newly opened terminal after installing missing prerequisites.
+- macOS and Linux: use the user's actual terminal and installed tool paths. Follow the official installation route for the OS/architecture and verify versions; do not assume a Windows command or a global package directory is available. Explain a permission or PATH failure and choose an appropriate supported installation route.
+- Codex: translate the generated command and arguments into the MCP configuration this local host actually loads (project configuration where supported), preserving other servers. Project trust may be necessary. Consult current official client instructions rather than assuming that .groot/mcp.json is loaded automatically.
+- Claude Code: merge the generated entry into the client's supported project MCP configuration, or use its documented add-server command with the correct project scope. Preserve other servers and complete any project approval/restart the client requires.
+- Other clients: first verify local stdio MCP support. Context-tool access and local code editing are different capabilities; a client without local file-editing tools must not be presented as a complete coding agent.
+
+The coding client launches Groot's local stdio MCP server. It is not an AI model or embedded chat. The hosted website is not a local MCP endpoint. A desktop installer is not currently shipped; do not invent a download link or claim that copying the prompt installs Groot. Existing user authorization applies to routine setup work; ask only for missing choices, actual OS/client trust requirements, or additional permission that is genuinely required.
 
 ## Prepare the project
 

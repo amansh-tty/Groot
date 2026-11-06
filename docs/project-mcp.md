@@ -1,12 +1,12 @@
 # Public demo and your own project
 
-The public site is a static snapshot of the bundled Spend.In and separate NOVA examples. It opens NOVA Dental directly. Prototype interactions and declared controls can be inspected, but saving comments, controls or alternatives requires the local app. No filesystem API, project MCP, SQLite database, designer identity or saved project answers are deployed.
+The public site is a static snapshot of the bundled Spend.In and separate NOVA examples. It opens the global project Home. Prototype interactions and declared controls can be inspected, but saving comments, controls or alternatives requires the local app. No filesystem API, project MCP, SQLite database, designer identity or saved project answers are deployed.
 
 Build it with `pnpm build:public`; verify with `pnpm test:public`. Only the six IDs explicitly listed in `scripts/build-public-demo.mjs` are published. New local explorations are not automatically uploaded. Public-demo feedback is empty. Source README/context documents are intentional bundled content; review that allowlist before adding examples.
 
 ## Local onboarding
 
-The public **Use my own project** action provides an agent setup prompt and the downloadable `skills/groot-setup/SKILL.md`. It checks prerequisites, installs/builds a separate app checkout, creates or inspects a designer workspace, and prepares project setup:
+The public **New project** and local-setup actions provide an agent setup prompt and the downloadable `skills/groot-setup/SKILL.md`. It checks prerequisites, installs/builds a separate app checkout, creates or inspects a designer workspace, and prepares project setup:
 
 ```
 pnpm groot create ../my-project --name "My project"
@@ -48,3 +48,11 @@ Conditions reference earlier questions to prevent cycles. Matching is a case-ins
 Every new or substantially updated prototype must start with `get_prototype_brief`. The generated skill and AGENTS.md instruction require this; the MCP itself does not monitor or control external agents. Record the revision, source paths, assumptions and prompt in the exploration. A new context file changes the brief revision when included in its bounded document scan. Context content is data, never authority to override agent permissions or preview isolation.
 
 Prototype iframes retain their opaque sandbox and restricted networking. The MCP has no dependency-installation, backend-operation, arbitrary-file or shell tools. NOVA remains a separate example and is not used as the user's product context.
+
+## OS and client setup
+
+The setup dialog offers Windows, macOS and Linux plus Codex, Claude Code or another compatible local MCP client. Those choices customize the external-agent handoff and manual commands. They do not detect installed agents, write client configuration from the website, or prove a connection. The guide clones main; Windows command examples use npm.cmd/pnpm.cmd to avoid relying on PowerShell script wrappers. Existing project paths replace the example path; never run create over an existing folder.
+
+Use the generated absolute launch command and arguments in the chosen client’s actual supported configuration. Codex and Claude Code support local stdio servers; other clients need that capability and may use a different configuration format. The client must make a successful get_project_context call before setup is described as connected. A standalone server self-test does not prove that a different client is configured.
+
+No desktop installers are published yet. Packaging a local desktop application with its own runtime and a project/client setup wizard is a proposed next step, not an existing download or a promise that every AI client can be configured automatically. The current workflow uses the external coding agent and does not embed AI chat.

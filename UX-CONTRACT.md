@@ -84,3 +84,7 @@ Selecting a gallery preview opens a large native modal with an opaque sandboxed 
 ## Planning boards
 
 Multiple boards may exist per project. Boards are strict, non-executable JSON under boards/<id>.json: text cards, positions and directed connections. Save is explicit and version checked; stale saves preserve the draft. External edits refresh a clean board. Undo retains up to forty local changes. Card headers support pointer dragging and 8px arrow-key movement, with Shift for 32px. The canvas pans with its Hand tool or arrow keys; zoom and pan are transient appearance state. Existing connected cards are required, IDs stay unique, and invalid or oversized source is preserved with a diagnostic. Leaving/reloading a dirty board offers Keep editing and Discard changes. Public creation guides local setup instead of implying cloud storage.
+
+## OS-aware local setup
+
+Home removes the redundant demo-note row and right-hand project count. Public create actions still open local setup. The setup dialog lets the visitor choose computer OS and coding client. These selections change the agent prompt, terminal guidance, package-manager wrapper and client-specific connection instructions; changing either clears stale copy feedback. The browser does not install software or modify local agent settings. Setup uses main, preserves existing files/configuration, and requires a real client-side get_project_context call before reporting a verified connection. Desktop packaging remains a proposal; no installer or false Connected state is shown.

@@ -52,6 +52,10 @@ try {
   ).toBeVisible();
   await expect(page.locator('.studio-bar')).toHaveCount(0);
   await expect(
+    page.getByText('Explore the bundled projects. Your own work stays local.', { exact: true }),
+  ).toHaveCount(0);
+  await expect(page.locator('.projects-home-filter > span')).toHaveCount(0);
+  await expect(
     page.frameLocator('iframe[title="Spend.In — Dashboard thumbnail"]').locator('body'),
   ).toContainText('Spend.In');
   await expect(
@@ -62,6 +66,34 @@ try {
   await page.getByRole('button', { name: 'New project', exact: true }).click();
   await expect(page.getByRole('dialog')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Copy setup prompt', exact: true })).toBeVisible();
+  const setup = page.getByRole('dialog', { name: 'Use Groot with your project' });
+  await setup.getByLabel('Computer OS', { exact: true }).selectOption('windows');
+  await setup.getByLabel('Your agent', { exact: true }).selectOption('claude');
+  await page.screenshot({ path: resolve(captures, 'setup.png') });
+  await setup.getByText('Manual steps and setup brief', { exact: true }).click();
+  await expect(setup.getByLabel('Local setup prompt', { exact: true })).toContainText(
+    'Windows with Claude Code',
+  );
+  await expect(setup.locator('.setup-details pre').first()).toContainText('pnpm.cmd groot setup');
+  await expect(setup.locator('.setup-details pre').first()).toContainText(
+    'git clone --branch main',
+  );
+  await setup.getByLabel('Computer OS', { exact: true }).selectOption('macos');
+  await setup.getByLabel('Your agent', { exact: true }).selectOption('codex');
+  await expect(setup.getByLabel('Local setup prompt', { exact: true })).toContainText(
+    'macOS with Codex',
+  );
+  await expect(setup.locator('.setup-details pre').first()).not.toContainText('pnpm.cmd');
+  await setup.getByLabel('Computer OS', { exact: true }).selectOption('linux');
+  await setup.getByLabel('Your agent', { exact: true }).selectOption('other');
+  await expect(setup.getByLabel('Local setup prompt', { exact: true })).toContainText(
+    'Linux with a compatible local MCP client',
+  );
+  await setup.getByText('Manual steps and setup brief', { exact: true }).click();
+  await page.setViewportSize({ width: 390, height: 844 });
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= 390));
+  await page.screenshot({ path: resolve(captures, 'setup-mobile.png') });
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await page.keyboard.press('Escape');
   await page.getByRole('button', { name: 'Planning board', exact: true }).click();
   await expect(page.getByRole('dialog')).toBeVisible();
