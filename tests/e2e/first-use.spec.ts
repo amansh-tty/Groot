@@ -56,7 +56,7 @@ test('empty project, creation recovery, agent handoff and isolated example', asy
   ).toBeVisible();
   await page.getByRole('button', { name: 'Design System', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'NOVA design system' })).toBeVisible();
-  await page.getByRole('button', { name: 'Explorations', exact: true }).click();
+  await page.getByRole('button', { name: 'Overview', exact: true }).click();
   await page.getByRole('link', { name: 'Back to your workspace' }).click();
   await expect(
     page.getByRole('heading', { name: 'Your first exploration starts here.' }),

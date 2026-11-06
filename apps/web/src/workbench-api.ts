@@ -22,7 +22,7 @@ export function apiUrl(path: string) {
   if (publicDemo) {
     const route = path.split('?')[0]!;
     if (
-      !/^\/(?:workspace|context|project-context|demos(?:\/[a-z0-9][a-z0-9-]{0,79}(?:\/(?:frame|preview|feedback|controls))?)?)$/.test(
+      !/^\/(?:workspace|context|project-context|files|demos(?:\/[a-z0-9][a-z0-9-]{0,79}(?:\/(?:frame|preview|feedback|controls))?)?)$/.test(
         route,
       )
     )

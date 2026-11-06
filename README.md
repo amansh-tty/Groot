@@ -8,6 +8,8 @@ The public demo is a static, read-only build of the bundled projects. It opens N
 
 Follow [the setup skill](skills/groot-setup/SKILL.md) to install locally. After creating or choosing a Groot workspace, run `pnpm groot setup <project-folder>`. Enable the generated MCP command in your coding agent, then let it ask and save project-specific context questions. Future prototypes start from a fresh context brief. See [project MCP and setup](docs/project-mcp.md) for configuration and limits.
 
+Home now includes **Project files**: create multiple design-source links, plans, presentation documents and notes, and connect each to related explorations. Existing context documents open read-only. These are local file-backed documents, not imported editable Figma frames or a slide/canvas editor. See [project files](docs/project-files.md).
+
 <img width="1440" height="1024" alt="image" src="https://github.com/user-attachments/assets/73494b43-983a-4d92-ba3b-8996b53ce8ba" />
 
 ## Run locally

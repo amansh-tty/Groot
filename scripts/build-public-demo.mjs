@@ -77,6 +77,8 @@ for (const { scope, root, ids } of selections) {
       });
   }
   await json(join(output, 'context.json'), context);
+  // Only bundled context is published. Designer-created project-files are always local.
+  await json(join(output, 'files.json'), { files: [], warnings: [] });
   await json(join(output, 'project-context.json'), {
     revision: 'public-demo',
     questions: [],

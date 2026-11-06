@@ -1,5 +1,6 @@
 import Fastify from 'fastify';
 import { ProjectContext } from './project-context.js';
+import { ProjectFiles, projectFileInput } from './project-files.js';
 import fastifyStatic from '@fastify/static';
 import { healthSchema, settingsSchema } from '@playground/shared';
 import { openDatabase } from './database.js';
@@ -91,6 +92,30 @@ export async function createApp(options: AppOptions) {
     });
     app.get('/api/demos', async (request) => bench(request).list());
     app.get('/api/context', async (request) => bench(request).context());
+    app.get('/api/files', async (request, reply) => {
+      try {
+        return await new ProjectFiles(bench(request).directory).list();
+      } catch (error) {
+        return reply.code(409).send({ error: { message: (error as Error).message } });
+      }
+    });
+    app.post('/api/files', async (request, reply) => {
+      if (bench(request) !== personal)
+        return reply.code(403).send({
+          error: {
+            message: 'The example project is read-only. Add files in your own workspace.',
+          },
+        });
+      try {
+        const value = projectFileInput.parse(request.body);
+        const available = (await personal.list()).demos;
+        if (value.relatedDemoIds.some((id) => !available.some((demo) => demo.id === id)))
+          throw new Error('Choose related explorations from this project.');
+        return await new ProjectFiles(directory).create(value);
+      } catch (error) {
+        return reply.code(400).send({ error: { message: (error as Error).message } });
+      }
+    });
     app.get<{ Params: { id: string } }>('/api/demos/:id/controls', async (request, reply) => {
       try {
         return await bench(request).controls(request.params.id);

@@ -33,6 +33,7 @@ import {
 } from './WorkspaceWelcome';
 import { ProjectGuide } from './ProjectGuide';
 import { LocalSetup } from './LocalSetup';
+import { ProjectFiles } from './ProjectFiles';
 
 if (publicDemo && !location.search && !location.hash) {
   history.replaceState(null, '', '?example=nova#demo=emergency-booking');
@@ -305,7 +306,7 @@ export function App() {
         <nav aria-label="Workspace navigation">
           {(
             [
-              { page: 'all', label: 'Explorations', Icon: Grid2X2 },
+              { page: 'all', label: 'Overview', Icon: Grid2X2 },
               { page: 'mine', label: 'My Explorations', Icon: UserRound },
               { page: 'system', label: 'Design System', Icon: Component },
               { page: 'start', label: 'Start Here', Icon: BookOpen },
@@ -390,6 +391,14 @@ export function App() {
         ) : (
           <div className="library-layout">
             <section className="exploration-library" aria-labelledby="library-title">
+              {route.page === 'all' && (
+                <ProjectFiles
+                  catalog={catalog}
+                  projectName={projectName}
+                  example={example}
+                  onOpen={(demo) => go({ page: 'all', demo })}
+                />
+              )}
               <header className="library-title">
                 <div>
                   <span className="section-label">{projectName} / Workspace</span>
@@ -526,7 +535,11 @@ export function App() {
                               demo.parentId}
                           </span>
                         ) : (
-                          <span>Original direction</span>
+                          <span>
+                            Original direction
+                            {catalog.demos.filter((item) => item.parentId === demo.id).length > 0 &&
+                              ` · ${catalog.demos.filter((item) => item.parentId === demo.id).length} variations`}
+                          </span>
                         )}
                         <span>{demo.author}</span>
                       </div>

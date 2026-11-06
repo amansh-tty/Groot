@@ -2,6 +2,8 @@
 
 The maintained user brief and AGENTS.md own product behavior. DESIGN.md owns the Groot interface. Imported prototype data and design systems remain independent.
 
+Home's Overview destination organizes a single active project's sources, plans, presentation documents, notes, read-only context and related prototypes. ProjectFiles owns the create/list/detail flow: title and file type are explicit, design sources require a safe URL, and links to prototypes must belong to that project. Successful creation returns to All files and announces the created title; failed saves preserve all form fields. Shared Dialog owns keyboard/focus behavior. Sources are opened as external links, never embedded or fetched by the backend. Read-only examples reject file creation. Public New file invokes local setup. The local file list and open content refresh after external edits, with the last loaded content retained on read errors. Integrations and canvas/deck authoring are outside this pass.
+
 Variation titles wrap rather than truncate. PromptExcerpt uses a two-line excerpt and an explicitly invoked native popover for long text; the full text is scrollable, viewport-bounded and dismissible with Escape, outside click or its labeled close button. Placement follows the invoking variation or history entry. The excerpt labels recorded prompts separately from fallback direction descriptions. Compare shows the current flow first and requires an explicit different target, grouping related variations before other explorations. Both panes still run independently.
 
 | Capability     | Canonical owner                                        | Source of truth                              | Allowed variants                                      | Verification                        |
