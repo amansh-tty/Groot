@@ -592,6 +592,34 @@ export function PrototypeView({
               </Button>
             </div>
           </div>
+          {config.screens.length > 1 && (
+            <>
+              <Button
+                className="canvas-screen-arrow canvas-screen-previous"
+                variant="outline"
+                size="icon"
+                aria-label="Previous screen on canvas"
+                disabled={config.screens.findIndex((item) => item.id === screen) <= 0}
+                onClick={() => changeScreen(-1)}
+              >
+                <ArrowLeft />
+              </Button>
+              <Button
+                className="canvas-screen-arrow canvas-screen-next"
+                variant="outline"
+                size="icon"
+                aria-label="Next screen on canvas"
+                disabled={
+                  config.screens.length < 2 ||
+                  config.screens.findIndex((item) => item.id === screen) >=
+                    config.screens.length - 1
+                }
+                onClick={() => changeScreen(1)}
+              >
+                <ArrowRight />
+              </Button>
+            </>
+          )}
           <div className="stage-caption">
             <span>{detail?.meta.title ?? meta?.title ?? 'Exploration'}</span>
             <span>

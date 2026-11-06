@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { ArrowUpRight, BookOpen, Check, Copy, FileText, FolderOpen } from 'lucide-react';
 import { api, publicDemo, requestLocalSetup } from './workbench-api';
+import { ProjectFiles } from './ProjectFiles';
+import type { Catalog } from './workbench-api';
 import { ProjectContextSetup } from './ProjectContextSetup';
 import { Button } from './components/ui/button';
 import {
@@ -16,11 +18,15 @@ export function ProjectGuide({
   workspace,
   revision,
   example,
+  catalog,
+  onOpen,
 }: {
   project: Project | null;
   workspace: WorkspaceLocation;
   revision: number;
   example: boolean;
+  catalog: Catalog;
+  onOpen: (id: string) => void;
 }) {
   const [documents, setDocuments] = useState<{ name: string; content: string }[]>([]);
   const [selected, setSelected] = useState('guide');
@@ -58,6 +64,13 @@ export function ProjectGuide({
             <FolderOpen size={14} />
             Using Groot
           </button>
+          <button
+            aria-current={selected === 'files' ? 'page' : undefined}
+            onClick={() => setSelected('files')}
+          >
+            <FolderOpen size={14} />
+            Project files
+          </button>
           <span className="section-label">
             Project context <b>{documents.length}</b>
           </span>
@@ -83,7 +96,9 @@ export function ProjectGuide({
             {error}
           </p>
         )}
-        {selected !== 'guide' ? (
+        {selected === 'files' ? (
+          <ProjectFiles catalog={catalog} example={example} onOpen={onOpen} />
+        ) : selected !== 'guide' ? (
           <>
             <span className="section-label">Project source · Read only</span>
             <h1>{selected.charAt(0) + selected.slice(1).toLowerCase()}</h1>

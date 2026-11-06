@@ -9,7 +9,8 @@ test('project file hub creates independent documents, links prototypes, and hand
   await mkdir(root, { recursive: true });
   await cp(join(process.cwd(), 'workspace'), root, { recursive: true });
   await page.setViewportSize({ width: 1440, height: 1024 });
-  await page.goto('/#page=all');
+  await page.goto('/#page=start');
+  await page.getByRole('button', { name: 'Project files', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Project files', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'New file', exact: true }).click();
   const form = page.getByRole('dialog', { name: 'New project file' });
@@ -40,6 +41,8 @@ test('project file hub creates independent documents, links prototypes, and hand
   await detail.getByRole('button', { name: 'Spend.In — Dashboard', exact: true }).click();
   await expect(page.locator('iframe[title="Interactive prototype"]')).toBeVisible();
   await page.getByRole('button', { name: 'Home', exact: true }).click();
+  await page.getByRole('button', { name: 'Start Here', exact: true }).click();
+  await page.getByRole('button', { name: 'Project files', exact: true }).click();
   await page.getByRole('button', { name: 'New file', exact: true }).click();
   await form.getByLabel('File name', { exact: true }).fill('Figma source');
   await form
@@ -47,6 +50,7 @@ test('project file hub creates independent documents, links prototypes, and hand
     .fill('https://www.figma.com/design/test-source');
   await form.getByRole('button', { name: 'Create file', exact: true }).click();
   await page.reload();
+  await page.getByRole('button', { name: 'Project files', exact: true }).click();
   await page.getByRole('button', { name: 'Open file Figma source', exact: true }).click();
   await expect(page.getByRole('link', { name: 'Open original source' })).toHaveAttribute(
     'href',
@@ -66,19 +70,7 @@ test('project file hub creates independent documents, links prototypes, and hand
     page.getByRole('button', { name: 'Open file Dashboard planning', exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: /^All files/ }).click();
-  await page.screenshot({ path: 'docs/home-refresh/after.png' });
-  const hub = await page.locator('.project-hub').boundingBox();
-  await writeFile(
-    'docs/home-refresh/measurements.json',
-    JSON.stringify({
-      after: {
-        x: (hub!.x / 1440) * 100,
-        y: (hub!.y / 1024) * 100,
-        w: (hub!.width / 1440) * 100,
-        h: (hub!.height / 1024) * 100,
-      },
-    }),
-  );
+
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   await page.getByRole('button', { name: 'Open file Dashboard planning', exact: true }).click();

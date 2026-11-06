@@ -2693,7 +2693,7 @@ textarea {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 120px 24px 36px;
+  padding: 120px 64px 56px;
 }
 .preview-frame-wrap {
   box-shadow: 0 0 0 1px #555;
@@ -3191,9 +3191,6 @@ textarea {
 }
 
 /* Final alignment and readable feedback details. */
-.preview-canvas {
-  justify-content: flex-start;
-}
 .preview-frame-wrap {
   margin-top: 12px;
 }
@@ -3792,7 +3789,7 @@ textarea {
   }
 }
 
-/* Home is a file workspace; prototypes retain their independent canvas UI. */
+/* Project documents live in Start Here; Home prioritizes work and explorations. */
 .project-hub {
   margin-bottom: 36px;
 }
@@ -4116,7 +4113,7 @@ textarea {
   padding: 32px;
   max-width: 1640px;
 }
-.project-hub + .library-title {
+.home-activity + .library-title {
   align-items: center;
   padding-bottom: 20px;
 }
@@ -4332,5 +4329,211 @@ textarea {
   }
   .public-demo .studio-bar {
     top: auto;
+  }
+}
+
+/* Activity uses the shell's neutral surfaces and a shared baseline. */
+.home-activity {
+  margin-bottom: 32px;
+}
+.home-project-heading {
+  margin: 0 0 24px;
+}
+.home-project-heading h1 {
+  font-size: 30px;
+  line-height: 1.3;
+  margin: 4px 0 0;
+}
+.home-activity-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 20px;
+}
+.activity-panel {
+  min-width: 0;
+  padding: 20px 24px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel, #242424);
+}
+.activity-panel > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 36px;
+  margin-bottom: 12px;
+}
+.activity-panel h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+.activity-source {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 16px;
+  font-size: 12px;
+}
+.activity-source a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--foreground);
+}
+.activity-source > span,
+.activity-pr-number,
+.activity-pr-state,
+.allowance-actions > span {
+  color: var(--muted-foreground);
+  font-size: 12px;
+}
+.activity-counts {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 20px 0 12px;
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+.activity-counts b {
+  color: var(--foreground);
+  font-size: 20px;
+  margin-right: 4px;
+  font-weight: 550;
+}
+.activity-counts > span:last-child {
+  margin-left: auto;
+  font-size: 12px;
+}
+.activity-pr-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.activity-pr-list li + li {
+  border-top: 1px solid var(--border);
+}
+.activity-pr-list a {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 10px;
+  color: var(--foreground);
+  text-decoration: none;
+  padding: 10px 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.activity-pr-list a > span:nth-child(2) {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.activity-pr-list a:hover > span:nth-child(2) {
+  text-decoration: underline;
+}
+.activity-message {
+  font-size: 14px;
+  color: var(--muted-foreground);
+  line-height: 1.65;
+  margin: 8px 0 20px;
+  max-width: 52ch;
+}
+.allowance-windows {
+  display: grid;
+  gap: 16px;
+  margin: 16px 0 20px;
+}
+.allowance-window > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+.allowance-window strong {
+  font-weight: 550;
+}
+.allowance-window > span {
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+.allowance-window progress {
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  display: block;
+  border: 0;
+  background: #454545;
+  margin: 8px 0 6px;
+  border-radius: 3px;
+}
+.allowance-window progress::-webkit-progress-bar {
+  background: #454545;
+  border-radius: 3px;
+}
+.allowance-window progress::-webkit-progress-value {
+  background: #dedede;
+  border-radius: 3px;
+}
+.allowance-window progress::-moz-progress-bar {
+  background: #dedede;
+  border-radius: 3px;
+}
+.allowance-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.guide-content .project-hub {
+  width: 100%;
+}
+.preview-frame-wrap.fit-preview {
+  margin-top: 0;
+}
+.canvas-screen-arrow {
+  position: absolute;
+  top: calc(50% + 32px);
+  transform: translateY(-50%);
+  z-index: 3;
+  border-radius: 50%;
+  background: #303030;
+}
+.canvas-screen-previous {
+  left: 14px;
+}
+.canvas-screen-next {
+  right: 14px;
+}
+.canvas-screen-arrow:disabled {
+  opacity: 0.25;
+}
+@media (max-width: 1100px) {
+  .home-activity-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 700px) {
+  .activity-panel {
+    padding: 16px;
+  }
+  .activity-panel > header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .activity-counts {
+    gap: 12px;
+  }
+  .preview-canvas {
+    padding: 120px 16px 56px;
+  }
+  .canvas-screen-arrow {
+    display: none;
   }
 }

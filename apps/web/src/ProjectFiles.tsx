@@ -36,12 +36,10 @@ const kinds = [
 
 export function ProjectFiles({
   catalog,
-  projectName,
   onOpen,
   example,
 }: {
   catalog: Catalog;
-  projectName: string;
   onOpen: (id: string) => void;
   example: boolean;
 }) {
@@ -119,8 +117,6 @@ export function ProjectFiles({
         .toLowerCase()
         .includes(search.toLowerCase()),
   );
-  const original = catalog.demos.filter((demo) => !demo.parentId).length;
-  const recent = [...catalog.demos].sort((a, b) => b.modified.localeCompare(a.modified))[0];
   function add() {
     if (publicDemo) {
       requestLocalSetup();
@@ -136,33 +132,16 @@ export function ProjectFiles({
     <section className="project-hub" aria-labelledby="project-hub-title">
       <div className="hub-heading">
         <div>
-          <span className="section-label">{example ? 'Example workspace' : 'Your workspace'}</span>
-          <h1 id="project-hub-title">{projectName}</h1>
+          <span className="section-label">Sources, plans and context</span>
+          <h1 id="project-hub-title">Project files</h1>
         </div>
         <Button variant="outline" onClick={add}>
           <Plus />
           New file
         </Button>
       </div>
-      <div className="hub-summary" aria-label="Project work summary">
-        <span>
-          <strong>{original}</strong> original {original === 1 ? 'exploration' : 'explorations'}
-        </span>
-        <span>
-          <strong>{catalog.demos.length - original}</strong> variations
-        </span>
-        <span>
-          <strong>{files.length}</strong> project files
-        </span>
-        {recent && (
-          <button onClick={() => onOpen(recent.id)}>
-            Continue <strong>{recent.title}</strong>
-            <ArrowUpRight size={14} />
-          </button>
-        )}
-      </div>
       <div className="hub-files-heading">
-        <h2>Project files</h2>
+        <h2>All project documents</h2>
         <label className="hub-search">
           <Search size={15} />
           <input

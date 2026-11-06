@@ -33,7 +33,7 @@ import {
 } from './WorkspaceWelcome';
 import { ProjectGuide } from './ProjectGuide';
 import { LocalSetup } from './LocalSetup';
-import { ProjectFiles } from './ProjectFiles';
+import { HomeActivity } from './HomeActivity';
 
 if (publicDemo && !location.search && !location.hash) {
   history.replaceState(null, '', '?example=nova#demo=emergency-booking');
@@ -301,7 +301,6 @@ export function App() {
           {projectName.toLowerCase() !== 'groot' && (
             <span className="project-name">{projectName}</span>
           )}
-          {example && <span className="quiet-badge">Example project</span>}
         </div>
         <nav aria-label="Workspace navigation">
           {(
@@ -369,6 +368,8 @@ export function App() {
             workspace={workspace?.workspace ?? { mode: 'legacy', path: '' }}
             revision={catalog.revision}
             example={example}
+            catalog={catalog}
+            onOpen={(demo) => go({ page: 'all', demo })}
           />
         ) : route.page === 'system' ? (
           example ? (
@@ -391,14 +392,7 @@ export function App() {
         ) : (
           <div className="library-layout">
             <section className="exploration-library" aria-labelledby="library-title">
-              {route.page === 'all' && (
-                <ProjectFiles
-                  catalog={catalog}
-                  projectName={projectName}
-                  example={example}
-                  onOpen={(demo) => go({ page: 'all', demo })}
-                />
-              )}
+              {route.page === 'all' && <HomeActivity projectName={projectName} />}
               <header className="library-title">
                 <div>
                   <span className="section-label">{projectName} / Workspace</span>

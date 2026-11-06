@@ -60,6 +60,24 @@ try {
   await expect(page.getByRole('dialog')).toBeVisible();
   await page.keyboard.press('Escape');
   await page.getByRole('button', { name: 'Home', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'PR contributions' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Project files', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Read local allowance', exact: true })).toHaveCount(
+    0,
+  );
+  await page.getByRole('button', { name: 'Use my local allowance', exact: true }).click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByText('Loading pull requests…', { exact: true })).toBeHidden({
+    timeout: 12000,
+  });
+  await page.locator('.home-project-heading').click();
+  await page.screenshot({
+    path: fileURLToPath(new URL('../docs/home-activity/home-public.png', import.meta.url)),
+  });
+  await page.getByRole('button', { name: 'Start Here', exact: true }).click();
+  await page.getByRole('button', { name: 'Project files', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Project files', exact: true })).toBeVisible();
   await page.goto(url + '/?project=spend-in#page=all');
   await expect(
     page.getByRole('heading', { name: 'Spend.In — Dashboard', exact: true }),

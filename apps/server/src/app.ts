@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import { ProjectContext } from './project-context.js';
 import { ProjectFiles, projectFileInput } from './project-files.js';
+import { createAllowanceReader } from './agent-allowance.js';
 import fastifyStatic from '@fastify/static';
 import { healthSchema, settingsSchema } from '@playground/shared';
 import { openDatabase } from './database.js';
@@ -43,6 +44,43 @@ export async function createApp(options: AppOptions) {
     app.addHook('onClose', async () => personal.close());
     const bench = (request: { query: unknown }) =>
       (request.query as { scope?: string }).scope === 'user' ? personal : workbench;
+    const readAllowance = createAllowanceReader();
+    app.get('/api/agent-allowance', async (_request, reply) => {
+      reply.header('Cache-Control', 'no-store');
+      try {
+        return await readAllowance();
+      } catch (error) {
+        return reply.code(503).send({ error: { message: (error as Error).message } });
+      }
+    });
+    let contributions: { value: unknown; expires: number } | undefined;
+    app.get('/api/contributions', async (_request, reply) => {
+      if (contributions && contributions.expires > Date.now()) return contributions.value;
+      try {
+        const response = await fetch(
+          'https://api.github.com/repos/amansh-tty/Groot/pulls?state=all&sort=updated&direction=desc&per_page=20',
+          {
+            headers: { Accept: 'application/vnd.github+json', 'User-Agent': 'Groot-workbench' },
+            signal: AbortSignal.timeout(8000),
+            redirect: 'error',
+          },
+        );
+        if (!response.ok)
+          throw new Error(
+            'GitHub activity is temporarily unavailable. Open the repository to see pull requests.',
+          );
+        const value: unknown = await response.json();
+        contributions = { value, expires: Date.now() + 300000 };
+        return value;
+      } catch {
+        return reply.code(503).send({
+          error: {
+            message:
+              'GitHub activity is temporarily unavailable. Open the repository to see pull requests.',
+          },
+        });
+      }
+    });
     app.get('/api/workspace', async (_request, reply) => {
       try {
         const legacy = (await workbench.list()).demos.filter(
